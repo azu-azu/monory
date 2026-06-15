@@ -20,6 +20,10 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>チケット画像を撮影してログに添付します。</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>チケット画像をログに添付するため、フォトライブラリにアクセスします。</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -31,9 +35,5 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>チケット画像をログに添付するため、フォトライブラリにアクセスします。</string>
-	<key>NSCameraUsageDescription</key>
-	<string>チケット画像を撮影してログに添付します。</string>
 </dict>
 </plist>

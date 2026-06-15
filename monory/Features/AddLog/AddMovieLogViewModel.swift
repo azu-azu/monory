@@ -10,6 +10,20 @@ struct TicketImageDraft {
 @MainActor
 @Observable
 final class AddMovieLogViewModel {
+    // Viewing type
+    static let streamingServices: [String] = [
+        "Netflix", "Prime Video", "Disney+", "Apple TV+",
+        "U-NEXT", "Hulu", "dアニメストア", "ABEMA", "その他",
+    ]
+
+    var viewingType: ViewingType = .theater
+    var streamingService: String = "Netflix"
+    var customStreamingService: String = ""
+
+    var effectiveStreamingService: String {
+        streamingService == "その他" ? customStreamingService : streamingService
+    }
+
     var movieTitle: String = ""
     var watchedAt: Date = Date()
     var theaterName: String = ""
@@ -104,12 +118,18 @@ final class AddMovieLogViewModel {
         let log = MovieLog(
             watchedAt: watchedAt,
             movieTitle: movieTitle.trimmingCharacters(in: .whitespaces),
-            theaterName: theaterName.trimmingCharacters(in: .whitespaces),
+            theaterName: viewingType == .theater ? theaterName.trimmingCharacters(in: .whitespaces) : "",
             review: review.trimmingCharacters(in: .whitespaces)
         )
-        log.screenNumber = screenNumber.isEmpty ? nil : screenNumber
-        log.seatNumber = seatNumber.isEmpty ? nil : seatNumber
-        log.screeningFormat = screeningFormat.rawValue
+        log.viewingType = viewingType.rawValue
+        if viewingType == .theater {
+            log.screenNumber = screenNumber.isEmpty ? nil : screenNumber
+            log.seatNumber = seatNumber.isEmpty ? nil : seatNumber
+            log.screeningFormat = screeningFormat.rawValue
+        } else {
+            let service = effectiveStreamingService
+            log.streamingService = service.isEmpty ? nil : service
+        }
 
         if let movie = selectedTMDBMovie {
             log.tmdbId = movie.id

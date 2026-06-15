@@ -29,6 +29,8 @@ targets:
         UILaunchScreen: {}
         UISupportedInterfaceOrientations~iphone:
           - UIInterfaceOrientationPortrait
+        NSPhotoLibraryUsageDescription: "チケット画像をログに添付するため、フォトライブラリにアクセスします。"
+        NSCameraUsageDescription: "チケット画像を撮影してログに添付します。"
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.tsukiusagi.monory

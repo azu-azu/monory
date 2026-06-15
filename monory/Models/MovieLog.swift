@@ -14,6 +14,10 @@ final class MovieLog {
     var seatNumber: String?
     var screeningFormat: String = ScreeningFormat.standard.rawValue
 
+    // Viewing type
+    var viewingType: String = ViewingType.theater.rawValue
+    var streamingService: String?
+
     // TMDB
     var tmdbId: Int?
     var movieOriginalTitle: String?

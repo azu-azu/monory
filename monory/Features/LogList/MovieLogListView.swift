@@ -89,7 +89,15 @@ private struct MovieLogRow: View {
                 Text(log.watchedAt.formatted(date: .abbreviated, time: .omitted))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                if !log.theaterName.isEmpty {
+                if log.viewingType == ViewingType.streaming.rawValue {
+                    if let service = log.streamingService, !service.isEmpty {
+                        Text("·")
+                            .foregroundStyle(.secondary)
+                        Text(service)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                } else if !log.theaterName.isEmpty {
                     Text("·")
                         .foregroundStyle(.secondary)
                     Text(log.theaterName)

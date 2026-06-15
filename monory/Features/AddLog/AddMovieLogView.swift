@@ -29,6 +29,15 @@ struct AddMovieLogView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    Picker("視聴方法", selection: $viewModel.viewingType) {
+                        ForEach(ViewingType.allCases, id: \.self) { type in
+                            Text(type.rawValue).tag(type)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+
                 Section("作品") {
                     TextField("映画タイトル", text: $viewModel.movieTitle)
                         .onChange(of: viewModel.movieTitle) { _, newValue in
@@ -63,13 +72,26 @@ struct AddMovieLogView: View {
                     DatePicker("観た日", selection: $viewModel.watchedAt, displayedComponents: .date)
                 }
 
-                Section("映画館") {
-                    TextField("映画館名", text: $viewModel.theaterName)
-                    TextField("スクリーン番号", text: $viewModel.screenNumber)
-                    TextField("座席番号", text: $viewModel.seatNumber)
-                    Picker("上映形式", selection: $viewModel.screeningFormat) {
-                        ForEach(ScreeningFormat.allCases, id: \.self) { format in
-                            Text(format.rawValue).tag(format)
+                if viewModel.viewingType == .theater {
+                    Section("映画館") {
+                        TextField("映画館名", text: $viewModel.theaterName)
+                        TextField("スクリーン番号", text: $viewModel.screenNumber)
+                        TextField("座席番号", text: $viewModel.seatNumber)
+                        Picker("上映形式", selection: $viewModel.screeningFormat) {
+                            ForEach(ScreeningFormat.allCases, id: \.self) { format in
+                                Text(format.rawValue).tag(format)
+                            }
+                        }
+                    }
+                } else {
+                    Section("配信") {
+                        Picker("サービス", selection: $viewModel.streamingService) {
+                            ForEach(AddMovieLogViewModel.streamingServices, id: \.self) { service in
+                                Text(service).tag(service)
+                            }
+                        }
+                        if viewModel.streamingService == "その他" {
+                            TextField("サービス名", text: $viewModel.customStreamingService)
                         }
                     }
                 }
@@ -80,35 +102,37 @@ struct AddMovieLogView: View {
                         .keyboardCloseToolbar()
                 }
 
-                Section("チケット画像") {
-                    PhotosPicker(selection: $selectedItems, matching: .images) {
-                        Label("画像を追加", systemImage: "plus.circle")
-                    }
+                if viewModel.viewingType == .theater {
+                    Section("チケット画像") {
+                        PhotosPicker(selection: $selectedItems, matching: .images) {
+                            Label("画像を追加", systemImage: "plus.circle")
+                        }
 
-                    if !viewModel.ticketDrafts.isEmpty {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 8) {
-                                ForEach(viewModel.ticketDrafts.indices, id: \.self) { index in
-                                    ZStack(alignment: .topTrailing) {
-                                        if let uiImage = UIImage(data: viewModel.ticketDrafts[index].imageData) {
-                                            Image(uiImage: uiImage)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 80, height: 80)
-                                                .clipped()
-                                                .cornerRadius(8)
+                        if !viewModel.ticketDrafts.isEmpty {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 8) {
+                                    ForEach(viewModel.ticketDrafts.indices, id: \.self) { index in
+                                        ZStack(alignment: .topTrailing) {
+                                            if let uiImage = UIImage(data: viewModel.ticketDrafts[index].imageData) {
+                                                Image(uiImage: uiImage)
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 80, height: 80)
+                                                    .clipped()
+                                                    .cornerRadius(8)
+                                            }
+                                            Button {
+                                                viewModel.ticketDrafts.remove(at: index)
+                                            } label: {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .foregroundStyle(.white, .black.opacity(0.6))
+                                            }
+                                            .padding(4)
                                         }
-                                        Button {
-                                            viewModel.ticketDrafts.remove(at: index)
-                                        } label: {
-                                            Image(systemName: "xmark.circle.fill")
-                                                .foregroundStyle(.white, .black.opacity(0.6))
-                                        }
-                                        .padding(4)
                                     }
                                 }
+                                .padding(.vertical, 4)
                             }
-                            .padding(.vertical, 4)
                         }
                     }
                 }

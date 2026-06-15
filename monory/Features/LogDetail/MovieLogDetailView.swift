@@ -40,11 +40,17 @@ struct MovieLogDetailView: View {
                 }
             }
 
-            Section("映画館") {
-                LabeledContent("映画館", value: log.theaterName.isEmpty ? "—" : log.theaterName)
-                LabeledContent("スクリーン", value: log.screenNumber ?? "—")
-                LabeledContent("座席", value: log.seatNumber ?? "—")
-                LabeledContent("上映形式", value: log.screeningFormat)
+            if log.viewingType == ViewingType.streaming.rawValue {
+                Section("配信") {
+                    LabeledContent("サービス", value: log.streamingService ?? "—")
+                }
+            } else {
+                Section("映画館") {
+                    LabeledContent("映画館", value: log.theaterName.isEmpty ? "—" : log.theaterName)
+                    LabeledContent("スクリーン", value: log.screenNumber ?? "—")
+                    LabeledContent("座席", value: log.seatNumber ?? "—")
+                    LabeledContent("上映形式", value: log.screeningFormat)
+                }
             }
 
             if !log.review.isEmpty {
