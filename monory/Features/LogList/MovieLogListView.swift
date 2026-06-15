@@ -89,7 +89,7 @@ private struct MovieLogRow: View {
                 Text(log.watchedAt.formatted(date: .abbreviated, time: .omitted))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                if log.viewingType == ViewingType.streaming.rawValue {
+                if log.isStreaming {
                     if let service = log.streamingService, !service.isEmpty {
                         Text("·")
                             .foregroundStyle(.secondary)

@@ -33,6 +33,10 @@ final class MovieLog {
     @Relationship(deleteRule: .cascade, inverse: \TicketImage.movieLog)
     var ticketImages: [TicketImage] = []
 
+    var isStreaming: Bool {
+        viewingType == ViewingType.streaming.rawValue
+    }
+
     init(
         watchedAt: Date = Date(),
         movieTitle: String = "",

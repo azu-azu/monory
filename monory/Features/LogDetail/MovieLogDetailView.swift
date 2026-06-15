@@ -40,7 +40,7 @@ struct MovieLogDetailView: View {
                 }
             }
 
-            if log.viewingType == ViewingType.streaming.rawValue {
+            if log.isStreaming {
                 Section("配信") {
                     LabeledContent("サービス", value: log.streamingService ?? "—")
                 }

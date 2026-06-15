@@ -11,9 +11,10 @@ struct TicketImageDraft {
 @Observable
 final class AddMovieLogViewModel {
     // Viewing type
+    static let otherServiceOption = "その他"
     static let streamingServices: [String] = [
         "Netflix", "Prime Video", "Disney+", "Apple TV+",
-        "U-NEXT", "Hulu", "dアニメストア", "ABEMA", "その他",
+        "U-NEXT", "Hulu", "dアニメストア", "ABEMA", otherServiceOption,
     ]
 
     var viewingType: ViewingType = .theater
@@ -21,7 +22,7 @@ final class AddMovieLogViewModel {
     var customStreamingService: String = ""
 
     var effectiveStreamingService: String {
-        streamingService == "その他" ? customStreamingService : streamingService
+        streamingService == Self.otherServiceOption ? customStreamingService : streamingService
     }
 
     var movieTitle: String = ""

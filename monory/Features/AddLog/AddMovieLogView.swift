@@ -90,7 +90,7 @@ struct AddMovieLogView: View {
                                 Text(service).tag(service)
                             }
                         }
-                        if viewModel.streamingService == "その他" {
+                        if viewModel.streamingService == AddMovieLogViewModel.otherServiceOption {
                             TextField("サービス名", text: $viewModel.customStreamingService)
                         }
                     }
