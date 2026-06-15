@@ -2,12 +2,26 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 
+enum QuickScanSource {
+    case camera
+    case library
+}
+
 struct AddMovieLogView: View {
+    let quickScanSource: QuickScanSource?
+
+    init(quickScanSource: QuickScanSource? = nil) {
+        self.quickScanSource = quickScanSource
+    }
+
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel = AddMovieLogViewModel()
     @State private var selectedItems: [PhotosPickerItem] = []
+    @State private var showTicketCamera = false
+    @State private var showScanLibraryPicker = false
+    @State private var scanLibraryItems: [PhotosPickerItem] = []
 
     var body: some View {
         NavigationStack {
@@ -121,6 +135,35 @@ struct AddMovieLogView: View {
                     selectedItems = []
                 }
             }
+            .onChange(of: scanLibraryItems) { _, newItems in
+                Task {
+                    for item in newItems {
+                        if let data = try? await item.loadTransferable(type: Data.self) {
+                            await viewModel.addTicketImage(data)
+                        }
+                    }
+                    scanLibraryItems = []
+                }
+            }
+            .task {
+                guard let source = quickScanSource else { return }
+                // sheet アニメーション完了を待つ
+                try? await Task.sleep(for: .milliseconds(600))
+                switch source {
+                case .camera:  showTicketCamera = true
+                case .library: showScanLibraryPicker = true
+                }
+            }
+            .fullScreenCover(isPresented: $showTicketCamera) {
+                CameraPickerView { data in
+                    Task { await viewModel.addTicketImage(data) }
+                }
+            }
+            .photosPicker(
+                isPresented: $showScanLibraryPicker,
+                selection: $scanLibraryItems,
+                matching: .images
+            )
         }
     }
 }

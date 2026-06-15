@@ -56,6 +56,7 @@ enum CinemaTicketParser {
 
         var result = CinemaTicketResult()
         result.movieTitle = extractValue(from: lines, keywords: titleKeywords)
+                         ?? extractMovieTitleFallback(from: lines)
         result.theaterName = extractTheaterName(from: lines)
         result.screenNumber = extractScreenNumber(from: lines, text: text)
         result.seatNumber = extractSeatNumber(from: lines, text: text)
@@ -85,6 +86,36 @@ enum CinemaTicketParser {
             }
         }
         return nil
+    }
+
+    /// TOHO 等、キーワードなしで日付行の直後にタイトルが来る形式向けフォールバック
+    private static func extractMovieTitleFallback(from lines: [String]) -> String? {
+        for (i, line) in lines.enumerated() {
+            let lineRange = NSRange(line.startIndex..., in: line)
+            let hasDate = dateRegexes.contains { $0.firstMatch(in: line, range: lineRange) != nil }
+            guard hasDate else { continue }
+            // 日付行の直後から最大2行チェック
+            for j in (i + 1)..<min(i + 3, lines.count) {
+                if isLikelyMovieTitle(lines[j]) { return lines[j] }
+            }
+        }
+        return nil
+    }
+
+    private static func isLikelyMovieTitle(_ line: String) -> Bool {
+        guard line.count > 3 else { return false }
+        // 価格・URL・既知の非タイトルラベルは除外
+        if line.contains("円") || line.contains("¥") || line.contains("￥") { return false }
+        if line.contains("://") || (line.contains(".") && !line.contains("・") && line.count < 30) { return false }
+        let nonTitlePrefixes = ["スクリーン", "Screen", "座席", "Purchase", "ご購入",
+                                "チケット", "予約番号", "入場", "鑑賞日時", "劇場", "作品名"]
+        if nonTitlePrefixes.contains(where: { line.hasPrefix($0) }) { return false }
+        // 数字だけの行は除外
+        if line.unicodeScalars.allSatisfy({ CharacterSet.decimalDigits.contains($0) }) { return false }
+        // 日本語（かな・漢字）を含むか、ラテン文字5文字以上
+        let hasJapanese = line.unicodeScalars.contains { $0.value >= 0x3000 && $0.value <= 0x9FFF }
+        let hasLatin = line.filter { $0.isLetter }.count > 5
+        return hasJapanese || hasLatin
     }
 
     private static func extractTheaterName(from lines: [String]) -> String? {

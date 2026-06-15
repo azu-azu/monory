@@ -16,6 +16,7 @@
 		48A9B4D3012A61ECAAF717F5 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B808DBE44DF4D18F0877F2 /* HapticManager.swift */; };
 		4DBE21EA89387E4887360C1B /* MovieLogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D2855D83EAD7716C911CE8 /* MovieLogDetailView.swift */; };
 		66FA98D7C0478E11F29EA1ED /* CommonComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B607655EF9E2EAB6404CC /* CommonComponents.swift */; };
+		749DE567E608A21D6F571D0A /* CameraPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40F7D72EB1CC5B95A5D6BFA /* CameraPickerView.swift */; };
 		7A4227EB3C4E05B9CD3B72D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A02951A2E5175B4858B48C76 /* Assets.xcassets */; };
 		80CC35BFCD57C63E6E9B77AC /* MovieLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9777A7A90A4CBEEE06DF87A3 /* MovieLog.swift */; };
 		84FB1073002631A956070E6E /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49508715B562EC81CD6060DC /* OCRService.swift */; };
@@ -45,6 +46,7 @@
 		9777A7A90A4CBEEE06DF87A3 /* MovieLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLog.swift; sourceTree = "<group>"; };
 		9DB90542F51EF6E628E95B52 /* AddMovieLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMovieLogView.swift; sourceTree = "<group>"; };
 		A02951A2E5175B4858B48C76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A40F7D72EB1CC5B95A5D6BFA /* CameraPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPickerView.swift; sourceTree = "<group>"; };
 		BF82D06C9CC95A9CB239ECF3 /* MonoryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonoryApp.swift; sourceTree = "<group>"; };
 		EAE6D4B6FEC12716D1AA97F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F3206F51A4C257B6FB1907FD /* CinemaTicketParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaTicketParser.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 			children = (
 				9DB90542F51EF6E628E95B52 /* AddMovieLogView.swift */,
 				18F67B451DB28EBEB141DC8F /* AddMovieLogViewModel.swift */,
+				A40F7D72EB1CC5B95A5D6BFA /* CameraPickerView.swift */,
 			);
 			path = AddLog;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 				3F25BEEDD9A9710A90235522 /* AddMovieLogViewModel.swift in Sources */,
 				1F6B833CDCA1321D1BCB4E57 /* AppContainer.swift in Sources */,
 				397EB8D28E8FF1ABDB89FAE4 /* AppTheme.swift in Sources */,
+				749DE567E608A21D6F571D0A /* CameraPickerView.swift in Sources */,
 				97DEB9E6D2D73D70E6C0DAC3 /* CinemaTicketParser.swift in Sources */,
 				66FA98D7C0478E11F29EA1ED /* CommonComponents.swift in Sources */,
 				48A9B4D3012A61ECAAF717F5 /* HapticManager.swift in Sources */,

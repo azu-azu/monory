@@ -1,5 +1,6 @@
 import UIKit
 
+@MainActor
 enum HapticManager {
     private static let light = UIImpactFeedbackGenerator(style: .light)
     private static let rigid = UIImpactFeedbackGenerator(style: .rigid)
@@ -13,10 +14,10 @@ enum HapticManager {
         switch style {
         case .light:
             light.impactOccurred()
-            DispatchQueue.main.async { light.prepare() }
+            Task { @MainActor in light.prepare() }
         case .rigid:
             rigid.impactOccurred()
-            DispatchQueue.main.async { rigid.prepare() }
+            Task { @MainActor in rigid.prepare() }
         default:
             UIImpactFeedbackGenerator(style: style).impactOccurred()
         }

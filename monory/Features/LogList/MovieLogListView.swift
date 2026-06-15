@@ -6,6 +6,8 @@ struct MovieLogListView: View {
     private var logs: [MovieLog]
 
     @State private var showAddLog = false
+    @State private var showAddFromScan = false
+    @State private var quickScanSource: QuickScanSource?
 
     var body: some View {
         NavigationStack {
@@ -25,9 +27,32 @@ struct MovieLogListView: View {
                         Image(systemName: "plus")
                     }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Button {
+                            quickScanSource = .camera
+                            showAddFromScan = true
+                        } label: {
+                            Label("カメラで撮影", systemImage: "camera")
+                        }
+                        Button {
+                            quickScanSource = .library
+                            showAddFromScan = true
+                        } label: {
+                            Label("ライブラリから選択", systemImage: "photo.on.rectangle")
+                        }
+                    } label: {
+                        Image(systemName: "ticket")
+                    }
+                }
             }
             .sheet(isPresented: $showAddLog) {
                 AddMovieLogView()
+            }
+            .sheet(isPresented: $showAddFromScan) {
+                if let source = quickScanSource {
+                    AddMovieLogView(quickScanSource: source)
+                }
             }
         }
     }
