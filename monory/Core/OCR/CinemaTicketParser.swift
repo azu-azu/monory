@@ -79,10 +79,6 @@ enum CinemaTicketParser {
                     // value on next line
                     if i + 1 < lines.count { return lines[i + 1] }
                 }
-                // keyword as standalone label on a line
-                if line == keyword, i + 1 < lines.count {
-                    return lines[i + 1]
-                }
             }
         }
         return nil
@@ -106,7 +102,7 @@ enum CinemaTicketParser {
         guard line.count > 3 else { return false }
         // 価格・URL・既知の非タイトルラベルは除外
         if line.contains("円") || line.contains("¥") || line.contains("￥") { return false }
-        if line.contains("://") || (line.contains(".") && !line.contains("・") && line.count < 30) { return false }
+        if line.contains("://") || line.hasSuffix(".jp") || line.hasSuffix(".com") { return false }
         let nonTitlePrefixes = ["スクリーン", "Screen", "座席", "Purchase", "ご購入",
                                 "チケット", "予約番号", "入場", "鑑賞日時", "劇場", "作品名"]
         if nonTitlePrefixes.contains(where: { line.hasPrefix($0) }) { return false }

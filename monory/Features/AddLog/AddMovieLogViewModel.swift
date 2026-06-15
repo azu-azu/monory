@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 struct TicketImageDraft {
     let imageData: Data
@@ -31,6 +32,14 @@ final class AddMovieLogViewModel {
     }
 
     // MARK: - Ticket image + OCR
+
+    func loadAndAddTicketImages(_ items: [PhotosPickerItem]) async {
+        for item in items {
+            if let data = try? await item.loadTransferable(type: Data.self) {
+                await addTicketImage(data)
+            }
+        }
+    }
 
     func addTicketImage(_ data: Data) async {
         let idx = ticketDrafts.count

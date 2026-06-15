@@ -10,6 +10,8 @@ enum QuickScanSource {
 struct AddMovieLogView: View {
     let quickScanSource: QuickScanSource?
 
+    private static let sheetAnimationDelay = Duration.milliseconds(600)
+
     init(quickScanSource: QuickScanSource? = nil) {
         self.quickScanSource = quickScanSource
     }
@@ -127,28 +129,20 @@ struct AddMovieLogView: View {
             }
             .onChange(of: selectedItems) { _, newItems in
                 Task {
-                    for item in newItems {
-                        if let data = try? await item.loadTransferable(type: Data.self) {
-                            await viewModel.addTicketImage(data)
-                        }
-                    }
+                    await viewModel.loadAndAddTicketImages(newItems)
                     selectedItems = []
                 }
             }
             .onChange(of: scanLibraryItems) { _, newItems in
                 Task {
-                    for item in newItems {
-                        if let data = try? await item.loadTransferable(type: Data.self) {
-                            await viewModel.addTicketImage(data)
-                        }
-                    }
+                    await viewModel.loadAndAddTicketImages(newItems)
                     scanLibraryItems = []
                 }
             }
             .task {
                 guard let source = quickScanSource else { return }
                 // sheet アニメーション完了を待つ
-                try? await Task.sleep(for: .milliseconds(600))
+                try? await Task.sleep(for: Self.sheetAnimationDelay)
                 switch source {
                 case .camera:  showTicketCamera = true
                 case .library: showScanLibraryPicker = true
