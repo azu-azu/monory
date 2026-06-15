@@ -2,6 +2,8 @@ import SwiftUI
 import UIKit
 
 struct CameraPickerView: UIViewControllerRepresentable {
+    static let jpegCompressionQuality: CGFloat = 0.8
+
     let onCapture: (Data) -> Void
     @Environment(\.dismiss) private var dismiss
 
@@ -32,7 +34,7 @@ struct CameraPickerView: UIViewControllerRepresentable {
             didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
         ) {
             if let image = info[.originalImage] as? UIImage,
-               let data = image.jpegData(compressionQuality: 0.8) {
+               let data = image.jpegData(compressionQuality: CameraPickerView.jpegCompressionQuality) {
                 onCapture(data)
             }
             dismiss()

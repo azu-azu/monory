@@ -129,12 +129,14 @@ struct AddMovieLogView: View {
                 }
             }
             .onChange(of: selectedItems) { _, newItems in
+                guard !newItems.isEmpty else { return }
                 Task {
                     await viewModel.loadAndAddTicketImages(newItems)
                     selectedItems = []
                 }
             }
             .onChange(of: scanLibraryItems) { _, newItems in
+                guard !newItems.isEmpty else { return }
                 Task {
                     await viewModel.loadAndAddTicketImages(newItems)
                     scanLibraryItems = []
