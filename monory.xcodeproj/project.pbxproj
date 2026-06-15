@@ -1,0 +1,463 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		130A9E19032C28AEBBAA8BCE /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE5EC19C14D8125A1F46D3C /* TMDBModels.swift */; };
+		1E4992516DF7D0EF98637A44 /* MovieLogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D6BC765BED4BAE5B4AC5F5 /* MovieLogListView.swift */; };
+		1F6B833CDCA1321D1BCB4E57 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CA9EBB80F6D279E5A26F16 /* AppContainer.swift */; };
+		240790BADB5DF68E3CF8345C /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9C76CE676B2012AB549E7 /* Secrets.swift */; };
+		397EB8D28E8FF1ABDB89FAE4 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3476DC97C66236DDFC9A9B /* AppTheme.swift */; };
+		3F25BEEDD9A9710A90235522 /* AddMovieLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F67B451DB28EBEB141DC8F /* AddMovieLogViewModel.swift */; };
+		48A9B4D3012A61ECAAF717F5 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B808DBE44DF4D18F0877F2 /* HapticManager.swift */; };
+		4DBE21EA89387E4887360C1B /* MovieLogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D2855D83EAD7716C911CE8 /* MovieLogDetailView.swift */; };
+		66FA98D7C0478E11F29EA1ED /* CommonComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B607655EF9E2EAB6404CC /* CommonComponents.swift */; };
+		7A4227EB3C4E05B9CD3B72D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A02951A2E5175B4858B48C76 /* Assets.xcassets */; };
+		80CC35BFCD57C63E6E9B77AC /* MovieLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9777A7A90A4CBEEE06DF87A3 /* MovieLog.swift */; };
+		84FB1073002631A956070E6E /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49508715B562EC81CD6060DC /* OCRService.swift */; };
+		8CCEC02670573F7B408EF238 /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B3FBA401A7B9CE3C4E844F /* TMDBClient.swift */; };
+		97DEB9E6D2D73D70E6C0DAC3 /* CinemaTicketParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3206F51A4C257B6FB1907FD /* CinemaTicketParser.swift */; };
+		BC7C2838CBEF4765A8AFA1DD /* ScreeningFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D1A5322F085ED16BAA001C /* ScreeningFormat.swift */; };
+		C820477FDBC71C9FBB9EFC49 /* TicketImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786D8E0A93A515524E8424F9 /* TicketImage.swift */; };
+		D5B190DEE049E72AC619F3AF /* AddMovieLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB90542F51EF6E628E95B52 /* AddMovieLogView.swift */; };
+		DA1A5AC6F1812997DBE9FE9A /* MonoryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF82D06C9CC95A9CB239ECF3 /* MonoryApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		08D1A5322F085ED16BAA001C /* ScreeningFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreeningFormat.swift; sourceTree = "<group>"; };
+		0A3B607655EF9E2EAB6404CC /* CommonComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonComponents.swift; sourceTree = "<group>"; };
+		18F67B451DB28EBEB141DC8F /* AddMovieLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMovieLogViewModel.swift; sourceTree = "<group>"; };
+		25B3FBA401A7B9CE3C4E844F /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
+		3B3476DC97C66236DDFC9A9B /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		49508715B562EC81CD6060DC /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
+		4CE5EC19C14D8125A1F46D3C /* TMDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBModels.swift; sourceTree = "<group>"; };
+		50A9C76CE676B2012AB549E7 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		54E6EB0220000D9BD1BD5179 /* monory.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = monory.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		68D6BC765BED4BAE5B4AC5F5 /* MovieLogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLogListView.swift; sourceTree = "<group>"; };
+		70D2855D83EAD7716C911CE8 /* MovieLogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLogDetailView.swift; sourceTree = "<group>"; };
+		786D8E0A93A515524E8424F9 /* TicketImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketImage.swift; sourceTree = "<group>"; };
+		85B808DBE44DF4D18F0877F2 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		87CA9EBB80F6D279E5A26F16 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
+		9777A7A90A4CBEEE06DF87A3 /* MovieLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLog.swift; sourceTree = "<group>"; };
+		9DB90542F51EF6E628E95B52 /* AddMovieLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMovieLogView.swift; sourceTree = "<group>"; };
+		A02951A2E5175B4858B48C76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BF82D06C9CC95A9CB239ECF3 /* MonoryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonoryApp.swift; sourceTree = "<group>"; };
+		EAE6D4B6FEC12716D1AA97F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F3206F51A4C257B6FB1907FD /* CinemaTicketParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaTicketParser.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		17391A9E1FAECF15BE4D70FE /* App */ = {
+			isa = PBXGroup;
+			children = (
+				87CA9EBB80F6D279E5A26F16 /* AppContainer.swift */,
+				BF82D06C9CC95A9CB239ECF3 /* MonoryApp.swift */,
+				50A9C76CE676B2012AB549E7 /* Secrets.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		1A3A9A3CEE151E7532CA3E8B /* monory */ = {
+			isa = PBXGroup;
+			children = (
+				A02951A2E5175B4858B48C76 /* Assets.xcassets */,
+				EAE6D4B6FEC12716D1AA97F9 /* Info.plist */,
+				17391A9E1FAECF15BE4D70FE /* App */,
+				696C9EEB6F1F349D634E6831 /* Core */,
+				9072179D81C3E8762D638ED3 /* DesignSystem */,
+				451094DAABA76A10FCE1B19C /* Features */,
+				E17F7423901B2F6AF25BF6BB /* Models */,
+			);
+			path = monory;
+			sourceTree = "<group>";
+		};
+		451094DAABA76A10FCE1B19C /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				D1742B4DAD59D390FE034273 /* AddLog */,
+				D916A416BA38623FCB867B01 /* LogDetail */,
+				8848C7B92AD8E591204A8D88 /* LogList */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		696C9EEB6F1F349D634E6831 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				CFCA6F27A0DD488EE7F444EB /* OCR */,
+				82939861E40096DC0F904C2C /* TMDB */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		82939861E40096DC0F904C2C /* TMDB */ = {
+			isa = PBXGroup;
+			children = (
+				25B3FBA401A7B9CE3C4E844F /* TMDBClient.swift */,
+				4CE5EC19C14D8125A1F46D3C /* TMDBModels.swift */,
+			);
+			path = TMDB;
+			sourceTree = "<group>";
+		};
+		8848C7B92AD8E591204A8D88 /* LogList */ = {
+			isa = PBXGroup;
+			children = (
+				68D6BC765BED4BAE5B4AC5F5 /* MovieLogListView.swift */,
+			);
+			path = LogList;
+			sourceTree = "<group>";
+		};
+		9072179D81C3E8762D638ED3 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				3B3476DC97C66236DDFC9A9B /* AppTheme.swift */,
+				0A3B607655EF9E2EAB6404CC /* CommonComponents.swift */,
+				85B808DBE44DF4D18F0877F2 /* HapticManager.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		B4DB2DD3CFC93584B8752EEE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				54E6EB0220000D9BD1BD5179 /* monory.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CFCA6F27A0DD488EE7F444EB /* OCR */ = {
+			isa = PBXGroup;
+			children = (
+				F3206F51A4C257B6FB1907FD /* CinemaTicketParser.swift */,
+				49508715B562EC81CD6060DC /* OCRService.swift */,
+			);
+			path = OCR;
+			sourceTree = "<group>";
+		};
+		D1742B4DAD59D390FE034273 /* AddLog */ = {
+			isa = PBXGroup;
+			children = (
+				9DB90542F51EF6E628E95B52 /* AddMovieLogView.swift */,
+				18F67B451DB28EBEB141DC8F /* AddMovieLogViewModel.swift */,
+			);
+			path = AddLog;
+			sourceTree = "<group>";
+		};
+		D916A416BA38623FCB867B01 /* LogDetail */ = {
+			isa = PBXGroup;
+			children = (
+				70D2855D83EAD7716C911CE8 /* MovieLogDetailView.swift */,
+			);
+			path = LogDetail;
+			sourceTree = "<group>";
+		};
+		E17F7423901B2F6AF25BF6BB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9777A7A90A4CBEEE06DF87A3 /* MovieLog.swift */,
+				08D1A5322F085ED16BAA001C /* ScreeningFormat.swift */,
+				786D8E0A93A515524E8424F9 /* TicketImage.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		EF77164AA73BDA2B6935F96B = {
+			isa = PBXGroup;
+			children = (
+				1A3A9A3CEE151E7532CA3E8B /* monory */,
+				B4DB2DD3CFC93584B8752EEE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7B51A26A19A887E1B52D6926 /* monory */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 39E234CB30A7FD71879E535C /* Build configuration list for PBXNativeTarget "monory" */;
+			buildPhases = (
+				1968779A9B41FFE527BF05DC /* Sources */,
+				590743DB6AC8F5303BC07EE8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = monory;
+			packageProductDependencies = (
+			);
+			productName = monory;
+			productReference = 54E6EB0220000D9BD1BD5179 /* monory.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		117736F70B50BC123324A13E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					7B51A26A19A887E1B52D6926 = {
+						DevelopmentTeam = ZD854UM35V;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 82FEAE836EC9BE9346ED99AA /* Build configuration list for PBXProject "monory" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = EF77164AA73BDA2B6935F96B;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B4DB2DD3CFC93584B8752EEE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7B51A26A19A887E1B52D6926 /* monory */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		590743DB6AC8F5303BC07EE8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A4227EB3C4E05B9CD3B72D6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1968779A9B41FFE527BF05DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5B190DEE049E72AC619F3AF /* AddMovieLogView.swift in Sources */,
+				3F25BEEDD9A9710A90235522 /* AddMovieLogViewModel.swift in Sources */,
+				1F6B833CDCA1321D1BCB4E57 /* AppContainer.swift in Sources */,
+				397EB8D28E8FF1ABDB89FAE4 /* AppTheme.swift in Sources */,
+				97DEB9E6D2D73D70E6C0DAC3 /* CinemaTicketParser.swift in Sources */,
+				66FA98D7C0478E11F29EA1ED /* CommonComponents.swift in Sources */,
+				48A9B4D3012A61ECAAF717F5 /* HapticManager.swift in Sources */,
+				DA1A5AC6F1812997DBE9FE9A /* MonoryApp.swift in Sources */,
+				80CC35BFCD57C63E6E9B77AC /* MovieLog.swift in Sources */,
+				4DBE21EA89387E4887360C1B /* MovieLogDetailView.swift in Sources */,
+				1E4992516DF7D0EF98637A44 /* MovieLogListView.swift in Sources */,
+				84FB1073002631A956070E6E /* OCRService.swift in Sources */,
+				BC7C2838CBEF4765A8AFA1DD /* ScreeningFormat.swift in Sources */,
+				240790BADB5DF68E3CF8345C /* Secrets.swift in Sources */,
+				8CCEC02670573F7B408EF238 /* TMDBClient.swift in Sources */,
+				130A9E19032C28AEBBAA8BCE /* TMDBModels.swift in Sources */,
+				C820477FDBC71C9FBB9EFC49 /* TicketImage.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		102F8ED1F1A02137105EA509 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = monory/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "チケット画像を撮影してログに添付します。";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "チケット画像をログに添付するため、フォトライブラリにアクセスします。";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tsukiusagi.monory;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		878667FAAD9BE854F2C82910 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ZD854UM35V;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B1840799A9DE41DA840CB993 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = monory/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "チケット画像を撮影してログに添付します。";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "チケット画像をログに添付するため、フォトライブラリにアクセスします。";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tsukiusagi.monory;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E4F0CFC3A241089AD87329B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ZD854UM35V;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		39E234CB30A7FD71879E535C /* Build configuration list for PBXNativeTarget "monory" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B1840799A9DE41DA840CB993 /* Debug */,
+				102F8ED1F1A02137105EA509 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		82FEAE836EC9BE9346ED99AA /* Build configuration list for PBXProject "monory" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				878667FAAD9BE854F2C82910 /* Debug */,
+				E4F0CFC3A241089AD87329B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 117736F70B50BC123324A13E /* Project object */;
+}

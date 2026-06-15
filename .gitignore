@@ -1,0 +1,21 @@
+# XcodeGen
+local.yml
+
+# Xcode
+xcuserdata/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# macOS
+.DS_Store
+
+# Secrets
+monory/App/Secrets.swift
+
+# Internal docs (private)
+Docs/internal/
+
+# Working files
+tmp.md
