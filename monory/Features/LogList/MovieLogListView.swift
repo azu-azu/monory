@@ -6,7 +6,6 @@ struct MovieLogListView: View {
     private var logs: [MovieLog]
 
     @State private var showAddLog = false
-    @State private var showAddFromScan = false
     @State private var quickScanSource: QuickScanSource?
 
     var body: some View {
@@ -31,13 +30,11 @@ struct MovieLogListView: View {
                     Menu {
                         Button {
                             quickScanSource = .camera
-                            showAddFromScan = true
                         } label: {
                             Label("カメラで撮影", systemImage: "camera")
                         }
                         Button {
                             quickScanSource = .library
-                            showAddFromScan = true
                         } label: {
                             Label("ライブラリから選択", systemImage: "photo.on.rectangle")
                         }
@@ -49,10 +46,8 @@ struct MovieLogListView: View {
             .sheet(isPresented: $showAddLog) {
                 AddMovieLogView()
             }
-            .sheet(isPresented: $showAddFromScan) {
-                if let source = quickScanSource {
-                    AddMovieLogView(quickScanSource: source)
-                }
+            .sheet(item: $quickScanSource) { source in
+                AddMovieLogView(quickScanSource: source)
             }
         }
     }

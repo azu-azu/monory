@@ -2,9 +2,10 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 
-enum QuickScanSource {
+enum QuickScanSource: String, Identifiable {
     case camera
     case library
+    var id: String { rawValue }
 }
 
 struct AddMovieLogView: View {
