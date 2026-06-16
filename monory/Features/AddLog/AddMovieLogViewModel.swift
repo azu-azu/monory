@@ -2,7 +2,8 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 
-struct TicketImageDraft {
+struct TicketImageDraft: Identifiable {
+    let id: UUID = UUID()
     let imageData: Data
     var ocrRawText: String?
 }

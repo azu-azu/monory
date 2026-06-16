@@ -25,6 +25,7 @@ struct AddMovieLogView: View {
     @State private var showTicketCamera = false
     @State private var showScanLibraryPicker = false
     @State private var scanLibraryItems: [PhotosPickerItem] = []
+    @State private var viewingDraftImage: UIImage?
 
     var body: some View {
         NavigationStack {
@@ -111,18 +112,21 @@ struct AddMovieLogView: View {
                         if !viewModel.ticketDrafts.isEmpty {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 8) {
-                                    ForEach(viewModel.ticketDrafts.indices, id: \.self) { index in
+                                    ForEach(viewModel.ticketDrafts) { draft in
                                         ZStack(alignment: .topTrailing) {
-                                            if let uiImage = UIImage(data: viewModel.ticketDrafts[index].imageData) {
+                                            if let uiImage = UIImage(data: draft.imageData) {
                                                 Image(uiImage: uiImage)
                                                     .resizable()
                                                     .scaledToFill()
                                                     .frame(width: 80, height: 80)
                                                     .clipped()
                                                     .cornerRadius(8)
+                                                    .onTapGesture {
+                                                        viewingDraftImage = uiImage
+                                                    }
                                             }
                                             Button {
-                                                viewModel.ticketDrafts.remove(at: index)
+                                                viewModel.ticketDrafts.removeAll { $0.id == draft.id }
                                             } label: {
                                                 Image(systemName: "xmark.circle.fill")
                                                     .foregroundStyle(.white, .black.opacity(0.6))
@@ -178,6 +182,14 @@ struct AddMovieLogView: View {
             .fullScreenCover(isPresented: $showTicketCamera) {
                 CameraPickerView { data in
                     Task { await viewModel.addTicketImage(data) }
+                }
+            }
+            .fullScreenCover(isPresented: Binding(
+                get: { viewingDraftImage != nil },
+                set: { if !$0 { viewingDraftImage = nil } }
+            )) {
+                if let image = viewingDraftImage {
+                    PhotoViewerSheet(image: image)
                 }
             }
             .photosPicker(
