@@ -47,6 +47,34 @@ enum CinemaTicketParser {
         ("ScreenX", "ScreenX"),
     ]
 
+    /// チケットタイトルから上映修飾語を除去する
+    /// 例: 「プロジェクト・ヘイル・メリー【IMAXレーザーGT字幕】」→「プロジェクト・ヘイル・メリー」
+    ///     「Michael/マイケル（IMAXレーザー・字幕」（閉じ括弧なし）→「Michael/マイケル」
+    static func normalizeTitle(_ title: String) -> String {
+        var result = title
+        // 完全なカッコペア: 「（...字幕...）」「【...吹替...】」など
+        result = stripAll(
+            result,
+            pattern: #"[\s　]*[（\(\[【「][^）\)\]】」]*(?:字幕|吹替|吹き替え)[^）\)\]】」]*[）\)\]】」]"#
+        )
+        // 閉じカッコなしで末尾まで続く場合（OCRで折り返された時）:「（IMAX字幕」
+        result = stripAll(
+            result,
+            pattern: #"[\s　]*[（\(\[【「][^）\)\]】」]*(?:字幕|吹替|吹き替え).*$"#
+        )
+        // カッコなしの末尾ノイズ: " 字幕版"、"　吹替" など
+        result = stripAll(result, pattern: #"[\s　]+(?:字幕版?|吹替版?|吹き替え版?)$"#)
+        return result.trimmingCharacters(in: .whitespaces)
+    }
+
+    private static func stripAll(_ string: String, pattern: String) -> String {
+        var result = string
+        while let range = result.range(of: pattern, options: .regularExpression) {
+            result.removeSubrange(range)
+        }
+        return result
+    }
+
     // MARK: - Public
 
     static func parse(_ text: String) -> CinemaTicketResult {
@@ -55,8 +83,9 @@ enum CinemaTicketParser {
             .filter { !$0.isEmpty }
 
         var result = CinemaTicketResult()
-        result.movieTitle = extractValue(from: lines, keywords: titleKeywords)
-                         ?? extractMovieTitleFallback(from: lines)
+        result.movieTitle = (extractValue(from: lines, keywords: titleKeywords)
+                         ?? extractMovieTitleFallback(from: lines))
+                         .map { normalizeTitle($0) }
         result.theaterName = extractTheaterName(from: lines)
         result.screenNumber = extractScreenNumber(from: lines, text: text)
         result.seatNumber = extractSeatNumber(from: lines, text: text)

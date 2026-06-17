@@ -64,8 +64,22 @@ final class AddMovieLogViewModel {
         let rawText = await OCRService.recognizeText(from: data)
         ticketDrafts[idx].ocrRawText = rawText
 
-        if let text = rawText {
-            applyOCRResult(CinemaTicketParser.parse(text))
+        guard let text = rawText else { return }
+        let parsed = CinemaTicketParser.parse(text)
+        applyOCRResult(parsed)
+
+        // OCR 後に TMDB を即検索して先頭候補を auto-select
+        // (onTitleChanged の debounced search はキャンセルして上書き)
+        guard selectedTMDBMovie == nil,
+              let title = parsed.movieTitle, !title.isEmpty else { return }
+        searchTask?.cancel()
+        isSearching = true
+        let results = (try? await TMDBClient.search(query: title)) ?? []
+        isSearching = false
+        if let best = results.first {
+            await selectMovie(best)
+        } else {
+            searchResults = results  // 結果なし → 手動検索に委ねる
         }
     }
 

@@ -6,7 +6,10 @@ enum TMDBClient {
 
     static func search(query: String) async throws -> [TMDBMovie] {
         let key = Secrets.tmdbAPIKey
-        guard !key.isEmpty, key != "YOUR_TMDB_API_KEY" else { return [] }
+        guard !key.isEmpty, key != "YOUR_TMDB_API_KEY" else {
+            print("[TMDB] ⚠️ API key not set")
+            return []
+        }
 
         var components = URLComponents(string: "\(baseURL)/search/movie")!
         components.queryItems = [
@@ -16,8 +19,19 @@ enum TMDBClient {
             URLQueryItem(name: "region", value: "JP"),
             URLQueryItem(name: "page", value: "1"),
         ]
-        let (data, _) = try await URLSession.shared.data(from: components.url!)
-        return try JSONDecoder().decode(TMDBSearchResponse.self, from: data).results
+        print("[TMDB] 🔍 query=\(query)")
+        do {
+            let (data, response) = try await URLSession.shared.data(from: components.url!)
+            let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+            let body = String(data: data, encoding: .utf8)?.prefix(300) ?? ""
+            print("[TMDB] status=\(status) body=\(body)")
+            let results = try JSONDecoder().decode(TMDBSearchResponse.self, from: data).results
+            print("[TMDB] ✅ \(results.count) results")
+            return results
+        } catch {
+            print("[TMDB] ❌ error=\(error)")
+            throw error
+        }
     }
 
     static func fetchPosterData(path: String) async throws -> Data {

@@ -18,7 +18,7 @@ struct MovieLogListView: View {
                 if pastLogs.isEmpty {
                     emptyState
                 } else {
-                    list
+                    grid
                 }
             }
             .navigationTitle("Monory")
@@ -56,15 +56,22 @@ struct MovieLogListView: View {
         }
     }
 
-    private var list: some View {
-        List {
-            ForEach(pastLogs) { log in
-                NavigationLink(destination: MovieLogDetailView(log: log)) {
-                    MovieLogRow(log: log)
+    private var grid: some View {
+        ScrollView {
+            LazyVGrid(
+                columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)],
+                spacing: 10
+            ) {
+                ForEach(pastLogs) { log in
+                    NavigationLink(destination: MovieLogDetailView(log: log)) {
+                        PosterCell(log: log)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
+            .padding(.horizontal, 12)
+            .padding(.top, 8)
         }
-        .listStyle(.plain)
     }
 
     private var emptyState: some View {
@@ -82,40 +89,62 @@ struct MovieLogListView: View {
     }
 }
 
-private struct MovieLogRow: View {
+private struct PosterCell: View {
     let log: MovieLog
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(log.movieTitle.isEmpty ? "無題" : log.movieTitle)
-                .font(.headline)
-            HStack(spacing: 8) {
-                Text(log.watchedAt.formatted(date: .abbreviated, time: .omitted))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                if log.isStreaming {
-                    if let service = log.streamingService, !service.isEmpty {
-                        Text("·")
-                            .foregroundStyle(.secondary)
-                        Text(service)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                } else if !log.theaterName.isEmpty {
-                    Text("·")
-                        .foregroundStyle(.secondary)
-                    Text(log.theaterName)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            if !log.review.isEmpty {
-                Text(log.review)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(2)
+        ZStack(alignment: .bottom) {
+            posterBackground
+            if log.moviePosterData != nil {
+                titleOverlay
             }
         }
-        .padding(.vertical, 4)
+        .aspectRatio(2/3, contentMode: .fit)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+
+    @ViewBuilder
+    private var posterBackground: some View {
+        if let data = log.moviePosterData, let uiImage = UIImage(data: data) {
+            Image(uiImage: uiImage)
+                .resizable()
+                .scaledToFill()
+        } else {
+            Color.secondary.opacity(0.12)
+                .overlay(
+                    VStack(spacing: 8) {
+                        Image(systemName: "film")
+                            .font(.system(size: 28))
+                            .foregroundStyle(.secondary)
+                        Text(log.movieTitle.isEmpty ? "無題" : log.movieTitle)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 8)
+                    }
+                )
+        }
+    }
+
+    private var titleOverlay: some View {
+        ZStack(alignment: .bottomLeading) {
+            LinearGradient(
+                stops: [
+                    .init(color: .clear, location: 0),
+                    .init(color: .black.opacity(0.75), location: 1)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 72)
+
+            Text(log.movieTitle.isEmpty ? "無題" : log.movieTitle)
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(.white)
+                .lineLimit(2)
+                .padding(.horizontal, 8)
+                .padding(.bottom, 8)
+        }
     }
 }
