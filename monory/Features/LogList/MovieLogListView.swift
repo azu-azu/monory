@@ -23,33 +23,10 @@ struct MovieLogListView: View {
                     grid
                 }
             }
-            .navigationTitle("Monory")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showAddLog = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button {
-                            quickScanSource = .camera
-                        } label: {
-                            Label("カメラで撮影", systemImage: "camera")
-                        }
-                        Button {
-                            quickScanSource = .library
-                        } label: {
-                            Label("ライブラリから選択", systemImage: "photo.on.rectangle")
-                        }
-                    } label: {
-                        Image(systemName: "ticket")
-                    }
-                }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                customHeader
             }
+            .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $showAddLog) {
                 AddMovieLogView()
             }
@@ -57,6 +34,37 @@ struct MovieLogListView: View {
                 AddMovieLogView(quickScanSource: source)
             }
         }
+    }
+
+    private var customHeader: some View {
+        HStack(spacing: 16) {
+            Text("Monory")
+                .font(.headline)
+                .fontWeight(.semibold)
+            Spacer()
+            Menu {
+                Button {
+                    quickScanSource = .camera
+                } label: {
+                    Label("カメラで撮影", systemImage: "camera")
+                }
+                Button {
+                    quickScanSource = .library
+                } label: {
+                    Label("ライブラリから選択", systemImage: "photo.on.rectangle")
+                }
+            } label: {
+                Image(systemName: "ticket")
+            }
+            Button {
+                showAddLog = true
+            } label: {
+                Image(systemName: "plus")
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(.bar)
     }
 
     private var grid: some View {
