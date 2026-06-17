@@ -8,10 +8,14 @@ struct MovieLogListView: View {
     @State private var showAddLog = false
     @State private var quickScanSource: QuickScanSource?
 
+    private var pastLogs: [MovieLog] {
+        logs.filter { !$0.isUpcoming }
+    }
+
     var body: some View {
         NavigationStack {
             Group {
-                if logs.isEmpty {
+                if pastLogs.isEmpty {
                     emptyState
                 } else {
                     list
@@ -54,7 +58,7 @@ struct MovieLogListView: View {
 
     private var list: some View {
         List {
-            ForEach(logs) { log in
+            ForEach(pastLogs) { log in
                 NavigationLink(destination: MovieLogDetailView(log: log)) {
                     MovieLogRow(log: log)
                 }

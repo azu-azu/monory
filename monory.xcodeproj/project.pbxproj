@@ -11,6 +11,7 @@
 		1E4992516DF7D0EF98637A44 /* MovieLogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D6BC765BED4BAE5B4AC5F5 /* MovieLogListView.swift */; };
 		1F6B833CDCA1321D1BCB4E57 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CA9EBB80F6D279E5A26F16 /* AppContainer.swift */; };
 		240790BADB5DF68E3CF8345C /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9C76CE676B2012AB549E7 /* Secrets.swift */; };
+		33008B889019F69EA4E9B3C9 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489907D5F7807D3BF9D5C46 /* RootTabView.swift */; };
 		397EB8D28E8FF1ABDB89FAE4 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3476DC97C66236DDFC9A9B /* AppTheme.swift */; };
 		3F25BEEDD9A9710A90235522 /* AddMovieLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F67B451DB28EBEB141DC8F /* AddMovieLogViewModel.swift */; };
 		48A9B4D3012A61ECAAF717F5 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B808DBE44DF4D18F0877F2 /* HapticManager.swift */; };
@@ -26,6 +27,7 @@
 		9B411EE57E72A15BCE2EF139 /* ViewingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596317C2554801150B4CD82 /* ViewingType.swift */; };
 		BC7C2838CBEF4765A8AFA1DD /* ScreeningFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D1A5322F085ED16BAA001C /* ScreeningFormat.swift */; };
 		C820477FDBC71C9FBB9EFC49 /* TicketImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786D8E0A93A515524E8424F9 /* TicketImage.swift */; };
+		CC0A5D4797B434E51B834E82 /* UpcomingTicketsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C07E1F24D3118AC62A74C9 /* UpcomingTicketsView.swift */; };
 		D5B190DEE049E72AC619F3AF /* AddMovieLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB90542F51EF6E628E95B52 /* AddMovieLogView.swift */; };
 		DA1A5AC6F1812997DBE9FE9A /* MonoryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF82D06C9CC95A9CB239ECF3 /* MonoryApp.swift */; };
 /* End PBXBuildFile section */
@@ -34,6 +36,7 @@
 		08D1A5322F085ED16BAA001C /* ScreeningFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreeningFormat.swift; sourceTree = "<group>"; };
 		0A3B607655EF9E2EAB6404CC /* CommonComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonComponents.swift; sourceTree = "<group>"; };
 		18F67B451DB28EBEB141DC8F /* AddMovieLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMovieLogViewModel.swift; sourceTree = "<group>"; };
+		2489907D5F7807D3BF9D5C46 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		25B3FBA401A7B9CE3C4E844F /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
 		32DBFED23D1185035351B96A /* PhotoViewerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerSheet.swift; sourceTree = "<group>"; };
 		3B3476DC97C66236DDFC9A9B /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
@@ -47,6 +50,7 @@
 		786D8E0A93A515524E8424F9 /* TicketImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketImage.swift; sourceTree = "<group>"; };
 		85B808DBE44DF4D18F0877F2 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		87CA9EBB80F6D279E5A26F16 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
+		94C07E1F24D3118AC62A74C9 /* UpcomingTicketsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingTicketsView.swift; sourceTree = "<group>"; };
 		9777A7A90A4CBEEE06DF87A3 /* MovieLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLog.swift; sourceTree = "<group>"; };
 		9DB90542F51EF6E628E95B52 /* AddMovieLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMovieLogView.swift; sourceTree = "<group>"; };
 		A02951A2E5175B4858B48C76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -62,6 +66,7 @@
 			children = (
 				87CA9EBB80F6D279E5A26F16 /* AppContainer.swift */,
 				BF82D06C9CC95A9CB239ECF3 /* MonoryApp.swift */,
+				2489907D5F7807D3BF9D5C46 /* RootTabView.swift */,
 				50A9C76CE676B2012AB549E7 /* Secrets.swift */,
 			);
 			path = App;
@@ -87,6 +92,7 @@
 				D1742B4DAD59D390FE034273 /* AddLog */,
 				D916A416BA38623FCB867B01 /* LogDetail */,
 				8848C7B92AD8E591204A8D88 /* LogList */,
+				C6BDE5803C743C5AD5A97695 /* UpcomingTickets */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -134,6 +140,14 @@
 				54E6EB0220000D9BD1BD5179 /* monory.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		C6BDE5803C743C5AD5A97695 /* UpcomingTickets */ = {
+			isa = PBXGroup;
+			children = (
+				94C07E1F24D3118AC62A74C9 /* UpcomingTicketsView.swift */,
+			);
+			path = UpcomingTickets;
 			sourceTree = "<group>";
 		};
 		CFCA6F27A0DD488EE7F444EB /* OCR */ = {
@@ -267,11 +281,13 @@
 				1E4992516DF7D0EF98637A44 /* MovieLogListView.swift in Sources */,
 				84FB1073002631A956070E6E /* OCRService.swift in Sources */,
 				8F51DDE04EACBDF54524E05F /* PhotoViewerSheet.swift in Sources */,
+				33008B889019F69EA4E9B3C9 /* RootTabView.swift in Sources */,
 				BC7C2838CBEF4765A8AFA1DD /* ScreeningFormat.swift in Sources */,
 				240790BADB5DF68E3CF8345C /* Secrets.swift in Sources */,
 				8CCEC02670573F7B408EF238 /* TMDBClient.swift in Sources */,
 				130A9E19032C28AEBBAA8BCE /* TMDBModels.swift in Sources */,
 				C820477FDBC71C9FBB9EFC49 /* TicketImage.swift in Sources */,
+				CC0A5D4797B434E51B834E82 /* UpcomingTicketsView.swift in Sources */,
 				9B411EE57E72A15BCE2EF139 /* ViewingType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

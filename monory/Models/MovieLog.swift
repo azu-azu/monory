@@ -37,6 +37,10 @@ final class MovieLog {
         viewingType == ViewingType.streaming.rawValue
     }
 
+    var isUpcoming: Bool {
+        Calendar.current.startOfDay(for: watchedAt) > Calendar.current.startOfDay(for: Date())
+    }
+
     init(
         watchedAt: Date = Date(),
         movieTitle: String = "",

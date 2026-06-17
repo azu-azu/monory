@@ -10,7 +10,7 @@ struct MonoryApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MovieLogListView()
+            RootTabView()
         }
         .modelContainer(appContainer.modelContainer)
     }
