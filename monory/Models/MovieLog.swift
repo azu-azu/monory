@@ -33,6 +33,10 @@ final class MovieLog {
     @Relationship(deleteRule: .cascade, inverse: \TicketImage.movieLog)
     var ticketImages: [TicketImage] = []
 
+    /// 配信時の追加視聴日（watchedAt が初回日、以降はここに追加）
+    @Relationship(deleteRule: .cascade, inverse: \ViewingDate.movieLog)
+    var viewingDates: [ViewingDate] = []
+
     var isStreaming: Bool {
         viewingType == ViewingType.streaming.rawValue
     }

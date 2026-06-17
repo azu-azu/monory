@@ -21,6 +21,27 @@ struct AddMovieLogView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel = AddMovieLogViewModel()
+
+    @ViewBuilder
+    private func viewingTypeButton(_ type: ViewingType, icon: String, label: String) -> some View {
+        Button {
+            viewModel.viewingType = type
+        } label: {
+            Label(label, systemImage: icon)
+                .font(.subheadline)
+                .fontWeight(viewModel.viewingType == type ? .semibold : .regular)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .background(
+                    viewModel.viewingType == type
+                        ? Color.accentColor
+                        : Color.secondary.opacity(0.12)
+                )
+                .foregroundStyle(viewModel.viewingType == type ? Color.white : Color.primary)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+        }
+        .buttonStyle(.plain)
+    }
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var showTicketCamera = false
     @State private var showScanLibraryPicker = false
@@ -30,20 +51,22 @@ struct AddMovieLogView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
-                    Picker("視聴方法", selection: $viewModel.viewingType) {
-                        ForEach(ViewingType.allCases, id: \.self) { type in
-                            Text(type.rawValue).tag(type)
+                Section("作品") {
+                    HStack {
+                        TextField("映画タイトル", text: $viewModel.movieTitle)
+                            .onChange(of: viewModel.movieTitle) { _, newValue in
+                                viewModel.onTitleChanged(newValue)
+                            }
+                        if !viewModel.movieTitle.isEmpty {
+                            Button {
+                                viewModel.clearAll()
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
-                    .pickerStyle(.segmented)
-                }
-
-                Section("作品") {
-                    TextField("映画タイトル", text: $viewModel.movieTitle)
-                        .onChange(of: viewModel.movieTitle) { _, newValue in
-                            viewModel.onTitleChanged(newValue)
-                        }
 
                     if viewModel.isSearching {
                         HStack {
@@ -70,7 +93,17 @@ struct AddMovieLogView: View {
                         )
                     }
 
-                    DatePicker("観た日", selection: $viewModel.watchedAt, displayedComponents: .date)
+                    if viewModel.viewingType == .theater {
+                        DatePicker("観た日", selection: $viewModel.watchedAt, displayedComponents: .date)
+                    }
+                }
+
+                Section {
+                    HStack(spacing: 8) {
+                        viewingTypeButton(.theater, icon: "film", label: "映画館")
+                        viewingTypeButton(.streaming, icon: "tv", label: "配信")
+                    }
+                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                 }
 
                 if viewModel.viewingType == .theater {
@@ -93,6 +126,29 @@ struct AddMovieLogView: View {
                         }
                         if viewModel.streamingService == AddMovieLogViewModel.otherServiceOption {
                             TextField("サービス名", text: $viewModel.customStreamingService)
+                        }
+                    }
+
+                    Section("視聴日") {
+                        DatePicker("初回", selection: $viewModel.watchedAt, displayedComponents: .date)
+                        ForEach($viewModel.additionalDates) { $item in
+                            HStack {
+                                DatePicker("", selection: $item.date, displayedComponents: .date)
+                                    .labelsHidden()
+                                Spacer()
+                                Button {
+                                    viewModel.additionalDates.removeAll { $0.id == item.id }
+                                } label: {
+                                    Image(systemName: "minus.circle.fill")
+                                        .foregroundStyle(.red)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        Button {
+                            viewModel.additionalDates.append(IdentifiableDate(date: Date()))
+                        } label: {
+                            Label("視聴日を追加", systemImage: "plus.circle")
                         }
                     }
                 }

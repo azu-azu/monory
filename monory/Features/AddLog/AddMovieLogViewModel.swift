@@ -8,6 +8,11 @@ struct TicketImageDraft: Identifiable {
     var ocrRawText: String?
 }
 
+struct IdentifiableDate: Identifiable {
+    let id: UUID = UUID()
+    var date: Date
+}
+
 @MainActor
 @Observable
 final class AddMovieLogViewModel {
@@ -21,6 +26,9 @@ final class AddMovieLogViewModel {
     var viewingType: ViewingType = .theater
     var streamingService: String = "Netflix"
     var customStreamingService: String = ""
+
+    // 配信: 2回目以降の視聴日
+    var additionalDates: [IdentifiableDate] = []
 
     var effectiveStreamingService: String {
         streamingService == Self.otherServiceOption ? customStreamingService : streamingService
@@ -128,6 +136,19 @@ final class AddMovieLogViewModel {
         searchResults = []
     }
 
+    /// タイトル × ボタン用: OCR で auto-populate された全フィールドを初期値に戻す
+    func clearAll() {
+        clearSelection()
+        movieTitle = ""
+        theaterName = ""
+        screenNumber = ""
+        seatNumber = ""
+        screeningFormat = .standard
+        customStreamingService = ""
+        searchTask?.cancel()
+        searchResults = []
+    }
+
     // MARK: - Save
 
     func save(in context: ModelContext) {
@@ -156,6 +177,15 @@ final class AddMovieLogViewModel {
         }
 
         context.insert(log)
+
+        // 配信: 追加視聴日を保存
+        if viewingType == .streaming {
+            for item in additionalDates {
+                let vd = ViewingDate(date: item.date)
+                context.insert(vd)
+                log.viewingDates.append(vd)
+            }
+        }
 
         for draft in ticketDrafts {
             let ticket = TicketImage(imageData: draft.imageData)

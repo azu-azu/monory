@@ -8,6 +8,7 @@ struct MovieLogDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var selectedTicket: TicketImage?
     @State private var showDeleteConfirmation = false
+    @State private var showEdit = false
 
     var body: some View {
         List {
@@ -31,7 +32,14 @@ struct MovieLogDetailView: View {
                 if let year = log.movieReleaseYear {
                     LabeledContent("公開年", value: String(year))
                 }
-                LabeledContent("観た日", value: log.watchedAt.formatted(date: .long, time: .omitted))
+                if log.isStreaming && !log.viewingDates.isEmpty {
+                    LabeledContent("初回視聴", value: log.watchedAt.formatted(date: .long, time: .omitted))
+                    ForEach(log.viewingDates.sorted(by: { $0.date < $1.date })) { vd in
+                        LabeledContent("視聴日", value: vd.date.formatted(date: .long, time: .omitted))
+                    }
+                } else {
+                    LabeledContent("観た日", value: log.watchedAt.formatted(date: .long, time: .omitted))
+                }
             }
 
             if let synopsis = log.movieSynopsis, !synopsis.isEmpty {
@@ -97,12 +105,22 @@ struct MovieLogDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    showEdit = true
+                } label: {
+                    Image(systemName: "pencil")
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
                     showDeleteConfirmation = true
                 } label: {
                     Image(systemName: "trash")
                 }
                 .tint(.red)
             }
+        }
+        .sheet(isPresented: $showEdit) {
+            EditMovieLogView(log: log)
         }
         .confirmationDialog("このログを削除しますか？", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button("削除", role: .destructive) {

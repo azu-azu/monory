@@ -24,6 +24,7 @@ struct MovieLogListView: View {
                 }
             }
             .navigationTitle("Monory")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
