@@ -104,13 +104,25 @@ enum CinemaTicketParser {
                 if line.hasPrefix(keyword) {
                     let rest = String(line.dropFirst(keyword.count))
                         .trimmingCharacters(in: separators)
-                    if !rest.isEmpty { return rest }
+                    if !rest.isEmpty {
+                        return joinIfUnclosed(rest, next: i + 1 < lines.count ? lines[i + 1] : nil)
+                    }
                     // value on next line
-                    if i + 1 < lines.count { return lines[i + 1] }
+                    if i + 1 < lines.count {
+                        return joinIfUnclosed(lines[i + 1], next: i + 2 < lines.count ? lines[i + 2] : nil)
+                    }
                 }
             }
         }
         return nil
+    }
+
+    /// 開き括弧が閉じ括弧より多い（= OCR が行中で折り返した）場合のみ next を結合する
+    private static func joinIfUnclosed(_ base: String, next: String?) -> String {
+        guard let next else { return base }
+        let opens  = base.unicodeScalars.filter { "（([【「".unicodeScalars.contains($0) }.count
+        let closes = base.unicodeScalars.filter { "）)】」]".unicodeScalars.contains($0) }.count
+        return opens > closes ? base + next : base
     }
 
     /// TOHO 等、キーワードなしで日付行の直後にタイトルが来る形式向けフォールバック
@@ -121,7 +133,9 @@ enum CinemaTicketParser {
             guard hasDate else { continue }
             // 日付行の直後から最大2行チェック
             for j in (i + 1)..<min(i + 3, lines.count) {
-                if isLikelyMovieTitle(lines[j]) { return lines[j] }
+                if isLikelyMovieTitle(lines[j]) {
+                    return joinIfUnclosed(lines[j], next: j + 1 < lines.count ? lines[j + 1] : nil)
+                }
             }
         }
         return nil

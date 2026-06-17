@@ -195,6 +195,7 @@ struct AddMovieLogView: View {
             .photosPicker(
                 isPresented: $showScanLibraryPicker,
                 selection: $scanLibraryItems,
+                maxSelectionCount: 1,
                 matching: .images
             )
         }

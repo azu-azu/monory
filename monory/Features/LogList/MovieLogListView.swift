@@ -2,6 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct MovieLogListView: View {
+    @Environment(\.modelContext) private var context
+
     @Query(sort: \MovieLog.watchedAt, order: .reverse)
     private var logs: [MovieLog]
 
@@ -59,17 +61,24 @@ struct MovieLogListView: View {
     private var grid: some View {
         ScrollView {
             LazyVGrid(
-                columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)],
-                spacing: 10
+                columns: [GridItem(.flexible(), spacing: 6), GridItem(.flexible(), spacing: 6), GridItem(.flexible(), spacing: 6)],
+                spacing: 6
             ) {
                 ForEach(pastLogs) { log in
                     NavigationLink(destination: MovieLogDetailView(log: log)) {
                         PosterCell(log: log)
                     }
                     .buttonStyle(.plain)
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            context.delete(log)
+                        } label: {
+                            Label("削除", systemImage: "trash")
+                        }
+                    }
                 }
             }
-            .padding(.horizontal, 12)
+            .padding(.horizontal, 8)
             .padding(.top, 8)
         }
     }

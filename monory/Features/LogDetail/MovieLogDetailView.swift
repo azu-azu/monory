@@ -5,7 +5,9 @@ struct MovieLogDetailView: View {
     let log: MovieLog
 
     @Environment(\.modelContext) private var context
+    @Environment(\.dismiss) private var dismiss
     @State private var selectedTicket: TicketImage?
+    @State private var showDeleteConfirmation = false
 
     var body: some View {
         List {
@@ -92,6 +94,22 @@ struct MovieLogDetailView: View {
         }
         .navigationTitle(log.movieTitle.isEmpty ? "無題" : log.movieTitle)
         .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showDeleteConfirmation = true
+                } label: {
+                    Image(systemName: "trash")
+                }
+                .tint(.red)
+            }
+        }
+        .confirmationDialog("このログを削除しますか？", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+            Button("削除", role: .destructive) {
+                context.delete(log)
+                dismiss()
+            }
+        }
         .fullScreenCover(item: $selectedTicket) { ticket in
             if let uiImage = UIImage(data: ticket.imageData) {
                 PhotoViewerSheet(image: uiImage)
