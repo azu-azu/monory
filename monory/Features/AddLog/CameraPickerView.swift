@@ -27,6 +27,7 @@ final class LiveCameraViewController: UIViewController {
     private let session = AVCaptureSession()
     private let videoOutput = AVCaptureVideoDataOutput()
     private let sessionQueue = DispatchQueue(label: "com.monory.camera.session")
+    private let ciContext = CIContext()
     private var previewLayer: AVCaptureVideoPreviewLayer?
     private var pendingCapture = false  // accessed only on sessionQueue
 

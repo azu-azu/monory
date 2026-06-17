@@ -60,11 +60,7 @@ struct EditMovieLogView: View {
                 }
 
                 Section {
-                    HStack(spacing: 8) {
-                        viewingTypeButton(.theater, icon: "film",  label: "映画館")
-                        viewingTypeButton(.streaming, icon: "tv", label: "配信")
-                    }
-                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                    ViewingTypeToggle(selection: $viewingType)
                 }
 
                 if viewingType == .theater {
@@ -139,27 +135,6 @@ struct EditMovieLogView: View {
     }
 
     // MARK: - Private
-
-    @ViewBuilder
-    private func viewingTypeButton(_ type: ViewingType, icon: String, label: String) -> some View {
-        Button {
-            viewingType = type
-        } label: {
-            Label(label, systemImage: icon)
-                .font(.subheadline)
-                .fontWeight(viewingType == type ? .semibold : .regular)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-                .background(
-                    viewingType == type
-                        ? Color.accentColor
-                        : Color.secondary.opacity(0.12)
-                )
-                .foregroundStyle(viewingType == type ? Color.white : Color.primary)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-        }
-        .buttonStyle(.plain)
-    }
 
     private func saveChanges() {
         log.movieTitle    = movieTitle.trimmingCharacters(in: .whitespaces)

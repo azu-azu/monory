@@ -22,26 +22,6 @@ struct AddMovieLogView: View {
 
     @State private var viewModel = AddMovieLogViewModel()
 
-    @ViewBuilder
-    private func viewingTypeButton(_ type: ViewingType, icon: String, label: String) -> some View {
-        Button {
-            viewModel.viewingType = type
-        } label: {
-            Label(label, systemImage: icon)
-                .font(.subheadline)
-                .fontWeight(viewModel.viewingType == type ? .semibold : .regular)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-                .background(
-                    viewModel.viewingType == type
-                        ? Color.accentColor
-                        : Color.secondary.opacity(0.12)
-                )
-                .foregroundStyle(viewModel.viewingType == type ? Color.white : Color.primary)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-        }
-        .buttonStyle(.plain)
-    }
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var showTicketCamera = false
     @State private var showScanLibraryPicker = false
@@ -99,11 +79,7 @@ struct AddMovieLogView: View {
                 }
 
                 Section {
-                    HStack(spacing: 8) {
-                        viewingTypeButton(.theater, icon: "film", label: "映画館")
-                        viewingTypeButton(.streaming, icon: "tv", label: "配信")
-                    }
-                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                    ViewingTypeToggle(selection: $viewModel.viewingType)
                 }
 
                 if viewModel.viewingType == .theater {

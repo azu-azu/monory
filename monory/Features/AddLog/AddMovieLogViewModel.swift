@@ -146,7 +146,6 @@ final class AddMovieLogViewModel {
         screeningFormat = .standard
         customStreamingService = ""
         searchTask?.cancel()
-        searchResults = []
     }
 
     // MARK: - Save

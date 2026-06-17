@@ -71,6 +71,42 @@ extension View {
     }
 }
 
+// MARK: - ViewingTypeToggle
+// 映画館/配信 切り替えボタン行。AddMovieLogView・EditMovieLogView 共用。
+
+struct ViewingTypeToggle: View {
+    @Binding var selection: ViewingType
+
+    var body: some View {
+        HStack(spacing: 8) {
+            toggleButton(.theater,   icon: "film", label: "映画館")
+            toggleButton(.streaming, icon: "tv",   label: "配信")
+        }
+        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+    }
+
+    @ViewBuilder
+    private func toggleButton(_ type: ViewingType, icon: String, label: String) -> some View {
+        Button {
+            selection = type
+        } label: {
+            Label(label, systemImage: icon)
+                .font(.subheadline)
+                .fontWeight(selection == type ? .semibold : .regular)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .background(
+                    selection == type
+                        ? Color.accentColor
+                        : Color.secondary.opacity(0.12)
+                )
+                .foregroundStyle(selection == type ? Color.white : Color.primary)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 // MARK: - RaisedButtonStyle
 
 struct RaisedButtonStyle: ButtonStyle {

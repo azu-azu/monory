@@ -8,7 +8,6 @@ struct MovieLogListView: View {
     private var logs: [MovieLog]
 
     @State private var showAddLog = false
-    @State private var quickScanSource: QuickScanSource?
 
     private var pastLogs: [MovieLog] {
         logs.filter { !$0.isUpcoming }
@@ -30,9 +29,6 @@ struct MovieLogListView: View {
             .sheet(isPresented: $showAddLog) {
                 AddMovieLogView()
             }
-            .sheet(item: $quickScanSource) { source in
-                AddMovieLogView(quickScanSource: source)
-            }
         }
     }
 
@@ -42,20 +38,6 @@ struct MovieLogListView: View {
                 .font(.headline)
                 .fontWeight(.semibold)
             Spacer()
-            Menu {
-                Button {
-                    quickScanSource = .camera
-                } label: {
-                    Label("カメラで撮影", systemImage: "camera")
-                }
-                Button {
-                    quickScanSource = .library
-                } label: {
-                    Label("ライブラリから選択", systemImage: "photo.on.rectangle")
-                }
-            } label: {
-                Image(systemName: "ticket")
-            }
             Button {
                 showAddLog = true
             } label: {
