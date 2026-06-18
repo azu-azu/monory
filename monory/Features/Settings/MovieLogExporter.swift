@@ -56,10 +56,7 @@ struct MovieLogExporter {
     }
 
     static func fileName() -> String {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        f.locale = Locale(identifier: "en_US_POSIX")
-        return "monory_export_\(f.string(from: Date())).csv"
+        "monory_export_\(dateFormatter.string(from: Date())).csv"
     }
 
     private static func escapeField(_ value: String) -> String {

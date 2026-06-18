@@ -1,5 +1,6 @@
 import SwiftUI
 @preconcurrency import AVFoundation
+@preconcurrency import CoreImage
 
 private let jpegCompressionQuality: CGFloat = 0.8
 
@@ -27,7 +28,7 @@ final class LiveCameraViewController: UIViewController {
     nonisolated(unsafe) private let session = AVCaptureSession()
     nonisolated(unsafe) private let videoOutput = AVCaptureVideoDataOutput()
     private let sessionQueue = DispatchQueue(label: "com.monory.camera.session")
-    private let ciContext = CIContext()
+    nonisolated(unsafe) private let ciContext = CIContext()
     private var previewLayer: AVCaptureVideoPreviewLayer?
     nonisolated(unsafe) private var pendingCapture = false  // accessed only on sessionQueue
 
@@ -177,7 +178,6 @@ extension LiveCameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate
 
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         let ciImage = CIImage(cvImageBuffer: imageBuffer)
-        let ciContext = CIContext()
         guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else { return }
         let uiImage = UIImage(cgImage: cgImage)
         guard let data = uiImage.jpegData(compressionQuality: jpegCompressionQuality) else { return }
