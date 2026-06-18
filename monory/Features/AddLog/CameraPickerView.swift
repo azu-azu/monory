@@ -66,7 +66,9 @@ final class LiveCameraViewController: UIViewController {
             setupCaptureSession()
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
-                if granted { self?.setupCaptureSession() }
+                if granted {
+                    Task { @MainActor [weak self] in self?.setupCaptureSession() }
+                }
             }
         default:
             break
