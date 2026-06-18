@@ -77,7 +77,7 @@ extension View {
 struct StarRatingView: View {
     let rating: Int?
     var editing: Bool = false
-    var onSelect: ((Int) -> Void)? = nil
+    var onSelect: ((Int?) -> Void)? = nil
 
     var body: some View {
         HStack(spacing: 4) {
@@ -87,8 +87,8 @@ struct StarRatingView: View {
                     .font(.system(size: editing ? 28 : 16))
                     .onTapGesture {
                         guard editing else { return }
-                        // 同じ星をタップしたらクリア
-                        onSelect?(star == rating ? 0 : star)
+                        // 同じ星をタップしたらクリア（nil = 未評価）
+                        onSelect?(star == rating ? nil : star)
                     }
             }
         }

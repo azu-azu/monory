@@ -127,7 +127,7 @@ struct EditMovieLogView: View {
                 Section("評価") {
                     HStack {
                         StarRatingView(rating: rating, editing: true) { selected in
-                            rating = selected == 0 ? nil : selected
+                            rating = selected
                         }
                         Spacer()
                         if rating != nil {

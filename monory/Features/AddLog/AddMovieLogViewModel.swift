@@ -20,7 +20,7 @@ final class AddMovieLogViewModel {
     static let otherServiceOption = StreamingServiceStore.otherOption
 
     var viewingType: ViewingType = .theater
-    var streamingService: String = "Netflix"
+    var streamingService: String = StreamingServiceStore.loadServices().first ?? StreamingServiceStore.defaultServices[0]
     var customStreamingService: String = ""
 
     // 配信: 2回目以降の視聴日
@@ -137,12 +137,16 @@ final class AddMovieLogViewModel {
     /// タイトル × ボタン用: OCR で auto-populate された全フィールドを初期値に戻す
     func clearAll() {
         clearSelection()
-        movieTitle = ""
-        theaterName = ""
-        screenNumber = ""
-        seatNumber = ""
-        screeningFormat = .standard
+        movieTitle             = ""
+        watchedAt              = Date()
+        watchedAtUnknown       = false
+        theaterName            = ""
+        screenNumber           = ""
+        seatNumber             = ""
+        screeningFormat        = .standard
         customStreamingService = ""
+        rating                 = nil
+        additionalDates        = []
         searchTask?.cancel()
     }
 
@@ -156,7 +160,7 @@ final class AddMovieLogViewModel {
             review: review.trimmingCharacters(in: .whitespaces)
         )
         log.watchedAtUnknown = watchedAtUnknown
-        log.rating = rating == 0 ? nil : rating
+        log.rating = rating
         log.viewingType = viewingType.rawValue
         if viewingType == .theater {
             log.screenNumber = screenNumber.isEmpty ? nil : screenNumber
