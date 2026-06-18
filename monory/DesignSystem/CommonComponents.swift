@@ -71,6 +71,31 @@ extension View {
     }
 }
 
+// MARK: - StarRatingView
+// rating: Int? (nil=未評価, 1-5)。editing=true でタップ選択可。
+
+struct StarRatingView: View {
+    let rating: Int?
+    var editing: Bool = false
+    var onSelect: ((Int) -> Void)? = nil
+
+    var body: some View {
+        HStack(spacing: 4) {
+            ForEach(1...5, id: \.self) { star in
+                Image(systemName: star <= (rating ?? 0) ? "star.fill" : "star")
+                    .foregroundStyle(star <= (rating ?? 0) ? Color.yellow : Color.secondary.opacity(0.4))
+                    .font(.system(size: editing ? 28 : 16))
+                    .onTapGesture {
+                        guard editing else { return }
+                        // 同じ星をタップしたらクリア
+                        onSelect?(star == rating ? 0 : star)
+                    }
+            }
+        }
+        .animation(.easeInOut(duration: 0.1), value: rating)
+    }
+}
+
 // MARK: - ViewingTypeToggle
 // 映画館/配信 切り替えボタン行。AddMovieLogView・EditMovieLogView 共用。
 

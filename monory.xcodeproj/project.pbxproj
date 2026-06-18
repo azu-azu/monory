@@ -25,8 +25,10 @@
 		84FB1073002631A956070E6E /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49508715B562EC81CD6060DC /* OCRService.swift */; };
 		8CCEC02670573F7B408EF238 /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B3FBA401A7B9CE3C4E844F /* TMDBClient.swift */; };
 		8F51DDE04EACBDF54524E05F /* PhotoViewerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DBFED23D1185035351B96A /* PhotoViewerSheet.swift */; };
+		94CF93F5B48E4348E9A91CDD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BCF3BB8216E0AECA6309AE /* SettingsView.swift */; };
 		97DEB9E6D2D73D70E6C0DAC3 /* CinemaTicketParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3206F51A4C257B6FB1907FD /* CinemaTicketParser.swift */; };
 		9B411EE57E72A15BCE2EF139 /* ViewingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596317C2554801150B4CD82 /* ViewingType.swift */; };
+		BA5653219697E32493ECF6AB /* StreamingServiceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444A634E25ED3FC29BA0DA35 /* StreamingServiceStore.swift */; };
 		BC7C2838CBEF4765A8AFA1DD /* ScreeningFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D1A5322F085ED16BAA001C /* ScreeningFormat.swift */; };
 		BFEA11F3D5BA5061DCF2B492 /* StatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908467089C9C58F995A5C875 /* StatusBarView.swift */; };
 		C820477FDBC71C9FBB9EFC49 /* TicketImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786D8E0A93A515524E8424F9 /* TicketImage.swift */; };
@@ -43,7 +45,9 @@
 		25B3FBA401A7B9CE3C4E844F /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
 		2B8979AA1D20DEC59946E649 /* ViewingDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewingDate.swift; sourceTree = "<group>"; };
 		32DBFED23D1185035351B96A /* PhotoViewerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerSheet.swift; sourceTree = "<group>"; };
+		38BCF3BB8216E0AECA6309AE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3B3476DC97C66236DDFC9A9B /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		444A634E25ED3FC29BA0DA35 /* StreamingServiceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingServiceStore.swift; sourceTree = "<group>"; };
 		49508715B562EC81CD6060DC /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
 		4CE5EC19C14D8125A1F46D3C /* TMDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBModels.swift; sourceTree = "<group>"; };
 		50A9C76CE676B2012AB549E7 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
@@ -67,6 +71,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		00AC3A3D8AF7AB635CAAB0E6 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				38BCF3BB8216E0AECA6309AE /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		17391A9E1FAECF15BE4D70FE /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -98,6 +110,7 @@
 				D1742B4DAD59D390FE034273 /* AddLog */,
 				D916A416BA38623FCB867B01 /* LogDetail */,
 				8848C7B92AD8E591204A8D88 /* LogList */,
+				00AC3A3D8AF7AB635CAAB0E6 /* Settings */,
 				C6BDE5803C743C5AD5A97695 /* UpcomingTickets */,
 			);
 			path = Features;
@@ -190,6 +203,7 @@
 			children = (
 				9777A7A90A4CBEEE06DF87A3 /* MovieLog.swift */,
 				08D1A5322F085ED16BAA001C /* ScreeningFormat.swift */,
+				444A634E25ED3FC29BA0DA35 /* StreamingServiceStore.swift */,
 				786D8E0A93A515524E8424F9 /* TicketImage.swift */,
 				2B8979AA1D20DEC59946E649 /* ViewingDate.swift */,
 				7596317C2554801150B4CD82 /* ViewingType.swift */,
@@ -294,7 +308,9 @@
 				33008B889019F69EA4E9B3C9 /* RootTabView.swift in Sources */,
 				BC7C2838CBEF4765A8AFA1DD /* ScreeningFormat.swift in Sources */,
 				240790BADB5DF68E3CF8345C /* Secrets.swift in Sources */,
+				94CF93F5B48E4348E9A91CDD /* SettingsView.swift in Sources */,
 				BFEA11F3D5BA5061DCF2B492 /* StatusBarView.swift in Sources */,
+				BA5653219697E32493ECF6AB /* StreamingServiceStore.swift in Sources */,
 				8CCEC02670573F7B408EF238 /* TMDBClient.swift in Sources */,
 				130A9E19032C28AEBBAA8BCE /* TMDBModels.swift in Sources */,
 				C820477FDBC71C9FBB9EFC49 /* TicketImage.swift in Sources */,

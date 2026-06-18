@@ -1,6 +1,13 @@
 import SwiftUI
 import SwiftData
 
+enum LogSortOrder: String, CaseIterable {
+    case dateDescending  = "日付（新しい順）"
+    case dateAscending   = "日付（古い順）"
+    case ratingDescending = "評価（高い順）"
+    case titleAscending  = "タイトル（あいうえお順）"
+}
+
 struct MovieLogListView: View {
     @Environment(\.modelContext) private var context
 
@@ -8,9 +15,11 @@ struct MovieLogListView: View {
     private var logs: [MovieLog]
 
     @State private var showAddLog = false
+    @State private var sortOrder: LogSortOrder = .dateDescending
 
     private var pastLogs: [MovieLog] {
-        logs.filter { !$0.isUpcoming }
+        let base = logs.filter { !$0.isUpcoming }
+        return sorted(base)
     }
 
     var body: some View {
@@ -33,11 +42,26 @@ struct MovieLogListView: View {
     }
 
     private var customHeader: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 12) {
             Text("Monory")
                 .font(.headline)
                 .fontWeight(.semibold)
             Spacer()
+            Menu {
+                ForEach(LogSortOrder.allCases, id: \.self) { order in
+                    Button {
+                        sortOrder = order
+                    } label: {
+                        if sortOrder == order {
+                            Label(order.rawValue, systemImage: "checkmark")
+                        } else {
+                            Text(order.rawValue)
+                        }
+                    }
+                }
+            } label: {
+                Image(systemName: "arrow.up.arrow.down")
+            }
             Button {
                 showAddLog = true
             } label: {
@@ -85,6 +109,31 @@ struct MovieLogListView: View {
             Text("右上の + から映画鑑賞を記録しよう")
                 .font(.subheadline)
                 .foregroundStyle(.tertiary)
+        }
+    }
+
+    private func sorted(_ list: [MovieLog]) -> [MovieLog] {
+        switch sortOrder {
+        case .dateDescending:
+            return list.sorted {
+                if $0.watchedAtUnknown != $1.watchedAtUnknown { return $1.watchedAtUnknown }
+                return $0.watchedAt > $1.watchedAt
+            }
+        case .dateAscending:
+            return list.sorted {
+                if $0.watchedAtUnknown != $1.watchedAtUnknown { return $1.watchedAtUnknown }
+                return $0.watchedAt < $1.watchedAt
+            }
+        case .ratingDescending:
+            return list.sorted {
+                let r0 = $0.rating ?? 0
+                let r1 = $1.rating ?? 0
+                if r0 != r1 { return r0 > r1 }
+                if $0.watchedAtUnknown != $1.watchedAtUnknown { return $1.watchedAtUnknown }
+                return $0.watchedAt > $1.watchedAt
+            }
+        case .titleAscending:
+            return list.sorted { $0.movieTitle.localizedCompare($1.movieTitle) == .orderedAscending }
         }
     }
 }

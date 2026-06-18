@@ -19,6 +19,10 @@ struct RootTabView: View {
                     Label("チケット", systemImage: "ticket")
                 }
                 .badge(upcomingCount)
+            SettingsView()
+                .tabItem {
+                    Label("設定", systemImage: "gearshape")
+                }
         }
         .overlay(alignment: .top) {
             GeometryReader { geo in

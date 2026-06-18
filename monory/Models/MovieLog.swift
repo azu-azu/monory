@@ -27,6 +27,9 @@ final class MovieLog {
     @Attribute(.externalStorage)
     var moviePosterData: Data?
 
+    var watchedAtUnknown: Bool = false
+    var rating: Int? = nil
+
     var createdAt: Date = Date()
     var updatedAt: Date = Date()
 
@@ -42,7 +45,14 @@ final class MovieLog {
     }
 
     var isUpcoming: Bool {
-        Calendar.current.startOfDay(for: watchedAt) > Calendar.current.startOfDay(for: Date())
+        guard !watchedAtUnknown else { return false }
+        return Calendar.current.startOfDay(for: watchedAt) > Calendar.current.startOfDay(for: Date())
+    }
+
+    var watchedAtDisplay: String {
+        watchedAtUnknown
+            ? "不明"
+            : watchedAt.formatted(date: .long, time: .omitted)
     }
 
     init(

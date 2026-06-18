@@ -17,11 +17,7 @@ struct IdentifiableDate: Identifiable {
 @Observable
 final class AddMovieLogViewModel {
     // Viewing type
-    static let otherServiceOption = "その他"
-    static let streamingServices: [String] = [
-        "Netflix", "Prime Video", "Disney+", "Apple TV+",
-        "U-NEXT", "Hulu", "dアニメストア", "ABEMA", otherServiceOption,
-    ]
+    static let otherServiceOption = StreamingServiceStore.otherOption
 
     var viewingType: ViewingType = .theater
     var streamingService: String = "Netflix"
@@ -36,10 +32,12 @@ final class AddMovieLogViewModel {
 
     var movieTitle: String = ""
     var watchedAt: Date = Date()
+    var watchedAtUnknown: Bool = false
     var theaterName: String = ""
     var screenNumber: String = ""
     var seatNumber: String = ""
     var screeningFormat: ScreeningFormat = .standard
+    var rating: Int? = nil
     var review: String = ""
     var ticketDrafts: [TicketImageDraft] = []
 
@@ -157,6 +155,8 @@ final class AddMovieLogViewModel {
             theaterName: viewingType == .theater ? theaterName.trimmingCharacters(in: .whitespaces) : "",
             review: review.trimmingCharacters(in: .whitespaces)
         )
+        log.watchedAtUnknown = watchedAtUnknown
+        log.rating = rating == 0 ? nil : rating
         log.viewingType = viewingType.rawValue
         if viewingType == .theater {
             log.screenNumber = screenNumber.isEmpty ? nil : screenNumber

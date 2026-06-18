@@ -19,6 +19,7 @@ struct AddMovieLogView: View {
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
+    @Environment(StreamingServiceStore.self) private var streamingStore
 
     @State private var viewModel = AddMovieLogViewModel()
 
@@ -74,7 +75,10 @@ struct AddMovieLogView: View {
                     }
 
                     if viewModel.viewingType == .theater {
-                        DatePicker("観た日", selection: $viewModel.watchedAt, displayedComponents: .date)
+                        Toggle("日付不明", isOn: $viewModel.watchedAtUnknown)
+                        if !viewModel.watchedAtUnknown {
+                            DatePicker("観た日", selection: $viewModel.watchedAt, displayedComponents: .date)
+                        }
                     }
                 }
 
@@ -96,35 +100,54 @@ struct AddMovieLogView: View {
                 } else {
                     Section("配信") {
                         Picker("サービス", selection: $viewModel.streamingService) {
-                            ForEach(AddMovieLogViewModel.streamingServices, id: \.self) { service in
+                            ForEach(streamingStore.services, id: \.self) { service in
                                 Text(service).tag(service)
                             }
+                            Text(StreamingServiceStore.otherOption)
+                                .tag(StreamingServiceStore.otherOption)
                         }
-                        if viewModel.streamingService == AddMovieLogViewModel.otherServiceOption {
+                        if viewModel.streamingService == StreamingServiceStore.otherOption {
                             TextField("サービス名", text: $viewModel.customStreamingService)
                         }
                     }
 
                     Section("視聴日") {
-                        DatePicker("初回", selection: $viewModel.watchedAt, displayedComponents: .date)
-                        ForEach($viewModel.additionalDates) { $item in
-                            HStack {
-                                DatePicker("", selection: $item.date, displayedComponents: .date)
-                                    .labelsHidden()
-                                Spacer()
-                                Button {
-                                    viewModel.additionalDates.removeAll { $0.id == item.id }
-                                } label: {
-                                    Image(systemName: "minus.circle.fill")
-                                        .foregroundStyle(.red)
+                        Toggle("日付不明", isOn: $viewModel.watchedAtUnknown)
+                        if !viewModel.watchedAtUnknown {
+                            DatePicker("初回", selection: $viewModel.watchedAt, displayedComponents: .date)
+                            ForEach($viewModel.additionalDates) { $item in
+                                HStack {
+                                    DatePicker("", selection: $item.date, displayedComponents: .date)
+                                        .labelsHidden()
+                                    Spacer()
+                                    Button {
+                                        viewModel.additionalDates.removeAll { $0.id == item.id }
+                                    } label: {
+                                        Image(systemName: "minus.circle.fill")
+                                            .foregroundStyle(.red)
+                                    }
+                                    .buttonStyle(.plain)
                                 }
-                                .buttonStyle(.plain)
+                            }
+                            Button {
+                                viewModel.additionalDates.append(IdentifiableDate(date: Date()))
+                            } label: {
+                                Label("視聴日を追加", systemImage: "plus.circle")
                             }
                         }
-                        Button {
-                            viewModel.additionalDates.append(IdentifiableDate(date: Date()))
-                        } label: {
-                            Label("視聴日を追加", systemImage: "plus.circle")
+                    }
+                }
+
+                Section("評価") {
+                    HStack {
+                        StarRatingView(rating: viewModel.rating, editing: true) { selected in
+                            viewModel.rating = selected == 0 ? nil : selected
+                        }
+                        Spacer()
+                        if viewModel.rating != nil {
+                            Button("クリア") { viewModel.rating = nil }
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }

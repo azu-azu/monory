@@ -33,12 +33,12 @@ struct MovieLogDetailView: View {
                     LabeledContent("公開年", value: String(year))
                 }
                 if log.isStreaming && !log.viewingDates.isEmpty {
-                    LabeledContent("初回視聴", value: log.watchedAt.formatted(date: .long, time: .omitted))
+                    LabeledContent("初回視聴", value: log.watchedAtDisplay)
                     ForEach(log.viewingDates.sorted(by: { $0.date < $1.date })) { vd in
                         LabeledContent("視聴日", value: vd.date.formatted(date: .long, time: .omitted))
                     }
                 } else {
-                    LabeledContent("観た日", value: log.watchedAt.formatted(date: .long, time: .omitted))
+                    LabeledContent("観た日", value: log.watchedAtDisplay)
                 }
             }
 
@@ -61,6 +61,11 @@ struct MovieLogDetailView: View {
                     LabeledContent("座席", value: log.seatNumber ?? "—")
                     LabeledContent("上映形式", value: log.screeningFormat)
                 }
+            }
+
+            Section("評価") {
+                StarRatingView(rating: log.rating)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
 
             if !log.review.isEmpty {
