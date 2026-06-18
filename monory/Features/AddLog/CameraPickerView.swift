@@ -1,9 +1,9 @@
 import SwiftUI
-import AVFoundation
+@preconcurrency import AVFoundation
+
+private let jpegCompressionQuality: CGFloat = 0.8
 
 struct CameraPickerView: UIViewControllerRepresentable {
-    static let jpegCompressionQuality: CGFloat = 0.8
-
     let onCapture: (Data) -> Void
     @Environment(\.dismiss) private var dismiss
 
@@ -24,12 +24,12 @@ final class LiveCameraViewController: UIViewController {
     private let onCaptureHandler: (Data) -> Void
     private let onCancelHandler: () -> Void
 
-    private let session = AVCaptureSession()
-    private let videoOutput = AVCaptureVideoDataOutput()
+    nonisolated(unsafe) private let session = AVCaptureSession()
+    nonisolated(unsafe) private let videoOutput = AVCaptureVideoDataOutput()
     private let sessionQueue = DispatchQueue(label: "com.monory.camera.session")
     private let ciContext = CIContext()
     private var previewLayer: AVCaptureVideoPreviewLayer?
-    private var pendingCapture = false  // accessed only on sessionQueue
+    nonisolated(unsafe) private var pendingCapture = false  // accessed only on sessionQueue
 
     init(onCapture: @escaping (Data) -> Void, onCancel: @escaping () -> Void) {
         self.onCaptureHandler = onCapture
@@ -96,8 +96,8 @@ final class LiveCameraViewController: UIViewController {
             }
 
             if let conn = self.videoOutput.connection(with: .video),
-               conn.isVideoOrientationSupported {
-                conn.videoOrientation = .portrait
+               conn.isVideoRotationAngleSupported(90) {
+                conn.videoRotationAngle = 90
             }
 
             self.session.commitConfiguration()
@@ -105,8 +105,8 @@ final class LiveCameraViewController: UIViewController {
             DispatchQueue.main.async {
                 let layer = AVCaptureVideoPreviewLayer(session: self.session)
                 layer.videoGravity = .resizeAspectFill
-                if let conn = layer.connection, conn.isVideoOrientationSupported {
-                    conn.videoOrientation = .portrait
+                if let conn = layer.connection, conn.isVideoRotationAngleSupported(90) {
+                    conn.videoRotationAngle = 90
                 }
                 layer.frame = self.view.bounds
                 // insertSublayer at 0 → under UIView subviews (buttons)
@@ -178,7 +178,7 @@ extension LiveCameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate
         let ciContext = CIContext()
         guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else { return }
         let uiImage = UIImage(cgImage: cgImage)
-        guard let data = uiImage.jpegData(compressionQuality: CameraPickerView.jpegCompressionQuality) else { return }
+        guard let data = uiImage.jpegData(compressionQuality: jpegCompressionQuality) else { return }
 
         DispatchQueue.main.async { [weak self] in
             self?.onCaptureHandler(data)
