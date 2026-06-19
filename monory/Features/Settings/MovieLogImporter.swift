@@ -14,6 +14,15 @@ struct MovieLogImporter {
         return f
     }()
 
+    // MovieLogExporter の列順と1対1で対応させる
+    private enum Col: Int {
+        case title = 0, originalTitle, releaseYear, watchedAt,
+             rating, viewingType, theaterName, streamingService,
+             screeningFormat, screenNumber, seatNumber,
+             additionalDates, review, tmdbId
+        static let count = 14
+    }
+
     static func `import`(data: Data, into context: ModelContext) -> ImportResult {
         // UTF-8 BOM を除去
         var csvData = data
@@ -33,37 +42,37 @@ struct MovieLogImporter {
 
         for row in rows {
             // 空行・列数不足はスキップ（末尾の空行も含む）
-            guard row.count >= 14, !row[0].isEmpty else {
+            guard row.count >= Col.count, !row[Col.title.rawValue].isEmpty else {
                 if !row.allSatisfy({ $0.isEmpty }) { skipped += 1 }
                 continue
             }
 
-            let watchedAtStr = row[3]
+            let watchedAtStr = row[Col.watchedAt.rawValue]
             let isUnknown = watchedAtStr == "不明"
             let watchedAt = isUnknown ? Date() : (dateFormatter.date(from: watchedAtStr) ?? Date())
 
             let log = MovieLog(
                 watchedAt: watchedAt,
-                movieTitle: row[0],
-                theaterName: row[6],
-                review: row[12]
+                movieTitle: row[Col.title.rawValue],
+                theaterName: row[Col.theaterName.rawValue],
+                review: row[Col.review.rawValue]
             )
-            log.movieOriginalTitle  = row[1].isEmpty ? nil : row[1]
-            log.movieReleaseYear    = Int(row[2])
+            log.movieOriginalTitle  = row[Col.originalTitle.rawValue].isEmpty ? nil : row[Col.originalTitle.rawValue]
+            log.movieReleaseYear    = Int(row[Col.releaseYear.rawValue])
             log.watchedAtUnknown    = isUnknown
-            log.rating              = Int(row[4])
-            log.viewingType         = row[5].isEmpty ? ViewingType.theater.rawValue : row[5]
-            log.streamingService    = row[7].isEmpty ? nil : row[7]
-            log.screeningFormat     = row[8].isEmpty ? ScreeningFormat.standard.rawValue : row[8]
-            log.screenNumber        = row[9].isEmpty ? nil : row[9]
-            log.seatNumber          = row[10].isEmpty ? nil : row[10]
-            log.tmdbId              = Int(row[13])
+            log.rating              = Int(row[Col.rating.rawValue])
+            log.viewingType         = row[Col.viewingType.rawValue].isEmpty ? ViewingType.theater.rawValue : row[Col.viewingType.rawValue]
+            log.streamingService    = row[Col.streamingService.rawValue].isEmpty ? nil : row[Col.streamingService.rawValue]
+            log.screeningFormat     = row[Col.screeningFormat.rawValue].isEmpty ? ScreeningFormat.standard.rawValue : row[Col.screeningFormat.rawValue]
+            log.screenNumber        = row[Col.screenNumber.rawValue].isEmpty ? nil : row[Col.screenNumber.rawValue]
+            log.seatNumber          = row[Col.seatNumber.rawValue].isEmpty ? nil : row[Col.seatNumber.rawValue]
+            log.tmdbId              = Int(row[Col.tmdbId.rawValue])
 
             context.insert(log)
 
             // 追加視聴日: "/" 区切りで複数日付
-            if !row[11].isEmpty {
-                for part in row[11].split(separator: "/", omittingEmptySubsequences: true) {
+            if !row[Col.additionalDates.rawValue].isEmpty {
+                for part in row[Col.additionalDates.rawValue].split(separator: "/", omittingEmptySubsequences: true) {
                     if let date = dateFormatter.date(from: String(part)) {
                         let vd = ViewingDate(date: date)
                         context.insert(vd)
