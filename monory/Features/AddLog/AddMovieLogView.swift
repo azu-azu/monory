@@ -5,6 +5,7 @@ import PhotosUI
 enum QuickScanSource: String, Identifiable {
     case camera
     case library
+    case paste
     var id: String { rawValue }
 }
 
@@ -28,6 +29,7 @@ struct AddMovieLogView: View {
     @State private var showScanLibraryPicker = false
     @State private var scanLibraryItems: [PhotosPickerItem] = []
     @State private var viewingDraftImage: UIImage?
+    @State private var showNoPasteImageAlert = false
 
     var body: some View {
         NavigationStack {
@@ -165,6 +167,11 @@ struct AddMovieLogView: View {
                         PhotosPicker(selection: $selectedItems, matching: .images) {
                             Label("画像を追加", systemImage: "plus.circle")
                         }
+                        Button {
+                            pasteFromClipboard()
+                        } label: {
+                            Label("クリップボードから貼り付け", systemImage: "doc.on.clipboard")
+                        }
 
                         if !viewModel.ticketDrafts.isEmpty {
                             ScrollView(.horizontal, showsIndicators: false) {
@@ -229,11 +236,14 @@ struct AddMovieLogView: View {
             }
             .task {
                 guard let source = quickScanSource else { return }
-                // sheet アニメーション完了を待つ
-                try? await Task.sleep(for: Self.sheetAnimationDelay)
+                // paste はシートアニメーション完了を待たない
+                if source != .paste {
+                    try? await Task.sleep(for: Self.sheetAnimationDelay)
+                }
                 switch source {
                 case .camera:  showTicketCamera = true
                 case .library: showScanLibraryPicker = true
+                case .paste:   pasteFromClipboard()
                 }
             }
             .fullScreenCover(isPresented: $showTicketCamera) {
@@ -255,7 +265,21 @@ struct AddMovieLogView: View {
                 maxSelectionCount: 1,
                 matching: .images
             )
+            .alert("クリップボードに画像がありません", isPresented: $showNoPasteImageAlert) {
+                Button("OK", role: .cancel) {}
+            }
         }
+    }
+
+    private static let pasteJPEGQuality: CGFloat = 0.8
+
+    private func pasteFromClipboard() {
+        guard let image = UIPasteboard.general.image,
+              let data = image.jpegData(compressionQuality: Self.pasteJPEGQuality) else {
+            showNoPasteImageAlert = true
+            return
+        }
+        Task { await viewModel.addTicketImage(data) }
     }
 }
 

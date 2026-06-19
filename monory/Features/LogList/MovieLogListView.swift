@@ -92,6 +92,11 @@ struct MovieLogListView: View {
                 } label: {
                     Label("ライブラリから選択", systemImage: "photo.on.rectangle")
                 }
+                Button {
+                    quickScanSource = .paste
+                } label: {
+                    Label("クリップボードから貼り付け", systemImage: "doc.on.clipboard")
+                }
             } label: {
                 Image(systemName: "ticket")
             }
