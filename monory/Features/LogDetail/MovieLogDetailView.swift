@@ -32,7 +32,7 @@ struct MovieLogDetailView: View {
                 if let year = log.movieReleaseYear {
                     LabeledContent("公開年", value: String(year))
                 }
-                if log.isStreaming && !log.viewingDates.isEmpty {
+                if log.isMedia && !log.viewingDates.isEmpty {
                     LabeledContent("初回視聴", value: log.watchedAtDisplay)
                     ForEach(log.viewingDates.sorted(by: { $0.date < $1.date })) { vd in
                         LabeledContent("視聴日", value: vd.date.formatted(date: .long, time: .omitted))
@@ -50,7 +50,7 @@ struct MovieLogDetailView: View {
                 }
             }
 
-            if log.isStreaming {
+            if log.isMedia {
                 Section("メディア") {
                     LabeledContent("サービス", value: log.streamingService ?? "—")
                 }

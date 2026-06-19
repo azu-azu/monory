@@ -40,8 +40,8 @@ final class MovieLog {
     @Relationship(deleteRule: .cascade, inverse: \ViewingDate.movieLog)
     var viewingDates: [ViewingDate] = []
 
-    var isStreaming: Bool {
-        viewingType == ViewingType.streaming.rawValue
+    var isMedia: Bool {
+        viewingType == ViewingType.media.rawValue
     }
 
     var isUpcoming: Bool {

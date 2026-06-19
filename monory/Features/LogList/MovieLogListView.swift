@@ -30,8 +30,8 @@ struct MovieLogListView: View {
             guard !log.isUpcoming else { return false }
             switch logFilter {
             case .all:     return true
-            case .theater: return !log.isStreaming
-            case .media:   return log.isStreaming
+            case .theater: return !log.isMedia
+            case .media:   return log.isMedia
             }
         }
         return sorted(base)

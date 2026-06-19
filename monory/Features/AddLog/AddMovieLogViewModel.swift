@@ -18,13 +18,15 @@ struct IdentifiableDate: Identifiable {
 final class AddMovieLogViewModel {
     // Viewing type
     static let otherServiceOption = StreamingServiceStore.otherOption
+    // OCR ノイズが末尾に集中するため、前半N文字のみで TMDB 検索する
+    private static let ocrSearchPrefixLength = 15
 
     var viewingType: ViewingType = .theater
     var scannedFromTicket: Bool = false
     var streamingService: String = StreamingServiceStore.loadServices().first ?? StreamingServiceStore.defaultServices[0]
     var customStreamingService: String = ""
 
-    // 配信: 2回目以降の視聴日
+    // メディア: 2回目以降の視聴日
     var additionalDates: [IdentifiableDate] = []
 
     var effectiveStreamingService: String {
@@ -70,20 +72,20 @@ final class AddMovieLogViewModel {
 
         let rawText = await OCRService.recognizeText(from: data)
         ticketDrafts[idx].ocrRawText = rawText
-        scannedFromTicket = true
-        watchedAtUnknown = false
 
         guard let text = rawText else { return }
+        scannedFromTicket = true
+        watchedAtUnknown = false
         let parsed = CinemaTicketParser.parse(text)
         applyOCRResult(parsed)
 
         // OCR 後に TMDB を即検索して先頭候補を auto-select
-        // 正規化ではなく前半N文字でマッチさせる
+        // OCR ノイズが末尾に集中するため、前半N文字でマッチさせる
         guard selectedTMDBMovie == nil,
               let title = parsed.movieTitle, !title.isEmpty else { return }
         searchTask?.cancel()
         isSearching = true
-        let shortQuery = String(title.prefix(15))
+        let shortQuery = String(title.prefix(Self.ocrSearchPrefixLength))
         let results = (try? await TMDBClient.search(query: shortQuery)) ?? []
         isSearching = false
         if let best = results.first {
@@ -190,8 +192,8 @@ final class AddMovieLogViewModel {
 
         context.insert(log)
 
-        // 配信: 追加視聴日を保存
-        if viewingType == .streaming {
+        // メディア: 追加視聴日を保存
+        if viewingType == .media {
             for item in additionalDates {
                 let vd = ViewingDate(date: item.date)
                 context.insert(vd)

@@ -105,7 +105,7 @@ struct ViewingTypeToggle: View {
     var body: some View {
         HStack(spacing: 8) {
             toggleButton(.theater,   icon: "film", label: "映画館")
-            toggleButton(.streaming, icon: "tv",   label: "メディア")
+            toggleButton(.media, icon: "tv",   label: "メディア")
         }
         .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
     }
