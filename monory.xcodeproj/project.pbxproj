@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		097EA85A5E5F7AB4CAF6ACA0 /* MovieLogExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E654120DB6EF777915AB6E /* MovieLogExporter.swift */; };
+		D2E3F4A5B6C70819304A5B6C /* MovieLogImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D2E3F4A5B60718293A4B5C /* MovieLogImporter.swift */; };
 		130A9E19032C28AEBBAA8BCE /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE5EC19C14D8125A1F46D3C /* TMDBModels.swift */; };
 		1E4992516DF7D0EF98637A44 /* MovieLogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D6BC765BED4BAE5B4AC5F5 /* MovieLogListView.swift */; };
 		1F6B833CDCA1321D1BCB4E57 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CA9EBB80F6D279E5A26F16 /* AppContainer.swift */; };
@@ -63,6 +64,7 @@
 		85B808DBE44DF4D18F0877F2 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		87CA9EBB80F6D279E5A26F16 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		87E654120DB6EF777915AB6E /* MovieLogExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLogExporter.swift; sourceTree = "<group>"; };
+		C1D2E3F4A5B60718293A4B5C /* MovieLogImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLogImporter.swift; sourceTree = "<group>"; };
 		908467089C9C58F995A5C875 /* StatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarView.swift; sourceTree = "<group>"; };
 		94C07E1F24D3118AC62A74C9 /* UpcomingTicketsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingTicketsView.swift; sourceTree = "<group>"; };
 		9777A7A90A4CBEEE06DF87A3 /* MovieLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLog.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 			children = (
 				B2F0D7062470A8D5CBA9D46F /* ExportView.swift */,
 				87E654120DB6EF777915AB6E /* MovieLogExporter.swift */,
+				C1D2E3F4A5B60718293A4B5C /* MovieLogImporter.swift */,
 				38BCF3BB8216E0AECA6309AE /* SettingsView.swift */,
 				44DC977F5A019DC6A8D4FFB0 /* StreamingServiceOrderView.swift */,
 			);
@@ -313,6 +316,7 @@
 				80CC35BFCD57C63E6E9B77AC /* MovieLog.swift in Sources */,
 				4DBE21EA89387E4887360C1B /* MovieLogDetailView.swift in Sources */,
 				097EA85A5E5F7AB4CAF6ACA0 /* MovieLogExporter.swift in Sources */,
+				D2E3F4A5B6C70819304A5B6C /* MovieLogImporter.swift in Sources */,
 				1E4992516DF7D0EF98637A44 /* MovieLogListView.swift in Sources */,
 				84FB1073002631A956070E6E /* OCRService.swift in Sources */,
 				8F51DDE04EACBDF54524E05F /* PhotoViewerSheet.swift in Sources */,

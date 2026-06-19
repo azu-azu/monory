@@ -7,7 +7,7 @@ struct SettingsView: View {
                 NavigationLink("メディアサービスの並び替え") {
                     StreamingServiceOrderView()
                 }
-                NavigationLink("CSVエクスポート") {
+                NavigationLink("バックアップ / 復元") {
                     ExportView()
                 }
             }

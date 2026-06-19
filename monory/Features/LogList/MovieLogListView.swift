@@ -152,6 +152,7 @@ struct MovieLogListView: View {
                 .font(.subheadline)
                 .foregroundStyle(.tertiary)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private func sorted(_ list: [MovieLog]) -> [MovieLog] {
