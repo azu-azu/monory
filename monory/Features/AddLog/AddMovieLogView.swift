@@ -75,10 +75,12 @@ struct AddMovieLogView: View {
                     }
 
                     if viewModel.viewingType == .theater {
-                        Toggle("日付不明", isOn: $viewModel.watchedAtUnknown)
                         if !viewModel.watchedAtUnknown {
                             DatePicker("観た日", selection: $viewModel.watchedAt, displayedComponents: .date)
                         }
+                        Toggle("日付不明", isOn: $viewModel.watchedAtUnknown)
+                            .disabled(viewModel.scannedFromTicket)
+                            .foregroundStyle(viewModel.scannedFromTicket ? .secondary : .primary)
                     }
                 }
 
@@ -98,7 +100,7 @@ struct AddMovieLogView: View {
                         }
                     }
                 } else {
-                    Section("配信") {
+                    Section("メディア") {
                         Picker("サービス", selection: $viewModel.streamingService) {
                             ForEach(streamingStore.services, id: \.self) { service in
                                 Text(service).tag(service)
@@ -112,7 +114,6 @@ struct AddMovieLogView: View {
                     }
 
                     Section("視聴日") {
-                        Toggle("日付不明", isOn: $viewModel.watchedAtUnknown)
                         if !viewModel.watchedAtUnknown {
                             DatePicker("初回", selection: $viewModel.watchedAt, displayedComponents: .date)
                             ForEach($viewModel.additionalDates) { $item in
@@ -135,6 +136,7 @@ struct AddMovieLogView: View {
                                 Label("視聴日を追加", systemImage: "plus.circle")
                             }
                         }
+                        Toggle("日付不明", isOn: $viewModel.watchedAtUnknown)
                     }
                 }
 

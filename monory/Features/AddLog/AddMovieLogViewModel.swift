@@ -20,6 +20,7 @@ final class AddMovieLogViewModel {
     static let otherServiceOption = StreamingServiceStore.otherOption
 
     var viewingType: ViewingType = .theater
+    var scannedFromTicket: Bool = false
     var streamingService: String = StreamingServiceStore.loadServices().first ?? StreamingServiceStore.defaultServices[0]
     var customStreamingService: String = ""
 
@@ -69,18 +70,21 @@ final class AddMovieLogViewModel {
 
         let rawText = await OCRService.recognizeText(from: data)
         ticketDrafts[idx].ocrRawText = rawText
+        scannedFromTicket = true
+        watchedAtUnknown = false
 
         guard let text = rawText else { return }
         let parsed = CinemaTicketParser.parse(text)
         applyOCRResult(parsed)
 
         // OCR 後に TMDB を即検索して先頭候補を auto-select
-        // (onTitleChanged の debounced search はキャンセルして上書き)
+        // 正規化ではなく前半N文字でマッチさせる
         guard selectedTMDBMovie == nil,
               let title = parsed.movieTitle, !title.isEmpty else { return }
         searchTask?.cancel()
         isSearching = true
-        let results = (try? await TMDBClient.search(query: title)) ?? []
+        let shortQuery = String(title.prefix(15))
+        let results = (try? await TMDBClient.search(query: shortQuery)) ?? []
         isSearching = false
         if let best = results.first {
             await selectMovie(best)
@@ -104,6 +108,10 @@ final class AddMovieLogViewModel {
     // MARK: - TMDB search
 
     func onTitleChanged(_ newValue: String) {
+        // 選択済みだが手動でタイトルを変更した場合、選択をクリアして再検索
+        if let selected = selectedTMDBMovie, newValue != selected.title {
+            clearSelection()
+        }
         guard selectedTMDBMovie == nil else { return }
         searchTask?.cancel()
         guard newValue.count >= 2 else {
@@ -140,6 +148,7 @@ final class AddMovieLogViewModel {
         movieTitle             = ""
         watchedAt              = Date()
         watchedAtUnknown       = false
+        scannedFromTicket      = false
         theaterName            = ""
         screenNumber           = ""
         seatNumber             = ""

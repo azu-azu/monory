@@ -8,6 +8,12 @@ enum LogSortOrder: String, CaseIterable {
     case titleAscending  = "タイトル（あいうえお順）"
 }
 
+enum LogFilter: String, CaseIterable {
+    case all     = "全て"
+    case theater = "映画館"
+    case media   = "メディア"
+}
+
 struct MovieLogListView: View {
     @Environment(\.modelContext) private var context
 
@@ -17,9 +23,17 @@ struct MovieLogListView: View {
     @State private var showAddLog = false
     @State private var quickScanSource: QuickScanSource?
     @State private var sortOrder: LogSortOrder = .dateDescending
+    @State private var logFilter: LogFilter = .all
 
     private var pastLogs: [MovieLog] {
-        let base = logs.filter { !$0.isUpcoming }
+        let base = logs.filter { log in
+            guard !log.isUpcoming else { return false }
+            switch logFilter {
+            case .all:     return true
+            case .theater: return !log.isStreaming
+            case .media:   return log.isStreaming
+            }
+        }
         return sorted(base)
     }
 
@@ -46,7 +60,8 @@ struct MovieLogListView: View {
     }
 
     private var customHeader: some View {
-        HStack(spacing: 12) {
+        VStack(spacing: 0) {
+            HStack(spacing: 12) {
             Text("Monory")
                 .font(.headline)
                 .fontWeight(.semibold)
@@ -86,8 +101,17 @@ struct MovieLogListView: View {
                 Image(systemName: "plus")
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            Picker("フィルタ", selection: $logFilter) {
+                ForEach(LogFilter.allCases, id: \.self) { filter in
+                    Text(filter.rawValue).tag(filter)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal, 16)
+            .padding(.bottom, 8)
+        }
         .background(.bar)
     }
 
@@ -205,11 +229,11 @@ private struct PosterCell: View {
             )
             .frame(height: 72)
 
-            Text(log.movieTitle.isEmpty ? "無題" : log.movieTitle)
+            Text(log.watchedAtDisplay)
                 .font(.caption)
                 .fontWeight(.medium)
                 .foregroundStyle(.white)
-                .lineLimit(2)
+                .lineLimit(1)
                 .padding(.horizontal, 8)
                 .padding(.bottom, 8)
         }

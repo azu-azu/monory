@@ -61,10 +61,10 @@ struct EditMovieLogView: View {
                             .multilineTextAlignment(.trailing)
                     }
                     if viewingType == .theater {
-                        Toggle("日付不明", isOn: $watchedAtUnknown)
                         if !watchedAtUnknown {
                             DatePicker("観た日", selection: $watchedAt, displayedComponents: .date)
                         }
+                        Toggle("日付不明", isOn: $watchedAtUnknown)
                     }
                 }
 
@@ -84,7 +84,7 @@ struct EditMovieLogView: View {
                         }
                     }
                 } else {
-                    Section("配信") {
+                    Section("メディア") {
                         Picker("サービス", selection: $streamingService) {
                             ForEach(streamingStore.services, id: \.self) { service in
                                 Text(service).tag(service)
@@ -98,7 +98,6 @@ struct EditMovieLogView: View {
                     }
 
                     Section("視聴日") {
-                        Toggle("日付不明", isOn: $watchedAtUnknown)
                         if !watchedAtUnknown {
                             DatePicker("初回", selection: $watchedAt, displayedComponents: .date)
                             ForEach($additionalDates) { $item in
@@ -121,6 +120,7 @@ struct EditMovieLogView: View {
                                 Label("視聴日を追加", systemImage: "plus.circle")
                             }
                         }
+                        Toggle("日付不明", isOn: $watchedAtUnknown)
                     }
                 }
 

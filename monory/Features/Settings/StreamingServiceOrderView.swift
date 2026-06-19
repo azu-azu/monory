@@ -23,7 +23,7 @@ struct StreamingServiceOrderView: View {
         }
         .listStyle(.plain)
         .environment(\.editMode, .constant(.active))
-        .navigationTitle("配信サービスの並び替え")
+        .navigationTitle("メディアサービスの並び替え")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

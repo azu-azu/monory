@@ -4,7 +4,7 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
-                NavigationLink("配信サービスの並び替え") {
+                NavigationLink("メディアサービスの並び替え") {
                     StreamingServiceOrderView()
                 }
                 NavigationLink("CSVエクスポート") {

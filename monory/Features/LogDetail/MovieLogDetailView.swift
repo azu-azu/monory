@@ -51,7 +51,7 @@ struct MovieLogDetailView: View {
             }
 
             if log.isStreaming {
-                Section("配信") {
+                Section("メディア") {
                     LabeledContent("サービス", value: log.streamingService ?? "—")
                 }
             } else {
