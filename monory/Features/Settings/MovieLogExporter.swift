@@ -13,14 +13,20 @@ struct MovieLogExporter {
             "タイトル", "原題", "公開年", "観た日", "評価",
             "種別", "映画館名", "配信サービス", "上映形式",
             "スクリーン", "座席", "追加視聴日", "感想", "TMDB ID",
+            "映画館メモ",
         ]
 
         var rows: [[String]] = [header]
 
         for log in logs {
-            let watchedAt = log.watchedAtUnknown
-                ? "不明"
-                : dateFormatter.string(from: log.watchedAt)
+            let watchedAt: String
+            if log.watchedAtUnknown {
+                watchedAt = "不明"
+            } else if log.watchedYearOnly {
+                watchedAt = String(Calendar.current.component(.year, from: log.watchedAt))
+            } else {
+                watchedAt = dateFormatter.string(from: log.watchedAt)
+            }
 
             let sortedDates = log.viewingDates
                 .sorted { $0.date < $1.date }
@@ -42,6 +48,7 @@ struct MovieLogExporter {
                 sortedDates,
                 log.review,
                 log.tmdbId.map { String($0) } ?? "",
+                log.theaterMemo,
             ]
             rows.append(row)
         }

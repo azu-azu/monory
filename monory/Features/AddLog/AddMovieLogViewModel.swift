@@ -13,6 +13,12 @@ struct IdentifiableDate: Identifiable {
     var date: Date
 }
 
+enum WatchedDateMode: String, CaseIterable {
+    case full     = "日付"
+    case yearOnly = "年のみ"
+    case unknown  = "不明"
+}
+
 @MainActor
 @Observable
 final class AddMovieLogViewModel {
@@ -20,8 +26,9 @@ final class AddMovieLogViewModel {
     static let otherServiceOption = StreamingServiceStore.otherOption
     // OCR ノイズが末尾に集中するため、前半N文字のみで TMDB 検索する
     private static let ocrSearchPrefixLength = 15
+    private static let currentYear = Calendar.current.component(.year, from: Date())
 
-    var viewingType: ViewingType = .theater
+    var viewingType: ViewingType
     var scannedFromTicket: Bool = false
     var streamingService: String = StreamingServiceStore.loadServices().first ?? StreamingServiceStore.defaultServices[0]
     var customStreamingService: String = ""
@@ -35,8 +42,10 @@ final class AddMovieLogViewModel {
 
     var movieTitle: String = ""
     var watchedAt: Date = Date()
-    var watchedAtUnknown: Bool = false
+    var watchedDateMode: WatchedDateMode = .full
+    var watchedYear: Int = Calendar.current.component(.year, from: Date())
     var theaterName: String = ""
+    var theaterMemo: String = ""
     var screenNumber: String = ""
     var seatNumber: String = ""
     var screeningFormat: ScreeningFormat = .standard
@@ -52,6 +61,10 @@ final class AddMovieLogViewModel {
     var selectedPosterData: Data?
 
     private var searchTask: Task<Void, Never>?
+
+    init(initialViewingType: ViewingType = .theater) {
+        self.viewingType = initialViewingType
+    }
 
     var canSave: Bool {
         !movieTitle.trimmingCharacters(in: .whitespaces).isEmpty
@@ -81,7 +94,7 @@ final class AddMovieLogViewModel {
 
         guard let text = rawText else { return }
         scannedFromTicket = true
-        watchedAtUnknown = false
+        watchedDateMode = .full
         let parsed = CinemaTicketParser.parse(text)
         applyOCRResult(parsed)
 
@@ -172,15 +185,17 @@ final class AddMovieLogViewModel {
 
     func save(in context: ModelContext) {
         let log = MovieLog(
-            watchedAt: watchedAt,
+            watchedAt: resolvedWatchedAt,
             movieTitle: movieTitle.trimmingCharacters(in: .whitespaces),
             theaterName: viewingType == .theater ? theaterName.trimmingCharacters(in: .whitespaces) : "",
             review: review.trimmingCharacters(in: .whitespaces)
         )
-        log.watchedAtUnknown = watchedAtUnknown
+        log.watchedAtUnknown = watchedDateMode == .unknown
+        log.watchedYearOnly  = watchedDateMode == .yearOnly
         log.rating = rating
         log.viewingType = viewingType.rawValue
         if viewingType == .theater {
+            log.theaterMemo = theaterMemo.trimmingCharacters(in: .whitespaces)
             log.screenNumber = screenNumber.isEmpty ? nil : screenNumber
             log.seatNumber = seatNumber.isEmpty ? nil : seatNumber
             log.screeningFormat = screeningFormat.rawValue
@@ -213,6 +228,17 @@ final class AddMovieLogViewModel {
             let ticket = TicketImage(imageData: draft.imageData)
             ticket.ocrRawText = draft.ocrRawText
             log.ticketImages.append(ticket)
+        }
+    }
+
+    private var resolvedWatchedAt: Date {
+        switch watchedDateMode {
+        case .full:
+            return watchedAt
+        case .yearOnly:
+            return Calendar.current.date(from: DateComponents(year: watchedYear, month: 1, day: 1)) ?? Date()
+        case .unknown:
+            return Date()
         }
     }
 }

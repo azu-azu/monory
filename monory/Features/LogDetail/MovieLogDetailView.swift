@@ -63,6 +63,9 @@ struct MovieLogDetailView: View {
                     if let fee = log.admissionFee {
                         LabeledContent("料金", value: "¥\(fee)")
                     }
+                    if !log.theaterMemo.isEmpty {
+                        LabeledContent("メモ", value: log.theaterMemo)
+                    }
                 }
             }
 

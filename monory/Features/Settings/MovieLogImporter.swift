@@ -19,8 +19,10 @@ struct MovieLogImporter {
         case title = 0, originalTitle, releaseYear, watchedAt,
              rating, viewingType, theaterName, streamingService,
              screeningFormat, screenNumber, seatNumber,
-             additionalDates, review, tmdbId
-        static let count = 14
+             additionalDates, review, tmdbId,
+             theaterMemo
+        static let minCount = 14  // 旧フォーマット互換
+        static let count = 15
     }
 
     static func `import`(data: Data, into context: ModelContext) -> ImportResult {
@@ -42,14 +44,23 @@ struct MovieLogImporter {
 
         for row in rows {
             // 空行・列数不足はスキップ（末尾の空行も含む）
-            guard row.count >= Col.count, !row[Col.title.rawValue].isEmpty else {
+            guard row.count >= Col.minCount, !row[Col.title.rawValue].isEmpty else {
                 if !row.allSatisfy({ $0.isEmpty }) { skipped += 1 }
                 continue
             }
 
             let watchedAtStr = row[Col.watchedAt.rawValue]
             let isUnknown = watchedAtStr == "不明"
-            let watchedAt = isUnknown ? Date() : (dateFormatter.date(from: watchedAtStr) ?? Date())
+            let isYearOnly = !isUnknown && watchedAtStr.count == 4 && Int(watchedAtStr) != nil
+
+            let watchedAt: Date
+            if isUnknown {
+                watchedAt = Date()
+            } else if isYearOnly, let year = Int(watchedAtStr) {
+                watchedAt = Calendar.current.date(from: DateComponents(year: year, month: 1, day: 1)) ?? Date()
+            } else {
+                watchedAt = dateFormatter.date(from: watchedAtStr) ?? Date()
+            }
 
             let log = MovieLog(
                 watchedAt: watchedAt,
@@ -60,6 +71,7 @@ struct MovieLogImporter {
             log.movieOriginalTitle  = row[Col.originalTitle.rawValue].isEmpty ? nil : row[Col.originalTitle.rawValue]
             log.movieReleaseYear    = Int(row[Col.releaseYear.rawValue])
             log.watchedAtUnknown    = isUnknown
+            log.watchedYearOnly     = isYearOnly
             log.rating              = Int(row[Col.rating.rawValue])
             log.viewingType         = row[Col.viewingType.rawValue].isEmpty ? ViewingType.theater.rawValue : row[Col.viewingType.rawValue]
             log.streamingService    = row[Col.streamingService.rawValue].isEmpty ? nil : row[Col.streamingService.rawValue]
@@ -67,6 +79,7 @@ struct MovieLogImporter {
             log.screenNumber        = row[Col.screenNumber.rawValue].isEmpty ? nil : row[Col.screenNumber.rawValue]
             log.seatNumber          = row[Col.seatNumber.rawValue].isEmpty ? nil : row[Col.seatNumber.rawValue]
             log.tmdbId              = Int(row[Col.tmdbId.rawValue])
+            log.theaterMemo         = row.count > Col.theaterMemo.rawValue ? row[Col.theaterMemo.rawValue] : ""
 
             context.insert(log)
 

@@ -51,7 +51,7 @@ struct MovieLogListView: View {
             }
             .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $showAddLog) {
-                AddMovieLogView()
+                AddMovieLogView(initialViewingType: logFilter == .media ? .media : .theater)
             }
             .sheet(item: $quickScanSource) { source in
                 AddMovieLogView(quickScanSource: source)

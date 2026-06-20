@@ -13,16 +13,18 @@ struct AddMovieLogView: View {
     let quickScanSource: QuickScanSource?
 
     private static let sheetAnimationDelay = Duration.milliseconds(600)
+    private static let currentYear = Calendar.current.component(.year, from: Date())
 
-    init(quickScanSource: QuickScanSource? = nil) {
+    init(quickScanSource: QuickScanSource? = nil, initialViewingType: ViewingType = .theater) {
         self.quickScanSource = quickScanSource
+        _viewModel = State(initialValue: AddMovieLogViewModel(initialViewingType: initialViewingType))
     }
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Environment(StreamingServiceStore.self) private var streamingStore
 
-    @State private var viewModel = AddMovieLogViewModel()
+    @State private var viewModel: AddMovieLogViewModel
 
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var showTicketCamera = false
@@ -77,12 +79,7 @@ struct AddMovieLogView: View {
                     }
 
                     if viewModel.viewingType == .theater {
-                        if !viewModel.watchedAtUnknown {
-                            DatePicker("観た日", selection: $viewModel.watchedAt, displayedComponents: .date)
-                        }
-                        Toggle("日付不明", isOn: $viewModel.watchedAtUnknown)
-                            .disabled(viewModel.scannedFromTicket)
-                            .foregroundStyle(viewModel.scannedFromTicket ? .secondary : .primary)
+                        dateSection
                     }
                 }
 
@@ -116,6 +113,7 @@ struct AddMovieLogView: View {
                                 Text(format.rawValue).tag(format)
                             }
                         }
+                        TextField("メモ", text: $viewModel.theaterMemo)
                     }
                 } else {
                     Section("メディア") {
@@ -132,8 +130,8 @@ struct AddMovieLogView: View {
                     }
 
                     Section("視聴日") {
-                        if !viewModel.watchedAtUnknown {
-                            DatePicker("初回", selection: $viewModel.watchedAt, displayedComponents: .date)
+                        dateSection
+                        if viewModel.watchedDateMode == .full {
                             ForEach($viewModel.additionalDates) { $item in
                                 HStack {
                                     DatePicker("", selection: $item.date, displayedComponents: .date)
@@ -154,7 +152,6 @@ struct AddMovieLogView: View {
                                 Label("視聴日を追加", systemImage: "plus.circle")
                             }
                         }
-                        Toggle("日付不明", isOn: $viewModel.watchedAtUnknown)
                     }
                 }
 
@@ -287,12 +284,43 @@ struct AddMovieLogView: View {
         }
     }
 
+    // MARK: - Date section
+
+    @ViewBuilder
+    private var dateSection: some View {
+        Picker("日付精度", selection: $viewModel.watchedDateMode) {
+            ForEach(WatchedDateMode.allCases, id: \.self) { mode in
+                Text(mode.rawValue).tag(mode)
+            }
+        }
+        .disabled(viewModel.scannedFromTicket)
+
+        switch viewModel.watchedDateMode {
+        case .full:
+            DatePicker(
+                viewModel.viewingType == .theater ? "観た日" : "初回",
+                selection: $viewModel.watchedAt,
+                displayedComponents: .date
+            )
+        case .yearOnly:
+            Stepper("\(viewModel.watchedYear)年", value: $viewModel.watchedYear, in: 1900...Self.currentYear)
+        case .unknown:
+            EmptyView()
+        }
+    }
+
+    // MARK: - Clipboard
+
     private static let pasteJPEGQuality: CGFloat = 0.8
 
     private func pasteFromClipboard() {
         guard let image = UIPasteboard.general.image,
               let data = image.jpegData(compressionQuality: Self.pasteJPEGQuality) else {
-            showNoPasteImageAlert = true
+            if quickScanSource == .paste {
+                dismiss()
+            } else {
+                showNoPasteImageAlert = true
+            }
             return
         }
         Task { await viewModel.addTicketImage(data) }

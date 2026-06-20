@@ -11,8 +11,11 @@ struct EditMovieLogView: View {
 
     @State private var movieTitle: String
     @State private var watchedAt: Date
+    @State private var watchedDateMode: WatchedDateMode
+    @State private var watchedYear: Int
     @State private var viewingType: ViewingType
     @State private var theaterName: String
+    @State private var theaterMemo: String
     @State private var screenNumber: String
     @State private var seatNumber: String
     @State private var screeningFormat: ScreeningFormat
@@ -20,16 +23,26 @@ struct EditMovieLogView: View {
     @State private var customStreamingService: String
     @State private var rating: Int?
     @State private var review: String
-    @State private var watchedAtUnknown: Bool
     @State private var additionalDates: [IdentifiableDate]
     @State private var admissionFeeText: String
 
+    // TMDB search
+    @State private var searchResults: [TMDBMovie] = []
+    @State private var isSearching: Bool = false
+    @State private var selectedTMDBMovie: TMDBMovie?
+    @State private var selectedPosterData: Data?
+    @State private var searchTask: Task<Void, Never>?
+
     @State private var selectedTicketItems: [PhotosPickerItem] = []
+    @State private var showNoPasteImageAlert = false
 
     @State private var ocrResult: CinemaTicketResult?
     @State private var showOCRSheet = false
     @State private var showRescanEmptyAlert = false
     @State private var isScanning = false
+
+    private static let currentYear = Calendar.current.component(.year, from: Date())
+    private static let pasteJPEGQuality: CGFloat = 0.8
 
     init(log: MovieLog) {
         self.log = log
@@ -37,18 +50,30 @@ struct EditMovieLogView: View {
         _watchedAt      = State(initialValue: log.watchedAt)
         _viewingType    = State(initialValue: ViewingType(rawValue: log.viewingType) ?? .theater)
         _theaterName    = State(initialValue: log.theaterName)
+        _theaterMemo    = State(initialValue: log.theaterMemo)
         _screenNumber   = State(initialValue: log.screenNumber ?? "")
         _seatNumber     = State(initialValue: log.seatNumber ?? "")
         _screeningFormat = State(initialValue: ScreeningFormat(rawValue: log.screeningFormat) ?? .standard)
         _rating             = State(initialValue: log.rating)
         _review             = State(initialValue: log.review)
-        _watchedAtUnknown   = State(initialValue: log.watchedAtUnknown)
         _additionalDates = State(initialValue:
             log.viewingDates
                 .sorted(by: { $0.date < $1.date })
                 .map { IdentifiableDate(date: $0.date) }
         )
         _admissionFeeText = State(initialValue: log.admissionFee.map { String($0) } ?? "")
+
+        // watched date mode
+        if log.watchedAtUnknown {
+            _watchedDateMode = State(initialValue: .unknown)
+            _watchedYear = State(initialValue: Calendar.current.component(.year, from: Date()))
+        } else if log.watchedYearOnly {
+            _watchedDateMode = State(initialValue: .yearOnly)
+            _watchedYear = State(initialValue: Calendar.current.component(.year, from: log.watchedAt))
+        } else {
+            _watchedDateMode = State(initialValue: .full)
+            _watchedYear = State(initialValue: Calendar.current.component(.year, from: log.watchedAt))
+        }
 
         // streaming service: preset か custom かを判定
         let knownServices = StreamingServiceStore.loadServices()
@@ -60,21 +85,77 @@ struct EditMovieLogView: View {
             _streamingService       = State(initialValue: StreamingServiceStore.otherOption)
             _customStreamingService = State(initialValue: stored)
         }
+
+        // TMDB: 既存データから復元
+        if let tmdbId = log.tmdbId {
+            let movie = TMDBMovie(
+                id: tmdbId,
+                title: log.movieTitle,
+                originalTitle: log.movieOriginalTitle ?? log.movieTitle,
+                overview: log.movieSynopsis ?? "",
+                releaseDate: log.movieReleaseYear.map { "\($0)-01-01" },
+                posterPath: nil
+            )
+            _selectedTMDBMovie  = State(initialValue: movie)
+            _selectedPosterData = State(initialValue: log.moviePosterData)
+        } else {
+            _selectedTMDBMovie  = State(initialValue: nil)
+            _selectedPosterData = State(initialValue: nil)
+        }
     }
 
     var body: some View {
         NavigationStack {
             Form {
                 Section("作品") {
-                    LabeledContent("タイトル") {
+                    HStack {
                         TextField("映画タイトル", text: $movieTitle)
                             .multilineTextAlignment(.trailing)
-                    }
-                    if viewingType == .theater {
-                        if !watchedAtUnknown {
-                            DatePicker("観た日", selection: $watchedAt, displayedComponents: .date)
+                            .onChange(of: movieTitle) { _, newValue in
+                                onTitleChanged(newValue)
+                            }
+                        if !movieTitle.isEmpty {
+                            Button {
+                                clearTitleSearch()
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        Toggle("日付不明", isOn: $watchedAtUnknown)
+                    }
+
+                    if isSearching {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                    } else {
+                        ForEach(searchResults.prefix(5)) { movie in
+                            Button {
+                                selectMovie(movie)
+                            } label: {
+                                EditTMDBMovieRow(movie: movie)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+
+                    if let movie = selectedTMDBMovie {
+                        EditSelectedMovieCard(
+                            movie: movie,
+                            posterData: selectedPosterData,
+                            onClear: {
+                                selectedTMDBMovie = nil
+                                selectedPosterData = nil
+                                searchResults = []
+                            }
+                        )
+                    }
+
+                    if viewingType == .theater {
+                        dateSection
                     }
                 }
 
@@ -97,6 +178,7 @@ struct EditMovieLogView: View {
                                 Text(format.rawValue).tag(format)
                             }
                         }
+                        TextField("メモ", text: $theaterMemo)
                     }
                 } else {
                     Section("メディア") {
@@ -113,8 +195,8 @@ struct EditMovieLogView: View {
                     }
 
                     Section("視聴日") {
-                        if !watchedAtUnknown {
-                            DatePicker("初回", selection: $watchedAt, displayedComponents: .date)
+                        dateSection
+                        if watchedDateMode == .full {
                             ForEach($additionalDates) { $item in
                                 HStack {
                                     DatePicker("", selection: $item.date, displayedComponents: .date)
@@ -135,7 +217,6 @@ struct EditMovieLogView: View {
                                 Label("視聴日を追加", systemImage: "plus.circle")
                             }
                         }
-                        Toggle("日付不明", isOn: $watchedAtUnknown)
                     }
                 }
 
@@ -163,6 +244,11 @@ struct EditMovieLogView: View {
                     Section("チケット画像") {
                         PhotosPicker(selection: $selectedTicketItems, matching: .images) {
                             Label("画像を追加", systemImage: "plus.circle")
+                        }
+                        Button {
+                            pasteFromClipboard()
+                        } label: {
+                            Label("クリップボードから貼り付け", systemImage: "doc.on.clipboard")
                         }
                         if !log.ticketImages.isEmpty {
                             ScrollView(.horizontal, showsIndicators: false) {
@@ -238,10 +324,96 @@ struct EditMovieLogView: View {
             } message: {
                 Text("チケット画像から情報を読み取れませんでした。")
             }
+            .alert("クリップボードに画像がありません", isPresented: $showNoPasteImageAlert) {
+                Button("OK", role: .cancel) {}
+            }
         }
     }
 
-    // MARK: - Private
+    // MARK: - Date section
+
+    @ViewBuilder
+    private var dateSection: some View {
+        Picker("日付精度", selection: $watchedDateMode) {
+            ForEach(WatchedDateMode.allCases, id: \.self) { mode in
+                Text(mode.rawValue).tag(mode)
+            }
+        }
+
+        switch watchedDateMode {
+        case .full:
+            DatePicker(
+                viewingType == .theater ? "観た日" : "初回",
+                selection: $watchedAt,
+                displayedComponents: .date
+            )
+        case .yearOnly:
+            Stepper("\(watchedYear)年", value: $watchedYear, in: 1900...Self.currentYear)
+        case .unknown:
+            EmptyView()
+        }
+    }
+
+    // MARK: - TMDB search
+
+    private func onTitleChanged(_ newValue: String) {
+        if let selected = selectedTMDBMovie, newValue != selected.title {
+            selectedTMDBMovie = nil
+            selectedPosterData = nil
+            searchResults = []
+        }
+        guard selectedTMDBMovie == nil else { return }
+        searchTask?.cancel()
+        guard newValue.count >= 2 else {
+            searchResults = []
+            return
+        }
+        searchTask = Task {
+            try? await Task.sleep(for: .milliseconds(500))
+            guard !Task.isCancelled else { return }
+            isSearching = true
+            defer { isSearching = false }
+            searchResults = (try? await TMDBClient.search(query: newValue)) ?? []
+        }
+    }
+
+    private func selectMovie(_ movie: TMDBMovie) {
+        searchTask?.cancel()
+        selectedTMDBMovie = movie
+        movieTitle = movie.title
+        searchResults = []
+        Task {
+            if let posterPath = movie.posterPath {
+                selectedPosterData = try? await TMDBClient.fetchPosterData(path: posterPath)
+            }
+        }
+    }
+
+    private func clearTitleSearch() {
+        searchTask?.cancel()
+        selectedTMDBMovie = nil
+        selectedPosterData = nil
+        searchResults = []
+        movieTitle = ""
+    }
+
+    // MARK: - Clipboard
+
+    private func pasteFromClipboard() {
+        guard let image = UIPasteboard.general.image,
+              let data = image.jpegData(compressionQuality: Self.pasteJPEGQuality) else {
+            showNoPasteImageAlert = true
+            return
+        }
+        Task {
+            let ticket = TicketImage(imageData: data)
+            ticket.ocrRawText = await OCRService.recognizeText(from: data)
+            context.insert(ticket)
+            log.ticketImages.append(ticket)
+        }
+    }
+
+    // MARK: - Ticket scan
 
     private func addTicketImages(_ items: [PhotosPickerItem]) async {
         for item in items {
@@ -260,9 +432,13 @@ struct EditMovieLogView: View {
 
         var merged = CinemaTicketResult()
         for ticket in log.ticketImages {
-            guard let rawText = ticket.ocrRawText
-                    ?? (await OCRService.recognizeText(from: ticket.imageData))
-            else { continue }
+            let rawText: String?
+            if let existing = ticket.ocrRawText {
+                rawText = existing
+            } else {
+                rawText = await OCRService.recognizeText(from: ticket.imageData)
+            }
+            guard let rawText else { continue }
             let parsed = CinemaTicketParser.parse(rawText)
             if merged.movieTitle == nil     { merged.movieTitle = parsed.movieTitle }
             if merged.theaterName == nil    { merged.theaterName = parsed.theaterName }
@@ -286,23 +462,27 @@ struct EditMovieLogView: View {
         case .theaterName(let v):     theaterName = v
         case .screenNumber(let v):    screenNumber = v
         case .seatNumber(let v):      seatNumber = v
-        case .watchedAt(let v):       watchedAt = v; watchedAtUnknown = false
+        case .watchedAt(let v):       watchedAt = v; watchedDateMode = .full
         case .screeningFormat(let v): screeningFormat = v
         case .admissionFee(let v):    admissionFeeText = String(v)
         }
     }
 
+    // MARK: - Save
+
     private func saveChanges() {
-        log.movieTitle        = movieTitle.trimmingCharacters(in: .whitespaces)
-        log.watchedAt         = watchedAt
-        log.watchedAtUnknown  = watchedAtUnknown
-        log.rating            = rating
-        log.viewingType       = viewingType.rawValue
-        log.review            = review.trimmingCharacters(in: .whitespaces)
-        log.updatedAt         = Date()
+        log.movieTitle       = movieTitle.trimmingCharacters(in: .whitespaces)
+        log.watchedAtUnknown = watchedDateMode == .unknown
+        log.watchedYearOnly  = watchedDateMode == .yearOnly
+        log.watchedAt        = resolvedWatchedAt
+        log.rating           = rating
+        log.viewingType      = viewingType.rawValue
+        log.review           = review.trimmingCharacters(in: .whitespaces)
+        log.updatedAt        = Date()
 
         if viewingType == .theater {
             log.theaterName     = theaterName.trimmingCharacters(in: .whitespaces)
+            log.theaterMemo     = theaterMemo.trimmingCharacters(in: .whitespaces)
             log.screenNumber    = screenNumber.isEmpty ? nil : screenNumber
             log.seatNumber      = seatNumber.isEmpty ? nil : seatNumber
             log.screeningFormat = screeningFormat.rawValue
@@ -316,16 +496,115 @@ struct EditMovieLogView: View {
                 : streamingService
             log.streamingService = service.isEmpty ? nil : service
             log.theaterName     = ""
+            log.theaterMemo     = ""
             log.screenNumber    = nil
             log.seatNumber      = nil
 
             // 追加視聴日を書き戻し（既存を全削除→再作成）
             for vd in log.viewingDates { context.delete(vd) }
-            for item in additionalDates {
-                let vd = ViewingDate(date: item.date)
-                context.insert(vd)
-                log.viewingDates.append(vd)
+            if watchedDateMode == .full {
+                for item in additionalDates {
+                    let vd = ViewingDate(date: item.date)
+                    context.insert(vd)
+                    log.viewingDates.append(vd)
+                }
             }
         }
+
+        // TMDB
+        if let movie = selectedTMDBMovie {
+            log.tmdbId = movie.id
+            log.movieOriginalTitle = movie.originalTitle != movie.title ? movie.originalTitle : nil
+            log.movieReleaseYear = movie.releaseYear
+            log.movieSynopsis = movie.overview.isEmpty ? nil : movie.overview
+            log.moviePosterData = selectedPosterData ?? log.moviePosterData
+        } else {
+            log.tmdbId = nil
+            log.movieOriginalTitle = nil
+            log.movieReleaseYear = nil
+            log.movieSynopsis = nil
+            log.moviePosterData = nil
+        }
+    }
+
+    private var resolvedWatchedAt: Date {
+        switch watchedDateMode {
+        case .full:
+            return watchedAt
+        case .yearOnly:
+            return Calendar.current.date(from: DateComponents(year: watchedYear, month: 1, day: 1)) ?? Date()
+        case .unknown:
+            return Date()
+        }
+    }
+}
+
+// MARK: - Private subviews
+
+private struct EditTMDBMovieRow: View {
+    let movie: TMDBMovie
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(movie.title)
+                .font(.body)
+                .foregroundStyle(.primary)
+            if let year = movie.releaseYear {
+                Text(String(year))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.vertical, 2)
+    }
+}
+
+private struct EditSelectedMovieCard: View {
+    let movie: TMDBMovie
+    let posterData: Data?
+    let onClear: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            if let data = posterData, let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 40, height: 56)
+                    .clipped()
+                    .cornerRadius(4)
+            } else {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(Color.secondary.opacity(0.2))
+                    .frame(width: 40, height: 56)
+                    .overlay(Image(systemName: "film").foregroundStyle(.secondary))
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(movie.title)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                if let year = movie.releaseYear {
+                    Text(String(year))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                if !movie.originalTitle.isEmpty, movie.originalTitle != movie.title {
+                    Text(movie.originalTitle)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+            }
+
+            Spacer()
+
+            Button(action: onClear) {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.vertical, 4)
     }
 }

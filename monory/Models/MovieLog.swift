@@ -29,6 +29,8 @@ final class MovieLog {
     var moviePosterData: Data?
 
     var watchedAtUnknown: Bool = false
+    var watchedYearOnly: Bool = false
+    var theaterMemo: String = ""
     var rating: Int? = nil
 
     var createdAt: Date = Date()
@@ -51,9 +53,11 @@ final class MovieLog {
     }
 
     var watchedAtDisplay: String {
-        watchedAtUnknown
-            ? "不明"
-            : watchedAt.formatted(date: .long, time: .omitted)
+        if watchedAtUnknown { return "不明" }
+        if watchedYearOnly {
+            return "\(Calendar.current.component(.year, from: watchedAt))年"
+        }
+        return watchedAt.formatted(date: .long, time: .omitted)
     }
 
     init(
