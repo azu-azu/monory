@@ -195,7 +195,7 @@ struct EditMovieLogView: View {
                     .fontWeight(.semibold)
                     .disabled(movieTitle.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
-                if !log.ticketImages.isEmpty {
+                if viewingType == .theater {
                     ToolbarItem(placement: .bottomBar) {
                         Button {
                             Task { await rescan() }
