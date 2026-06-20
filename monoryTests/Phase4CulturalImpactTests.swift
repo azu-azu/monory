@@ -76,6 +76,11 @@ final class Phase4CulturalImpactTests: XCTestCase {
             updatedAt: .now,
             ticketImages: [],
             viewingDates: [],
+            movieRuntimeMinutes: nil,
+            movieGenresRaw: nil,
+            movieDirector: nil,
+            movieCastRaw: nil,
+            metadataUpdatedAt: nil,
             culturalImpactNote: "映画の歴史に残る一作",
             culturalImpactSources: ["https://en.wikipedia.org/wiki/Inception"]
         )
