@@ -8,6 +8,12 @@ struct CinemaTicketResult {
     var watchedAt: Date?
     var screeningFormat: String?
     var admissionFee: Int?
+
+    var hasAnyResult: Bool {
+        movieTitle != nil || theaterName != nil || screenNumber != nil
+            || seatNumber != nil || watchedAt != nil
+            || screeningFormat != nil || admissionFee != nil
+    }
 }
 
 enum CinemaTicketParser {

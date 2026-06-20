@@ -260,14 +260,10 @@ struct EditMovieLogView: View {
 
         var merged = CinemaTicketResult()
         for ticket in log.ticketImages {
-            let text: String?
-            if let stored = ticket.ocrRawText {
-                text = stored
-            } else {
-                text = await OCRService.recognizeText(from: ticket.imageData)
-            }
-            guard let t = text else { continue }
-            let parsed = CinemaTicketParser.parse(t)
+            guard let rawText = ticket.ocrRawText
+                    ?? (await OCRService.recognizeText(from: ticket.imageData))
+            else { continue }
+            let parsed = CinemaTicketParser.parse(rawText)
             if merged.movieTitle == nil     { merged.movieTitle = parsed.movieTitle }
             if merged.theaterName == nil    { merged.theaterName = parsed.theaterName }
             if merged.screenNumber == nil   { merged.screenNumber = parsed.screenNumber }
@@ -277,11 +273,7 @@ struct EditMovieLogView: View {
             if merged.admissionFee == nil   { merged.admissionFee = parsed.admissionFee }
         }
         ocrResult = merged
-        let hasAnyResult = merged.movieTitle != nil || merged.theaterName != nil
-            || merged.screenNumber != nil || merged.seatNumber != nil
-            || merged.watchedAt != nil || merged.screeningFormat != nil
-            || merged.admissionFee != nil
-        if hasAnyResult {
+        if merged.hasAnyResult {
             showOCRSheet = true
         } else {
             showRescanEmptyAlert = true
