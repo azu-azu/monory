@@ -88,8 +88,7 @@ struct FullBackupImporter {
                 throw BackupError.resourceLimitExceeded
             }
 
-            // per-file size（負値はアーカイブ破損として拒否）
-            guard entry.uncompressedSize >= 0 else { throw BackupError.invalidArchive }
+            // per-file size
             let entrySize = UInt64(entry.uncompressedSize)
             if path == "logs.json" {
                 guard entrySize <= Self.maxLogsJSONSize else {
