@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 struct EditMovieLogView: View {
     let log: MovieLog
@@ -22,6 +23,8 @@ struct EditMovieLogView: View {
     @State private var watchedAtUnknown: Bool
     @State private var additionalDates: [IdentifiableDate]
     @State private var admissionFeeText: String
+
+    @State private var selectedTicketItems: [PhotosPickerItem] = []
 
     @State private var ocrResult: CinemaTicketResult?
     @State private var showOCRSheet = false
@@ -152,6 +155,31 @@ struct EditMovieLogView: View {
                         .lineLimit(5...10)
                         .keyboardCloseToolbar()
                 }
+
+                if viewingType == .theater {
+                    Section("チケット画像") {
+                        PhotosPicker(selection: $selectedTicketItems, matching: .images) {
+                            Label("画像を追加", systemImage: "plus.circle")
+                        }
+                        if !log.ticketImages.isEmpty {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 8) {
+                                    ForEach(log.ticketImages) { ticket in
+                                        if let uiImage = UIImage(data: ticket.imageData) {
+                                            Image(uiImage: uiImage)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 80, height: 80)
+                                                .clipped()
+                                                .cornerRadius(8)
+                                        }
+                                    }
+                                }
+                                .padding(.vertical, 4)
+                            }
+                        }
+                    }
+                }
             }
             .navigationTitle("記録を編集")
             .navigationBarTitleDisplayMode(.inline)
@@ -182,6 +210,13 @@ struct EditMovieLogView: View {
                     }
                 }
             }
+            .onChange(of: selectedTicketItems) { _, newItems in
+                guard !newItems.isEmpty else { return }
+                Task {
+                    await addTicketImages(newItems)
+                    selectedTicketItems = []
+                }
+            }
             .sheet(isPresented: $showOCRSheet) {
                 if let result = ocrResult {
                     OCRResultSheet(result: result) { field in
@@ -198,6 +233,17 @@ struct EditMovieLogView: View {
     }
 
     // MARK: - Private
+
+    private func addTicketImages(_ items: [PhotosPickerItem]) async {
+        for item in items {
+            guard let data = try? await item.loadTransferable(type: Data.self) else { continue }
+            let ticket = TicketImage(imageData: data)
+            ticket.ocrRawText = await OCRService.recognizeText(from: data)
+            context.insert(ticket)
+            log.ticketImages.append(ticket)
+        }
+        await rescan()
+    }
 
     private func rescan() async {
         isScanning = true
