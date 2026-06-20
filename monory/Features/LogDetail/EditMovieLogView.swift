@@ -110,6 +110,10 @@ struct EditMovieLogView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    ViewingTypeToggle(selection: $viewingType)
+                }
+
                 Section("作品") {
                     HStack {
                         TextField("映画タイトル", text: $movieTitle)
@@ -163,10 +167,6 @@ struct EditMovieLogView: View {
                     }
                 }
 
-                Section {
-                    ViewingTypeToggle(selection: $viewingType)
-                }
-
                 if viewingType == .theater {
                     Section("映画館") {
                         HStack {
@@ -196,19 +196,6 @@ struct EditMovieLogView: View {
                         TextField("メモ", text: $theaterMemo)
                     }
                 } else {
-                    Section("メディア") {
-                        Picker("サービス", selection: $streamingService) {
-                            ForEach(streamingStore.services, id: \.self) { service in
-                                Text(service).tag(service)
-                            }
-                            Text(StreamingServiceStore.otherOption)
-                                .tag(StreamingServiceStore.otherOption)
-                        }
-                        if streamingService == StreamingServiceStore.otherOption {
-                            TextField("サービス名", text: $customStreamingService)
-                        }
-                    }
-
                     Section("視聴日") {
                         dateSection
                         if watchedDateMode == .full {
@@ -231,6 +218,16 @@ struct EditMovieLogView: View {
                             } label: {
                                 Label("視聴日を追加", systemImage: "plus.circle")
                             }
+                        }
+                        Picker("メディア", selection: $streamingService) {
+                            ForEach(streamingStore.services, id: \.self) { service in
+                                Text(service).tag(service)
+                            }
+                            Text(StreamingServiceStore.otherOption)
+                                .tag(StreamingServiceStore.otherOption)
+                        }
+                        if streamingService == StreamingServiceStore.otherOption {
+                            TextField("サービス名", text: $customStreamingService)
                         }
                     }
                 }

@@ -12,18 +12,6 @@ struct MovieLogDetailView: View {
 
     var body: some View {
         List {
-            // Poster
-            if let data = log.moviePosterData, let uiImage = UIImage(data: data) {
-                Section {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: .infinity)
-                        .cornerRadius(8)
-                        .listRowInsets(EdgeInsets())
-                }
-            }
-
             Section {
                 LabeledContent("映画タイトル", value: log.movieTitle.isEmpty ? "—" : log.movieTitle)
                 if let originalTitle = log.movieOriginalTitle {
@@ -40,6 +28,9 @@ struct MovieLogDetailView: View {
                 } else {
                     LabeledContent("観た日", value: log.watchedAtDisplay)
                 }
+                if log.isMedia {
+                    LabeledContent("メディア", value: log.streamingService ?? "—")
+                }
             }
 
             if let synopsis = log.movieSynopsis, !synopsis.isEmpty {
@@ -50,11 +41,7 @@ struct MovieLogDetailView: View {
                 }
             }
 
-            if log.isMedia {
-                Section("メディア") {
-                    LabeledContent("サービス", value: log.streamingService ?? "—")
-                }
-            } else {
+            if !log.isMedia {
                 Section("映画館") {
                     LabeledContent("映画館", value: log.theaterName.isEmpty ? "—" : log.theaterName)
                     LabeledContent("スクリーン", value: log.screenNumber ?? "—")
@@ -113,7 +100,7 @@ struct MovieLogDetailView: View {
             }
         }
         .navigationTitle(log.movieTitle.isEmpty ? "無題" : log.movieTitle)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
