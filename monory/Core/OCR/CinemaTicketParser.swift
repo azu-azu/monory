@@ -18,6 +18,19 @@ struct CinemaTicketResult {
 
 enum CinemaTicketParser {
 
+    // MARK: - Unicode ranges
+
+    private static let japaneseScalarStart: UInt32 = 0x3000  // CJK記号・句読点
+    private static let japaneseScalarEnd:   UInt32 = 0x9FFF  // CJK統合漢字
+    private static let fullWidthDigitStart: UInt32 = 0xFF10  // '０'
+    private static let fullWidthDigitEnd:   UInt32 = 0xFF19  // '９'
+    private static let halfWidthDigitBase:  UInt32 = 0x30    // '0'
+
+    // MARK: - Admission fee bounds
+
+    private static let minAdmissionFee = 300    // 最安映画料金の目安
+    private static let maxAdmissionFee = 9_999  // 5桁以上は誤 OCR と判断
+
     // MARK: - Keyword lists
 
     private static let titleKeywords = ["作品名", "映画名", "タイトル", "作品"]
@@ -165,7 +178,7 @@ enum CinemaTicketParser {
         // 数字だけの行は除外
         if line.unicodeScalars.allSatisfy({ CharacterSet.decimalDigits.contains($0) }) { return false }
         // 日本語（かな・漢字）を含むか、ラテン文字5文字以上
-        let hasJapanese = line.unicodeScalars.contains { $0.value >= 0x3000 && $0.value <= 0x9FFF }
+        let hasJapanese = line.unicodeScalars.contains { $0.value >= japaneseScalarStart && $0.value <= japaneseScalarEnd }
         let hasLatin = line.filter { $0.isLetter }.count > 5
         return hasJapanese || hasLatin
     }
@@ -272,9 +285,9 @@ enum CinemaTicketParser {
         let digits = raw
             .unicodeScalars
             .compactMap { s -> Character? in
-                if s.value >= 0xFF10 && s.value <= 0xFF19 {
+                if s.value >= fullWidthDigitStart && s.value <= fullWidthDigitEnd {
                     // 全角数字 → 半角
-                    return Character(UnicodeScalar(s.value - 0xFF10 + 0x30)!)
+                    return Character(UnicodeScalar(s.value - fullWidthDigitStart + halfWidthDigitBase)!)
                 }
                 let c = Character(s)
                 return (c.isNumber || c == ",") ? c : nil
@@ -284,6 +297,6 @@ enum CinemaTicketParser {
     }
 
     private static func isReasonableFee(_ fee: Int) -> Bool {
-        fee >= 300 && fee <= 9999
+        fee >= minAdmissionFee && fee <= maxAdmissionFee
     }
 }

@@ -71,7 +71,7 @@ struct AddMovieLogView: View {
                     }
 
                     if let movie = viewModel.selectedTMDBMovie {
-                        SelectedMovieCard(
+                        TMDBSelectedMovieCard(
                             movie: movie,
                             posterData: viewModel.selectedPosterData,
                             onClear: { viewModel.clearSelection() }
@@ -197,7 +197,7 @@ struct AddMovieLogView: View {
                                                     .scaledToFill()
                                                     .frame(width: 80, height: 80)
                                                     .clipped()
-                                                    .cornerRadius(8)
+                                                    .cornerRadius(CornerRadius.standard)
                                                     .onTapGesture {
                                                         viewingDraftImage = uiImage
                                                     }
@@ -327,70 +327,3 @@ struct AddMovieLogView: View {
     }
 }
 
-private struct TMDBMovieRow: View {
-    let movie: TMDBMovie
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(movie.title)
-                .font(.body)
-                .foregroundStyle(.primary)
-            if let year = movie.releaseYear {
-                Text(String(year))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding(.vertical, 2)
-    }
-}
-
-private struct SelectedMovieCard: View {
-    let movie: TMDBMovie
-    let posterData: Data?
-    let onClear: () -> Void
-
-    var body: some View {
-        HStack(spacing: 12) {
-            if let data = posterData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 40, height: 56)
-                    .clipped()
-                    .cornerRadius(4)
-            } else {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.secondary.opacity(0.2))
-                    .frame(width: 40, height: 56)
-                    .overlay(Image(systemName: "film").foregroundStyle(.secondary))
-            }
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(movie.title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                if let year = movie.releaseYear {
-                    Text(String(year))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                if !movie.originalTitle.isEmpty, movie.originalTitle != movie.title {
-                    Text(movie.originalTitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-            }
-
-            Spacer()
-
-            Button(action: onClear) {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.secondary)
-            }
-            .buttonStyle(.plain)
-        }
-        .padding(.vertical, 4)
-    }
-}

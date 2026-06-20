@@ -139,14 +139,14 @@ struct EditMovieLogView: View {
                             Button {
                                 selectMovie(movie)
                             } label: {
-                                EditTMDBMovieRow(movie: movie)
+                                TMDBMovieRow(movie: movie)
                             }
                             .buttonStyle(.plain)
                         }
                     }
 
                     if let movie = selectedTMDBMovie {
-                        EditSelectedMovieCard(
+                        TMDBSelectedMovieCard(
                             movie: movie,
                             posterData: selectedPosterData,
                             onClear: {
@@ -275,7 +275,7 @@ struct EditMovieLogView: View {
                                                 .scaledToFill()
                                                 .frame(width: 80, height: 80)
                                                 .clipped()
-                                                .cornerRadius(8)
+                                                .cornerRadius(CornerRadius.standard)
                                         }
                                     }
                                 }
@@ -585,70 +585,3 @@ struct EditMovieLogView: View {
 
 // MARK: - Private subviews
 
-private struct EditTMDBMovieRow: View {
-    let movie: TMDBMovie
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(movie.title)
-                .font(.body)
-                .foregroundStyle(.primary)
-            if let year = movie.releaseYear {
-                Text(String(year))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding(.vertical, 2)
-    }
-}
-
-private struct EditSelectedMovieCard: View {
-    let movie: TMDBMovie
-    let posterData: Data?
-    let onClear: () -> Void
-
-    var body: some View {
-        HStack(spacing: 12) {
-            if let data = posterData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 40, height: 56)
-                    .clipped()
-                    .cornerRadius(4)
-            } else {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.secondary.opacity(0.2))
-                    .frame(width: 40, height: 56)
-                    .overlay(Image(systemName: "film").foregroundStyle(.secondary))
-            }
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(movie.title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                if let year = movie.releaseYear {
-                    Text(String(year))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                if !movie.originalTitle.isEmpty, movie.originalTitle != movie.title {
-                    Text(movie.originalTitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-            }
-
-            Spacer()
-
-            Button(action: onClear) {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.secondary)
-            }
-            .buttonStyle(.plain)
-        }
-        .padding(.vertical, 4)
-    }
-}

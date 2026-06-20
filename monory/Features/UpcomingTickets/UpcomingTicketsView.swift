@@ -132,7 +132,7 @@ private struct UpcomingTicketCard: View {
                 .padding(.vertical, 10)
         }
         .background(Color(.secondarySystemGroupedBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .clipShape(RoundedRectangle(cornerRadius: CornerRadius.cardLarge))
         .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
     }
 
@@ -144,7 +144,7 @@ private struct UpcomingTicketCard: View {
                 .scaledToFill()
                 .frame(width: 56, height: 80)
                 .clipped()
-                .cornerRadius(6)
+                .cornerRadius(CornerRadius.posterMedium)
         } else {
             RoundedRectangle(cornerRadius: 6)
                 .fill(Color.secondary.opacity(0.12))

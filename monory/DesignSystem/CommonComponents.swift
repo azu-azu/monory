@@ -39,7 +39,7 @@ private struct CardStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding()
-            .background(CommonBackgroundColors.card, in: RoundedRectangle(cornerRadius: 12))
+            .background(CommonBackgroundColors.card, in: RoundedRectangle(cornerRadius: CornerRadius.card))
     }
 }
 
@@ -126,9 +126,83 @@ struct ViewingTypeToggle: View {
                         : Color.secondary.opacity(0.12)
                 )
                 .foregroundStyle(selection == type ? Color.white : Color.primary)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.standard))
         }
         .buttonStyle(.plain)
+    }
+}
+
+// MARK: - TMDBMovieRow
+// TMDB 検索候補の1行。AddMovieLogView・EditMovieLogView 共用。
+
+struct TMDBMovieRow: View {
+    let movie: TMDBMovie
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(movie.title)
+                .font(.body)
+                .foregroundStyle(.primary)
+            if let year = movie.releaseYear {
+                Text(String(year))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.vertical, 2)
+    }
+}
+
+// MARK: - TMDBSelectedMovieCard
+// TMDB で選択済み映画カード（ポスター＋タイトル＋×ボタン）。Add/Edit 共用。
+
+struct TMDBSelectedMovieCard: View {
+    let movie: TMDBMovie
+    let posterData: Data?
+    let onClear: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            if let data = posterData, let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 40, height: 56)
+                    .clipped()
+                    .cornerRadius(CornerRadius.posterThumb)
+            } else {
+                RoundedRectangle(cornerRadius: CornerRadius.posterThumb)
+                    .fill(Color.secondary.opacity(0.2))
+                    .frame(width: 40, height: 56)
+                    .overlay(Image(systemName: "film").foregroundStyle(.secondary))
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(movie.title)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                if let year = movie.releaseYear {
+                    Text(String(year))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                if !movie.originalTitle.isEmpty, movie.originalTitle != movie.title {
+                    Text(movie.originalTitle)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+            }
+
+            Spacer()
+
+            Button(action: onClear) {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.vertical, 4)
     }
 }
 
@@ -140,7 +214,7 @@ struct RaisedButtonStyle: ButtonStyle {
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .background(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 10)  // ボタン固有の丸み
                     .fill(AppTheme.accent)
                     .shadow(
                         color: .black.opacity(configuration.isPressed ? 0 : 0.2),

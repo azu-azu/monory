@@ -30,3 +30,11 @@ enum StatusColors {
     static let success = Color.green
     static let warning = Color.orange
 }
+
+enum CornerRadius {
+    static let posterThumb: CGFloat = 4    // TMDB ポスターサムネイル (40×56)
+    static let posterMedium: CGFloat = 6   // 中サイズポスター (56×80)
+    static let standard: CGFloat = 8       // 画像・ボタン
+    static let card: CGFloat = 12          // カード背景
+    static let cardLarge: CGFloat = 14     // 大型カードコンテナ
+}
