@@ -233,15 +233,8 @@ struct MovieMetadataSheet: View {
     private func awardRows(_ awards: [WikidataAward], label: String) -> some View {
         ForEach(awards) { award in
             HStack(alignment: .top, spacing: 8) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(award.awardName)
-                        .font(.subheadline)
-                    if let category = award.categoryName {
-                        Text(category)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
+                Text(award.awardName)
+                    .font(.subheadline)
                 Spacer()
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(label)
@@ -294,10 +287,20 @@ struct MovieMetadataSheet: View {
     @ViewBuilder
     private var attributionSection: some View {
         Section {
-            // TMDB attribution requirement
-            Text("This product uses the TMDB API but is not endorsed or certified by TMDB.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            // TMDB attribution requirement:
+            // https://www.themoviedb.org/about/logos-attribution
+            // TMDBLogo.imageset に公式ロゴ PNG を配置すること（現在は placeholder）
+            HStack(spacing: 8) {
+                if UIImage(named: "TMDBLogo") != nil {
+                    Image("TMDBLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 18)
+                }
+                Text("This product uses the TMDB API but is not endorsed or certified by TMDB.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }

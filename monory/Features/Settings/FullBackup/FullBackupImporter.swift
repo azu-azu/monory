@@ -361,6 +361,11 @@ struct FullBackupImporter {
         log.rating = dto.rating
         log.createdAt = dto.createdAt
         log.updatedAt = dto.updatedAt
+        log.movieRuntimeMinutes = dto.movieRuntimeMinutes
+        log.movieGenresRaw = dto.movieGenresRaw
+        log.movieDirector = dto.movieDirector
+        log.movieCastRaw = dto.movieCastRaw
+        log.metadataUpdatedAt = dto.metadataUpdatedAt
         log.culturalImpactNote = dto.culturalImpactNote ?? ""
         if let sources = dto.culturalImpactSources, !sources.isEmpty {
             log.culturalImpactSourcesData = try? JSONEncoder().encode(sources)

@@ -35,6 +35,12 @@ struct MovieLogDTO: Codable, Sendable {
     let updatedAt: Date
     let ticketImages: [TicketImageDTO]
     let viewingDates: [ViewingDateDTO]
+    // Phase 1 extended metadata — optional for backward compatibility with old backups
+    let movieRuntimeMinutes: Int?
+    let movieGenresRaw: String?
+    let movieDirector: String?
+    let movieCastRaw: String?
+    let metadataUpdatedAt: Date?
     // Phase 4 — optional for backward compatibility with old backups
     let culturalImpactNote: String?
     let culturalImpactSources: [String]?

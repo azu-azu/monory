@@ -66,6 +66,11 @@ struct FullBackupExporter {
                 updatedAt: log.updatedAt,
                 ticketImages: ticketDTOs,
                 viewingDates: viewingDateDTOs,
+                movieRuntimeMinutes: log.movieRuntimeMinutes,
+                movieGenresRaw: log.movieGenresRaw,
+                movieDirector: log.movieDirector,
+                movieCastRaw: log.movieCastRaw,
+                metadataUpdatedAt: log.metadataUpdatedAt,
                 culturalImpactNote: log.culturalImpactNote.isEmpty ? nil : log.culturalImpactNote,
                 culturalImpactSources: culturalSources
             )

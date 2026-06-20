@@ -97,7 +97,9 @@ final class MovieMetadataViewModel {
         log.culturalImpactSourcesData = strings.isEmpty
             ? nil
             : try? JSONEncoder().encode(strings)
-        log.metadataUpdatedAt = Date()
+        let now = Date()
+        log.metadataUpdatedAt = now
+        log.updatedAt = now   // merge backup の新旧判定に使われる
         try? context.save()
     }
 }

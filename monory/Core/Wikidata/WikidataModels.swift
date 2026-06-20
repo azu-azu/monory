@@ -9,7 +9,6 @@ struct WikidataAward: Identifiable, Hashable {
     }
 
     let awardName: String
-    let categoryName: String?
     let year: Int?
     let type: AwardType
 
@@ -43,7 +42,6 @@ struct WikidataSPARQLResponse: Decodable {
             let value: String
         }
         let awardLabel: Value?
-        let categoryLabel: Value?
         let year: Value?
         let type: Value?
     }

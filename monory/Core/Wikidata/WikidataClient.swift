@@ -49,7 +49,6 @@ struct WikidataClient {
             else { return nil }
             return WikidataAward(
                 awardName: awardName,
-                categoryName: binding.categoryLabel?.value,
                 year: binding.year.flatMap { Int($0.value) },
                 type: awardType
             )
@@ -62,20 +61,18 @@ struct WikidataClient {
         // Sanitize: Wikidata ID は Q + 数字のみ
         let safe = wikidataID.filter { $0 == "Q" || $0.isNumber }
         return """
-        SELECT ?awardLabel ?categoryLabel ?year ?type WHERE {
+        SELECT ?awardLabel ?year ?type WHERE {
           VALUES ?entity { wd:\(safe) }
           {
             ?entity p:P166 ?stmt.
             BIND("won" AS ?type)
             ?stmt ps:P166 ?award.
             OPTIONAL { ?stmt pq:P585 ?date. BIND(YEAR(?date) AS ?year) }
-            OPTIONAL { ?stmt pq:P1027 ?category. }
           } UNION {
             ?entity p:P1411 ?stmt.
             BIND("nominated" AS ?type)
             ?stmt ps:P1411 ?award.
             OPTIONAL { ?stmt pq:P585 ?date. BIND(YEAR(?date) AS ?year) }
-            OPTIONAL { ?stmt pq:P1027 ?category. }
           }
           SERVICE wikibase:label { bd:serviceParam wikibase:language "ja,en". }
         }

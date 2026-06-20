@@ -162,14 +162,17 @@ final class AddMovieLogViewModel {
         selectedTMDBMovie = movie
         movieTitle = movie.title
         searchResults = []
+        let capturedID = movie.id
         if let posterPath = movie.posterPath {
-            selectedPosterData = try? await TMDBClient.fetchPosterData(path: posterPath)
+            let data = try? await TMDBClient.fetchPosterData(path: posterPath)
+            guard selectedTMDBMovie?.id == capturedID else { return }
+            selectedPosterData = data
         }
         // Silent background detail fetch — failure is non-fatal
         detailTask?.cancel()
         detailTask = Task {
-            guard let metadata = try? await TMDBClient.fetchMovieDetails(id: movie.id) else { return }
-            guard !Task.isCancelled else { return }
+            guard let metadata = try? await TMDBClient.fetchMovieDetails(id: capturedID) else { return }
+            guard !Task.isCancelled, self.selectedTMDBMovie?.id == capturedID else { return }
             self.draftMetadata = metadata
         }
     }

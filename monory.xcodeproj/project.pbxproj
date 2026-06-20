@@ -80,7 +80,7 @@
 		18F67B451DB28EBEB141DC8F /* AddMovieLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMovieLogViewModel.swift; sourceTree = "<group>"; };
 		2489907D5F7807D3BF9D5C46 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		25B3FBA401A7B9CE3C4E844F /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
-		28ADFCCC37FF15A41DEABDE0 /* monoryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = monoryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		28ADFCCC37FF15A41DEABDE0 /* monoryTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = monoryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B8979AA1D20DEC59946E649 /* ViewingDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewingDate.swift; sourceTree = "<group>"; };
 		2BABCD9075953B2A100BAAE7 /* BackupDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupDTO.swift; sourceTree = "<group>"; };
 		32DBFED23D1185035351B96A /* PhotoViewerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerSheet.swift; sourceTree = "<group>"; };
@@ -93,7 +93,7 @@
 		4CE5EC19C14D8125A1F46D3C /* TMDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBModels.swift; sourceTree = "<group>"; };
 		50A9C76CE676B2012AB549E7 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		53F87863FF824F1C3D39EDF7 /* Phase2RegionalDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase2RegionalDataTests.swift; sourceTree = "<group>"; };
-		54E6EB0220000D9BD1BD5179 /* monory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = monory.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		54E6EB0220000D9BD1BD5179 /* monory.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = monory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E6F03CC8FFEDCE88A2C062F /* WikidataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikidataModels.swift; sourceTree = "<group>"; };
 		5E841EC399B8A845A717E079 /* Phase4CulturalImpactTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase4CulturalImpactTests.swift; sourceTree = "<group>"; };
 		68D6BC765BED4BAE5B4AC5F5 /* MovieLogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLogListView.swift; sourceTree = "<group>"; };
@@ -389,7 +389,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2640;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					7B51A26A19A887E1B52D6926 = {
 						DevelopmentTeam = ZD854UM35V;
@@ -610,7 +610,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -711,7 +710,6 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

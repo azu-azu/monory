@@ -32,6 +32,7 @@ struct EditMovieLogView: View {
     @State private var selectedTMDBMovie: TMDBMovie?
     @State private var selectedPosterData: Data?
     @State private var searchTask: Task<Void, Never>?
+    @State private var posterTask: Task<Void, Never>?
     @State private var detailTask: Task<Void, Never>?
     @State private var draftMetadata: MovieMetadata?
     @State private var tmdbYearApplied: Bool
@@ -411,22 +412,26 @@ struct EditMovieLogView: View {
             watchedYear = releaseYear
             tmdbYearApplied = true
         }
-        Task {
-            if let posterPath = movie.posterPath {
-                selectedPosterData = try? await TMDBClient.fetchPosterData(path: posterPath)
-            }
+        let capturedID = movie.id
+        posterTask?.cancel()
+        posterTask = Task {
+            guard let posterPath = movie.posterPath else { return }
+            let data = try? await TMDBClient.fetchPosterData(path: posterPath)
+            guard !Task.isCancelled, selectedTMDBMovie?.id == capturedID else { return }
+            selectedPosterData = data
         }
         // Silent background detail fetch — failure is non-fatal
         detailTask?.cancel()
         detailTask = Task {
-            guard let metadata = try? await TMDBClient.fetchMovieDetails(id: movie.id) else { return }
-            guard !Task.isCancelled else { return }
+            guard let metadata = try? await TMDBClient.fetchMovieDetails(id: capturedID) else { return }
+            guard !Task.isCancelled, selectedTMDBMovie?.id == capturedID else { return }
             draftMetadata = metadata
         }
     }
 
     private func clearTitleSearch() {
         searchTask?.cancel()
+        posterTask?.cancel()
         detailTask?.cancel()
         selectedTMDBMovie = nil
         selectedPosterData = nil
