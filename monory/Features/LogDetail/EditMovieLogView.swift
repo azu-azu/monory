@@ -87,8 +87,11 @@ struct EditMovieLogView: View {
                         TextField("映画館名", text: $theaterName)
                         TextField("スクリーン番号", text: $screenNumber)
                         TextField("座席番号", text: $seatNumber)
-                        TextField("料金（円）", text: $admissionFeeText)
-                            .keyboardType(.numberPad)
+                        LabeledContent("料金") {
+                            TextField("0", text: $admissionFeeText)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing)
+                        }
                         Picker("上映形式", selection: $screeningFormat) {
                             ForEach(ScreeningFormat.allCases, id: \.self) { format in
                                 Text(format.rawValue).tag(format)

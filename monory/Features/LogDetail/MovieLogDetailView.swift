@@ -60,6 +60,9 @@ struct MovieLogDetailView: View {
                     LabeledContent("スクリーン", value: log.screenNumber ?? "—")
                     LabeledContent("座席", value: log.seatNumber ?? "—")
                     LabeledContent("上映形式", value: log.screeningFormat)
+                    if let fee = log.admissionFee {
+                        LabeledContent("料金", value: "¥\(fee)")
+                    }
                 }
             }
 

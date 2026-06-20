@@ -106,8 +106,11 @@ struct AddMovieLogView: View {
                         }
                         TextField("スクリーン番号", text: $viewModel.screenNumber)
                         TextField("座席番号", text: $viewModel.seatNumber)
-                        TextField("料金（円）", text: $viewModel.admissionFeeText)
-                            .keyboardType(.numberPad)
+                        LabeledContent("料金") {
+                            TextField("0", text: $viewModel.admissionFeeText)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing)
+                        }
                         Picker("上映形式", selection: $viewModel.screeningFormat) {
                             ForEach(ScreeningFormat.allCases, id: \.self) { format in
                                 Text(format.rawValue).tag(format)
