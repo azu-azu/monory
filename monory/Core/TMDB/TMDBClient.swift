@@ -1,13 +1,15 @@
 import Foundation
+import OSLog
 
 enum TMDBClient {
     private static let baseURL = "https://api.themoviedb.org/3"
     static let imageBaseURL = "https://image.tmdb.org/t/p/w500"
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "monory", category: "TMDB")
 
     static func search(query: String) async throws -> [TMDBMovie] {
         let key = Secrets.tmdbAPIKey
         guard !key.isEmpty, key != "YOUR_TMDB_API_KEY" else {
-            print("[TMDB] ⚠️ API key not set")
+            logger.warning("API key not set")
             return []
         }
 
@@ -19,17 +21,15 @@ enum TMDBClient {
             URLQueryItem(name: "region", value: "JP"),
             URLQueryItem(name: "page", value: "1"),
         ]
-        print("[TMDB] 🔍 query=\(query)")
+        logger.debug("query=\(query, privacy: .private)")
         do {
             let (data, response) = try await URLSession.shared.data(from: components.url!)
             let status = (response as? HTTPURLResponse)?.statusCode ?? 0
-            let body = String(data: data, encoding: .utf8)?.prefix(300) ?? ""
-            print("[TMDB] status=\(status) body=\(body)")
             let results = try JSONDecoder().decode(TMDBSearchResponse.self, from: data).results
-            print("[TMDB] ✅ \(results.count) results")
+            logger.debug("status=\(status) results=\(results.count)")
             return results
         } catch {
-            print("[TMDB] ❌ error=\(error)")
+            logger.error("search failed: \(error)")
             throw error
         }
     }

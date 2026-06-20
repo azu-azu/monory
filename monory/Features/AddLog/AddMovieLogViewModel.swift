@@ -87,11 +87,13 @@ final class AddMovieLogViewModel {
     }
 
     func addTicketImage(_ data: Data) async {
-        let idx = ticketDrafts.count
-        ticketDrafts.append(TicketImageDraft(imageData: data))
+        let draft = TicketImageDraft(imageData: data)
+        ticketDrafts.append(draft)
 
         let rawText = await OCRService.recognizeText(from: data)
-        ticketDrafts[idx].ocrRawText = rawText
+        if let i = ticketDrafts.firstIndex(where: { $0.id == draft.id }) {
+            ticketDrafts[i].ocrRawText = rawText
+        }
 
         guard let text = rawText else { return }
         scannedFromTicket = true

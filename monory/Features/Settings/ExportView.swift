@@ -69,11 +69,7 @@ struct ExportView: View {
             Button("OK", role: .cancel) {}
         } message: {
             if let r = importResult {
-                if r.skippedCount > 0 {
-                    Text("\(r.importedCount)件をインポートしました（\(r.skippedCount)件はスキップ）")
-                } else {
-                    Text("\(r.importedCount)件をインポートしました")
-                }
+                Text(r.importSummary)
             }
         }
         .alert("インポートに失敗しました", isPresented: $importError) {

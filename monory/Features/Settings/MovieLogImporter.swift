@@ -5,6 +5,15 @@ struct MovieLogImporter {
     struct ImportResult {
         let importedCount: Int
         let skippedCount: Int
+        let invalidDateCount: Int
+
+        var importSummary: String {
+            var parts: [String] = []
+            if invalidDateCount > 0 { parts.append("\(invalidDateCount)件の日付を「不明」として処理") }
+            if skippedCount > 0     { parts.append("\(skippedCount)件はスキップ") }
+            let suffix = parts.isEmpty ? "" : "（\(parts.joined(separator: "、"))）"
+            return "\(importedCount)件をインポートしました\(suffix)"
+        }
     }
 
     private static let dateFormatter: DateFormatter = {
@@ -32,7 +41,7 @@ struct MovieLogImporter {
             csvData = csvData.dropFirst(3)
         }
         guard let text = String(data: csvData, encoding: .utf8) else {
-            return ImportResult(importedCount: 0, skippedCount: 0)
+            return ImportResult(importedCount: 0, skippedCount: 0, invalidDateCount: 0)
         }
 
         var rows = parseCSV(text)
@@ -41,6 +50,7 @@ struct MovieLogImporter {
 
         var imported = 0
         var skipped = 0
+        var invalidDates = 0
 
         for row in rows {
             // 空行・列数不足はスキップ（末尾の空行も含む）
@@ -52,14 +62,16 @@ struct MovieLogImporter {
             let watchedAtStr = row[Col.watchedAt.rawValue]
             let isUnknown = watchedAtStr == "不明"
             let isYearOnly = !isUnknown && watchedAtStr.count == 4 && Int(watchedAtStr) != nil
+            let parsedDate: Date? = (!isUnknown && !isYearOnly) ? dateFormatter.date(from: watchedAtStr) : nil
+            let isInvalidDate = !isUnknown && !isYearOnly && parsedDate == nil
 
             let watchedAt: Date
-            if isUnknown {
-                watchedAt = Date()
-            } else if isYearOnly, let year = Int(watchedAtStr) {
+            if isYearOnly, let year = Int(watchedAtStr) {
                 watchedAt = Calendar.current.date(from: DateComponents(year: year, month: 1, day: 1)) ?? Date()
+            } else if let date = parsedDate {
+                watchedAt = date
             } else {
-                watchedAt = dateFormatter.date(from: watchedAtStr) ?? Date()
+                watchedAt = Date()  // 内部値。UI は watchedAtUnknown で「不明」と表示
             }
 
             let log = MovieLog(
@@ -70,8 +82,9 @@ struct MovieLogImporter {
             )
             log.movieOriginalTitle  = row[Col.originalTitle.rawValue].isEmpty ? nil : row[Col.originalTitle.rawValue]
             log.movieReleaseYear    = Int(row[Col.releaseYear.rawValue])
-            log.watchedAtUnknown    = isUnknown
+            log.watchedAtUnknown    = isUnknown || isInvalidDate
             log.watchedYearOnly     = isYearOnly
+            if isInvalidDate { invalidDates += 1 }
             log.rating              = Int(row[Col.rating.rawValue])
             log.viewingType         = row[Col.viewingType.rawValue].isEmpty ? ViewingType.theater.rawValue : row[Col.viewingType.rawValue]
             log.streamingService    = row[Col.streamingService.rawValue].isEmpty ? nil : row[Col.streamingService.rawValue]
@@ -90,6 +103,8 @@ struct MovieLogImporter {
                         let vd = ViewingDate(date: date)
                         context.insert(vd)
                         log.viewingDates.append(vd)
+                    } else {
+                        invalidDates += 1
                     }
                 }
             }
@@ -97,7 +112,7 @@ struct MovieLogImporter {
             imported += 1
         }
 
-        return ImportResult(importedCount: imported, skippedCount: skipped)
+        return ImportResult(importedCount: imported, skippedCount: skipped, invalidDateCount: invalidDates)
     }
 
     // MARK: - RFC 4180 CSV parser
