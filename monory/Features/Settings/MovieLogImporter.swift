@@ -45,7 +45,7 @@ struct MovieLogImporter {
         }
 
         var rows = parseCSV(text)
-        guard rows.count > 1 else { return ImportResult(importedCount: 0, skippedCount: 0) }
+        guard rows.count > 1 else { return ImportResult(importedCount: 0, skippedCount: 0, invalidDateCount: 0) }
         rows.removeFirst() // header row
 
         var imported = 0

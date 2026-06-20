@@ -91,9 +91,8 @@ final class AddMovieLogViewModel {
         ticketDrafts.append(draft)
 
         let rawText = await OCRService.recognizeText(from: data)
-        if let i = ticketDrafts.firstIndex(where: { $0.id == draft.id }) {
-            ticketDrafts[i].ocrRawText = rawText
-        }
+        guard let i = ticketDrafts.firstIndex(where: { $0.id == draft.id }) else { return }
+        ticketDrafts[i].ocrRawText = rawText
 
         guard let text = rawText else { return }
         scannedFromTicket = true
