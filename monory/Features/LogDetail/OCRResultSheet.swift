@@ -75,19 +75,16 @@ struct OCRResultSheet: View {
                          display: result.admissionFee.map { "¥\($0)" },
                          field: result.admissionFee.map { .admissionFee($0) })
 
-                Section {
-                    Button {
-                        applyAll()
-                        dismiss()
-                    } label: {
-                        Text("すべて適用して閉じる")
-                            .frame(maxWidth: .infinity)
-                    }
-                }
             }
             .navigationTitle("チケットから読み取り")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("すべて適用") {
+                        applyAll()
+                        dismiss()
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("閉じる") { dismiss() }
                 }
