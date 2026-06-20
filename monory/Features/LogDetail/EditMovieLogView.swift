@@ -180,17 +180,6 @@ struct EditMovieLogView: View {
                                 }
                                 .padding(.vertical, 4)
                             }
-                            Button {
-                                Task { await rescan() }
-                            } label: {
-                                if isScanning {
-                                    Label("読み取り中...", systemImage: "arrow.clockwise")
-                                        .foregroundStyle(.secondary)
-                                } else {
-                                    Label("画像をもう一度読み取る", systemImage: "arrow.clockwise")
-                                }
-                            }
-                            .disabled(isScanning)
                         }
                     }
                 }
@@ -208,6 +197,26 @@ struct EditMovieLogView: View {
                     }
                     .fontWeight(.semibold)
                     .disabled(movieTitle.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+                if viewingType == .theater {
+                    ToolbarItem(placement: .bottomBar) {
+                        Button {
+                            Task { await rescan() }
+                        } label: {
+                            if isScanning {
+                                HStack(spacing: 6) {
+                                    ProgressView()
+                                    Text("読み取り中...")
+                                }
+                            } else {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "arrow.clockwise")
+                                    Text("画像を再読み取り")
+                                }
+                            }
+                        }
+                        .disabled(isScanning)
+                    }
                 }
             }
             .onChange(of: selectedTicketItems) { _, newItems in
