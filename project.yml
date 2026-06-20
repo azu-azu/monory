@@ -54,12 +54,30 @@ targets:
         INFOPLIST_KEY_NSCameraUsageDescription: "チケット画像を撮影してログに添付します。"
         GENERATE_INFOPLIST_FILE: NO
 
+  monoryTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - monoryTests
+    dependencies:
+      - target: monory
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.tsukiusagi.monoryTests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/monory.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/monory"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        GENERATE_INFOPLIST_FILE: YES
+
 schemes:
   monory:
     build:
       targets:
         monory: all
+        monoryTests: [test]
     run:
       config: Debug
+    test:
+      targets:
+        - monoryTests
     archive:
       config: Release

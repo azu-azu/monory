@@ -9,6 +9,7 @@ struct MovieLogDetailView: View {
     @State private var selectedTicket: TicketImage?
     @State private var showDeleteConfirmation = false
     @State private var showEdit = false
+    @State private var showMetadataSheet = false
 
     var body: some View {
         List {
@@ -19,6 +20,13 @@ struct MovieLogDetailView: View {
                 }
                 if let year = log.movieReleaseYear {
                     LabeledContent("公開年", value: String(year))
+                }
+                if log.tmdbId != nil {
+                    Button {
+                        showMetadataSheet = true
+                    } label: {
+                        Label("作品詳細", systemImage: "film")
+                    }
                 }
                 if log.isMedia && !log.viewingDates.isEmpty {
                     LabeledContent("初回視聴", value: log.watchedAtDisplay)
@@ -120,6 +128,9 @@ struct MovieLogDetailView: View {
         }
         .sheet(isPresented: $showEdit) {
             EditMovieLogView(log: log)
+        }
+        .sheet(isPresented: $showMetadataSheet) {
+            MovieMetadataSheet(log: log)
         }
         .confirmationDialog("このログを削除しますか？", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button("削除", role: .destructive) {

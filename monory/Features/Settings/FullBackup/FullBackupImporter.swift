@@ -361,5 +361,11 @@ struct FullBackupImporter {
         log.rating = dto.rating
         log.createdAt = dto.createdAt
         log.updatedAt = dto.updatedAt
+        log.culturalImpactNote = dto.culturalImpactNote ?? ""
+        if let sources = dto.culturalImpactSources, !sources.isEmpty {
+            log.culturalImpactSourcesData = try? JSONEncoder().encode(sources)
+        } else {
+            log.culturalImpactSourcesData = nil
+        }
     }
 }

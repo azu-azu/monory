@@ -19,7 +19,7 @@ final class MovieLog {
     var viewingType: String = ViewingType.theater.rawValue
     var streamingService: String?
 
-    // TMDB
+    // TMDB — basic
     var tmdbId: Int?
     var movieOriginalTitle: String?
     var movieReleaseYear: Int?
@@ -27,6 +27,18 @@ final class MovieLog {
 
     @Attribute(.externalStorage)
     var moviePosterData: Data?
+
+    // TMDB — Phase 1 extended metadata
+    // nil = 未取得, "" = 取得済みだが値なし, non-empty = 取得済み
+    var movieRuntimeMinutes: Int?
+    var movieGenresRaw: String?
+    var movieDirector: String?
+    var movieCastRaw: String?
+    var metadataUpdatedAt: Date?
+
+    // Phase 4 — User-authored cultural impact
+    var culturalImpactNote: String = ""
+    var culturalImpactSourcesData: Data?
 
     var watchedAtUnknown: Bool = false
     var watchedYearOnly: Bool = false
@@ -42,6 +54,27 @@ final class MovieLog {
     /// 配信時の追加視聴日（watchedAt が初回日、以降はここに追加）
     @Relationship(deleteRule: .cascade, inverse: \ViewingDate.movieLog)
     var viewingDates: [ViewingDate] = []
+
+    /// nil / 空 string はどちらも [] に map する。View 側に persistence の意味論を漏らさない。
+    var movieGenres: [String] {
+        guard let raw = movieGenresRaw, !raw.isEmpty else { return [] }
+        return raw.split(separator: ",").map(String.init)
+    }
+
+    var movieCast: [String] {
+        guard let raw = movieCastRaw, !raw.isEmpty else { return [] }
+        return raw.split(separator: ",").map(String.init)
+    }
+
+    var culturalImpactSources: [URL] {
+        guard let data = culturalImpactSourcesData,
+              let strings = try? JSONDecoder().decode([String].self, from: data)
+        else { return [] }
+        return strings
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .compactMap { URL(string: $0) }
+            .filter { $0.scheme != nil }
+    }
 
     var isMedia: Bool {
         viewingType == ViewingType.media.rawValue

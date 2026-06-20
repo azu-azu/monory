@@ -32,6 +32,8 @@ struct EditMovieLogView: View {
     @State private var selectedTMDBMovie: TMDBMovie?
     @State private var selectedPosterData: Data?
     @State private var searchTask: Task<Void, Never>?
+    @State private var detailTask: Task<Void, Never>?
+    @State private var draftMetadata: MovieMetadata?
     @State private var tmdbYearApplied: Bool
 
     @State private var selectedTicketItems: [PhotosPickerItem] = []
@@ -154,8 +156,10 @@ struct EditMovieLogView: View {
                             movie: movie,
                             posterData: selectedPosterData,
                             onClear: {
+                                detailTask?.cancel()
                                 selectedTMDBMovie = nil
                                 selectedPosterData = nil
+                                draftMetadata = nil
                                 searchResults = []
                                 tmdbYearApplied = false
                             }
@@ -412,12 +416,21 @@ struct EditMovieLogView: View {
                 selectedPosterData = try? await TMDBClient.fetchPosterData(path: posterPath)
             }
         }
+        // Silent background detail fetch — failure is non-fatal
+        detailTask?.cancel()
+        detailTask = Task {
+            guard let metadata = try? await TMDBClient.fetchMovieDetails(id: movie.id) else { return }
+            guard !Task.isCancelled else { return }
+            draftMetadata = metadata
+        }
     }
 
     private func clearTitleSearch() {
         searchTask?.cancel()
+        detailTask?.cancel()
         selectedTMDBMovie = nil
         selectedPosterData = nil
+        draftMetadata = nil
         searchResults = []
         movieTitle = ""
         tmdbYearApplied = false
@@ -574,12 +587,26 @@ struct EditMovieLogView: View {
             log.movieReleaseYear = movie.releaseYear
             log.movieSynopsis = movie.overview.isEmpty ? nil : movie.overview
             log.moviePosterData = selectedPosterData ?? log.moviePosterData
+            // Phase 1: re-select 時のみ extended metadata を更新する
+            if let metadata = draftMetadata {
+                log.movieRuntimeMinutes = metadata.runtimeMinutes
+                log.movieGenresRaw = metadata.genres.isEmpty ? nil : metadata.genres.joined(separator: ",")
+                log.movieDirector = metadata.director
+                log.movieCastRaw = metadata.topCast.isEmpty ? nil : metadata.topCast.joined(separator: ",")
+                log.metadataUpdatedAt = Date()
+            }
         } else {
             log.tmdbId = nil
             log.movieOriginalTitle = nil
             log.movieReleaseYear = nil
             log.movieSynopsis = nil
             log.moviePosterData = nil
+            // TMDB リンクを削除したら extended metadata も合わせてクリア
+            log.movieRuntimeMinutes = nil
+            log.movieGenresRaw = nil
+            log.movieDirector = nil
+            log.movieCastRaw = nil
+            log.metadataUpdatedAt = nil
         }
     }
 

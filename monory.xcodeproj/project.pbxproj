@@ -10,32 +10,41 @@
 		097EA85A5E5F7AB4CAF6ACA0 /* MovieLogExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E654120DB6EF777915AB6E /* MovieLogExporter.swift */; };
 		0D96A40EB0A0B12CB4052653 /* OCRResultSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCA6A4E28BCEA9B2D05926A /* OCRResultSheet.swift */; };
 		130A9E19032C28AEBBAA8BCE /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE5EC19C14D8125A1F46D3C /* TMDBModels.swift */; };
+		16430B1E7789F05A11FCE806 /* MovieMetadataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D028CBD2249E09267A1BA9 /* MovieMetadataViewModel.swift */; };
 		1E4992516DF7D0EF98637A44 /* MovieLogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D6BC765BED4BAE5B4AC5F5 /* MovieLogListView.swift */; };
 		1F6B833CDCA1321D1BCB4E57 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CA9EBB80F6D279E5A26F16 /* AppContainer.swift */; };
+		1F9D29BEE3A645289C3430F4 /* MovieLogMigrationSpikeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6F4D235948566764D874D7 /* MovieLogMigrationSpikeTests.swift */; };
 		23C3C39D4E821097CDC174E9 /* MovieLogImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4430473E65E3C5DB09ECFB /* MovieLogImporter.swift */; };
 		240790BADB5DF68E3CF8345C /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9C76CE676B2012AB549E7 /* Secrets.swift */; };
 		2F0F392081F0A50CD09E3D48 /* StreamingServiceOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DC977F5A019DC6A8D4FFB0 /* StreamingServiceOrderView.swift */; };
 		33008B889019F69EA4E9B3C9 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489907D5F7807D3BF9D5C46 /* RootTabView.swift */; };
+		39668062FE80224E081D024A /* WikidataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6F03CC8FFEDCE88A2C062F /* WikidataModels.swift */; };
 		397EB8D28E8FF1ABDB89FAE4 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3476DC97C66236DDFC9A9B /* AppTheme.swift */; };
+		3BC5C68B42AE912B9A8B1843 /* SwiftDataStringArraySpikeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A761E6E1EC32C8036D593F25 /* SwiftDataStringArraySpikeTests.swift */; };
 		3F25BEEDD9A9710A90235522 /* AddMovieLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F67B451DB28EBEB141DC8F /* AddMovieLogViewModel.swift */; };
 		42EEE995814C0BF0787CE768 /* EditMovieLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77EEF952D77D854D2C3B503 /* EditMovieLogView.swift */; };
 		48A9B4D3012A61ECAAF717F5 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B808DBE44DF4D18F0877F2 /* HapticManager.swift */; };
 		4DBE21EA89387E4887360C1B /* MovieLogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D2855D83EAD7716C911CE8 /* MovieLogDetailView.swift */; };
+		511A8BBD61EEC18DD0DFDB30 /* Phase2RegionalDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F87863FF824F1C3D39EDF7 /* Phase2RegionalDataTests.swift */; };
 		66FA98D7C0478E11F29EA1ED /* CommonComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B607655EF9E2EAB6404CC /* CommonComponents.swift */; };
 		6A04FE02168905B041A99038 /* ExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0D7062470A8D5CBA9D46F /* ExportView.swift */; };
+		6A62E5203B1D49A486B9BED3 /* CulturalImpactEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5569BE37FDA8752F25DB39 /* CulturalImpactEditView.swift */; };
 		749DE567E608A21D6F571D0A /* CameraPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40F7D72EB1CC5B95A5D6BFA /* CameraPickerView.swift */; };
 		783812A42579A7CF0093EC69 /* ViewingDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8979AA1D20DEC59946E649 /* ViewingDate.swift */; };
 		7A4227EB3C4E05B9CD3B72D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A02951A2E5175B4858B48C76 /* Assets.xcassets */; };
+		7AB790C4F8669E7CD6CE6A1A /* WikidataAwardsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E7688FBF003D82FCB9906DA /* WikidataAwardsTests.swift */; };
 		80CC35BFCD57C63E6E9B77AC /* MovieLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9777A7A90A4CBEEE06DF87A3 /* MovieLog.swift */; };
 		8477E1FEA2BF45C4DD96E7A5 /* FullBackupImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD82F96FEFF15D4A507CD598 /* FullBackupImporter.swift */; };
 		84FB1073002631A956070E6E /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49508715B562EC81CD6060DC /* OCRService.swift */; };
 		8CCEC02670573F7B408EF238 /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B3FBA401A7B9CE3C4E844F /* TMDBClient.swift */; };
 		8F51DDE04EACBDF54524E05F /* PhotoViewerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DBFED23D1185035351B96A /* PhotoViewerSheet.swift */; };
+		92631D91F3FF06B070B7D749 /* Phase4CulturalImpactTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E841EC399B8A845A717E079 /* Phase4CulturalImpactTests.swift */; };
 		94CF93F5B48E4348E9A91CDD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BCF3BB8216E0AECA6309AE /* SettingsView.swift */; };
 		97DEB9E6D2D73D70E6C0DAC3 /* CinemaTicketParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3206F51A4C257B6FB1907FD /* CinemaTicketParser.swift */; };
 		9B411EE57E72A15BCE2EF139 /* ViewingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596317C2554801150B4CD82 /* ViewingType.swift */; };
 		AEE64758FE831701E1712A4C /* FullBackupExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FD87D58AFB3C455097C3D7 /* FullBackupExporter.swift */; };
 		BA5653219697E32493ECF6AB /* StreamingServiceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444A634E25ED3FC29BA0DA35 /* StreamingServiceStore.swift */; };
+		BC4A6FFA830AB79C3D4E84C2 /* MovieMetadataSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482491413BD3267053E2D1A /* MovieMetadataSheet.swift */; };
 		BC7C2838CBEF4765A8AFA1DD /* ScreeningFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D1A5322F085ED16BAA001C /* ScreeningFormat.swift */; };
 		BEE0C60ED118FEE1BCEC1A15 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 643BE9A908DE527A40914875 /* ZIPFoundation */; };
 		BFEA11F3D5BA5061DCF2B492 /* StatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908467089C9C58F995A5C875 /* StatusBarView.swift */; };
@@ -44,14 +53,34 @@
 		D5B190DEE049E72AC619F3AF /* AddMovieLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB90542F51EF6E628E95B52 /* AddMovieLogView.swift */; };
 		D8AEAF48FD7270C9C2CB357B /* BackupDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BABCD9075953B2A100BAAE7 /* BackupDTO.swift */; };
 		DA1A5AC6F1812997DBE9FE9A /* MonoryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF82D06C9CC95A9CB239ECF3 /* MonoryApp.swift */; };
+		DCDE49F42146A8E769B93E75 /* MovieMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2BFCE175D005B1AB0BC1A4 /* MovieMetadata.swift */; };
+		E0373E79A1DCE36204638968 /* MovieMetadataMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C9BE8AA0EB974C7773D7DD /* MovieMetadataMappingTests.swift */; };
+		E9E4830C3B30DD8CBA48FAEB /* TMDBDetailDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA02A6456A0BE5A1CC1C19C7 /* TMDBDetailDecodingTests.swift */; };
+		F8D95D32C7331C4CB065EC1A /* RawCollectionEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB90E491BC6DF02ADAA6E0D /* RawCollectionEncodingTests.swift */; };
+		F9591F8EA45E2D18B53B308E /* WikidataClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23CF6893A6F710124AAD79D /* WikidataClient.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4FC02AA9DC757EBBF591206A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 117736F70B50BC123324A13E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B51A26A19A887E1B52D6926;
+			remoteInfo = monory;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		0482491413BD3267053E2D1A /* MovieMetadataSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieMetadataSheet.swift; sourceTree = "<group>"; };
 		08D1A5322F085ED16BAA001C /* ScreeningFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreeningFormat.swift; sourceTree = "<group>"; };
 		0A3B607655EF9E2EAB6404CC /* CommonComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonComponents.swift; sourceTree = "<group>"; };
+		0B5569BE37FDA8752F25DB39 /* CulturalImpactEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CulturalImpactEditView.swift; sourceTree = "<group>"; };
+		0C6F4D235948566764D874D7 /* MovieLogMigrationSpikeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLogMigrationSpikeTests.swift; sourceTree = "<group>"; };
+		0E7688FBF003D82FCB9906DA /* WikidataAwardsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikidataAwardsTests.swift; sourceTree = "<group>"; };
 		18F67B451DB28EBEB141DC8F /* AddMovieLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMovieLogViewModel.swift; sourceTree = "<group>"; };
 		2489907D5F7807D3BF9D5C46 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		25B3FBA401A7B9CE3C4E844F /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
+		28ADFCCC37FF15A41DEABDE0 /* monoryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = monoryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B8979AA1D20DEC59946E649 /* ViewingDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewingDate.swift; sourceTree = "<group>"; };
 		2BABCD9075953B2A100BAAE7 /* BackupDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupDTO.swift; sourceTree = "<group>"; };
 		32DBFED23D1185035351B96A /* PhotoViewerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerSheet.swift; sourceTree = "<group>"; };
@@ -59,14 +88,20 @@
 		3B3476DC97C66236DDFC9A9B /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		444A634E25ED3FC29BA0DA35 /* StreamingServiceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingServiceStore.swift; sourceTree = "<group>"; };
 		44DC977F5A019DC6A8D4FFB0 /* StreamingServiceOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingServiceOrderView.swift; sourceTree = "<group>"; };
+		45D028CBD2249E09267A1BA9 /* MovieMetadataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieMetadataViewModel.swift; sourceTree = "<group>"; };
 		49508715B562EC81CD6060DC /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
 		4CE5EC19C14D8125A1F46D3C /* TMDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBModels.swift; sourceTree = "<group>"; };
 		50A9C76CE676B2012AB549E7 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
-		54E6EB0220000D9BD1BD5179 /* monory.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = monory.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		53F87863FF824F1C3D39EDF7 /* Phase2RegionalDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase2RegionalDataTests.swift; sourceTree = "<group>"; };
+		54E6EB0220000D9BD1BD5179 /* monory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = monory.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E6F03CC8FFEDCE88A2C062F /* WikidataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikidataModels.swift; sourceTree = "<group>"; };
+		5E841EC399B8A845A717E079 /* Phase4CulturalImpactTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase4CulturalImpactTests.swift; sourceTree = "<group>"; };
 		68D6BC765BED4BAE5B4AC5F5 /* MovieLogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLogListView.swift; sourceTree = "<group>"; };
+		6C2BFCE175D005B1AB0BC1A4 /* MovieMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieMetadata.swift; sourceTree = "<group>"; };
 		70D2855D83EAD7716C911CE8 /* MovieLogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLogDetailView.swift; sourceTree = "<group>"; };
 		7596317C2554801150B4CD82 /* ViewingType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewingType.swift; sourceTree = "<group>"; };
 		786D8E0A93A515524E8424F9 /* TicketImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketImage.swift; sourceTree = "<group>"; };
+		78C9BE8AA0EB974C7773D7DD /* MovieMetadataMappingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieMetadataMappingTests.swift; sourceTree = "<group>"; };
 		85B808DBE44DF4D18F0877F2 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		86FD87D58AFB3C455097C3D7 /* FullBackupExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullBackupExporter.swift; sourceTree = "<group>"; };
 		87CA9EBB80F6D279E5A26F16 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
@@ -76,12 +111,16 @@
 		9777A7A90A4CBEEE06DF87A3 /* MovieLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLog.swift; sourceTree = "<group>"; };
 		9DB90542F51EF6E628E95B52 /* AddMovieLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMovieLogView.swift; sourceTree = "<group>"; };
 		A02951A2E5175B4858B48C76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A23CF6893A6F710124AAD79D /* WikidataClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikidataClient.swift; sourceTree = "<group>"; };
 		A40F7D72EB1CC5B95A5D6BFA /* CameraPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPickerView.swift; sourceTree = "<group>"; };
+		A761E6E1EC32C8036D593F25 /* SwiftDataStringArraySpikeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataStringArraySpikeTests.swift; sourceTree = "<group>"; };
 		A77EEF952D77D854D2C3B503 /* EditMovieLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMovieLogView.swift; sourceTree = "<group>"; };
 		AD82F96FEFF15D4A507CD598 /* FullBackupImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullBackupImporter.swift; sourceTree = "<group>"; };
 		AE4430473E65E3C5DB09ECFB /* MovieLogImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieLogImporter.swift; sourceTree = "<group>"; };
 		B2F0D7062470A8D5CBA9D46F /* ExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportView.swift; sourceTree = "<group>"; };
 		BF82D06C9CC95A9CB239ECF3 /* MonoryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonoryApp.swift; sourceTree = "<group>"; };
+		CA02A6456A0BE5A1CC1C19C7 /* TMDBDetailDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBDetailDecodingTests.swift; sourceTree = "<group>"; };
+		CAB90E491BC6DF02ADAA6E0D /* RawCollectionEncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawCollectionEncodingTests.swift; sourceTree = "<group>"; };
 		CBCA6A4E28BCEA9B2D05926A /* OCRResultSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRResultSheet.swift; sourceTree = "<group>"; };
 		EAE6D4B6FEC12716D1AA97F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F3206F51A4C257B6FB1907FD /* CinemaTicketParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaTicketParser.swift; sourceTree = "<group>"; };
@@ -112,6 +151,16 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		03B823AF4E0786391CB6C69A /* MovieMetadata */ = {
+			isa = PBXGroup;
+			children = (
+				0B5569BE37FDA8752F25DB39 /* CulturalImpactEditView.swift */,
+				0482491413BD3267053E2D1A /* MovieMetadataSheet.swift */,
+				45D028CBD2249E09267A1BA9 /* MovieMetadataViewModel.swift */,
+			);
+			path = MovieMetadata;
+			sourceTree = "<group>";
+		};
 		17391A9E1FAECF15BE4D70FE /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -137,12 +186,28 @@
 			path = monory;
 			sourceTree = "<group>";
 		};
+		2A3E0C686A3BEA4A2D0EDAA5 /* monoryTests */ = {
+			isa = PBXGroup;
+			children = (
+				0C6F4D235948566764D874D7 /* MovieLogMigrationSpikeTests.swift */,
+				78C9BE8AA0EB974C7773D7DD /* MovieMetadataMappingTests.swift */,
+				53F87863FF824F1C3D39EDF7 /* Phase2RegionalDataTests.swift */,
+				5E841EC399B8A845A717E079 /* Phase4CulturalImpactTests.swift */,
+				CAB90E491BC6DF02ADAA6E0D /* RawCollectionEncodingTests.swift */,
+				A761E6E1EC32C8036D593F25 /* SwiftDataStringArraySpikeTests.swift */,
+				CA02A6456A0BE5A1CC1C19C7 /* TMDBDetailDecodingTests.swift */,
+				0E7688FBF003D82FCB9906DA /* WikidataAwardsTests.swift */,
+			);
+			path = monoryTests;
+			sourceTree = "<group>";
+		};
 		451094DAABA76A10FCE1B19C /* Features */ = {
 			isa = PBXGroup;
 			children = (
 				D1742B4DAD59D390FE034273 /* AddLog */,
 				D916A416BA38623FCB867B01 /* LogDetail */,
 				8848C7B92AD8E591204A8D88 /* LogList */,
+				03B823AF4E0786391CB6C69A /* MovieMetadata */,
 				00AC3A3D8AF7AB635CAAB0E6 /* Settings */,
 				C6BDE5803C743C5AD5A97695 /* UpcomingTickets */,
 			);
@@ -164,6 +229,7 @@
 			children = (
 				CFCA6F27A0DD488EE7F444EB /* OCR */,
 				82939861E40096DC0F904C2C /* TMDB */,
+				A4559F3403303D8646B37F25 /* Wikidata */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -171,6 +237,7 @@
 		82939861E40096DC0F904C2C /* TMDB */ = {
 			isa = PBXGroup;
 			children = (
+				6C2BFCE175D005B1AB0BC1A4 /* MovieMetadata.swift */,
 				25B3FBA401A7B9CE3C4E844F /* TMDBClient.swift */,
 				4CE5EC19C14D8125A1F46D3C /* TMDBModels.swift */,
 			);
@@ -197,10 +264,20 @@
 			path = DesignSystem;
 			sourceTree = "<group>";
 		};
+		A4559F3403303D8646B37F25 /* Wikidata */ = {
+			isa = PBXGroup;
+			children = (
+				A23CF6893A6F710124AAD79D /* WikidataClient.swift */,
+				5E6F03CC8FFEDCE88A2C062F /* WikidataModels.swift */,
+			);
+			path = Wikidata;
+			sourceTree = "<group>";
+		};
 		B4DB2DD3CFC93584B8752EEE /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				54E6EB0220000D9BD1BD5179 /* monory.app */,
+				28ADFCCC37FF15A41DEABDE0 /* monoryTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -259,6 +336,7 @@
 			isa = PBXGroup;
 			children = (
 				1A3A9A3CEE151E7532CA3E8B /* monory */,
+				2A3E0C686A3BEA4A2D0EDAA5 /* monoryTests */,
 				B4DB2DD3CFC93584B8752EEE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -286,6 +364,24 @@
 			productReference = 54E6EB0220000D9BD1BD5179 /* monory.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C3E24FDC6539ACEDDD4A50FF /* monoryTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6252E6DF97A26ADF2A037F7B /* Build configuration list for PBXNativeTarget "monoryTests" */;
+			buildPhases = (
+				1D2D9A4A13DF4F4A905379AA /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1C9E319A2D280924B8DFC1C4 /* PBXTargetDependency */,
+			);
+			name = monoryTests;
+			packageProductDependencies = (
+			);
+			productName = monoryTests;
+			productReference = 28ADFCCC37FF15A41DEABDE0 /* monoryTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -293,9 +389,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					7B51A26A19A887E1B52D6926 = {
+						DevelopmentTeam = ZD854UM35V;
+						ProvisioningStyle = Automatic;
+					};
+					C3E24FDC6539ACEDDD4A50FF = {
 						DevelopmentTeam = ZD854UM35V;
 						ProvisioningStyle = Automatic;
 					};
@@ -319,6 +419,7 @@
 			projectRoot = "";
 			targets = (
 				7B51A26A19A887E1B52D6926 /* monory */,
+				C3E24FDC6539ACEDDD4A50FF /* monoryTests */,
 			);
 		};
 /* End PBXProject section */
@@ -347,6 +448,7 @@
 				749DE567E608A21D6F571D0A /* CameraPickerView.swift in Sources */,
 				97DEB9E6D2D73D70E6C0DAC3 /* CinemaTicketParser.swift in Sources */,
 				66FA98D7C0478E11F29EA1ED /* CommonComponents.swift in Sources */,
+				6A62E5203B1D49A486B9BED3 /* CulturalImpactEditView.swift in Sources */,
 				42EEE995814C0BF0787CE768 /* EditMovieLogView.swift in Sources */,
 				6A04FE02168905B041A99038 /* ExportView.swift in Sources */,
 				AEE64758FE831701E1712A4C /* FullBackupExporter.swift in Sources */,
@@ -358,6 +460,9 @@
 				097EA85A5E5F7AB4CAF6ACA0 /* MovieLogExporter.swift in Sources */,
 				23C3C39D4E821097CDC174E9 /* MovieLogImporter.swift in Sources */,
 				1E4992516DF7D0EF98637A44 /* MovieLogListView.swift in Sources */,
+				DCDE49F42146A8E769B93E75 /* MovieMetadata.swift in Sources */,
+				BC4A6FFA830AB79C3D4E84C2 /* MovieMetadataSheet.swift in Sources */,
+				16430B1E7789F05A11FCE806 /* MovieMetadataViewModel.swift in Sources */,
 				0D96A40EB0A0B12CB4052653 /* OCRResultSheet.swift in Sources */,
 				84FB1073002631A956070E6E /* OCRService.swift in Sources */,
 				8F51DDE04EACBDF54524E05F /* PhotoViewerSheet.swift in Sources */,
@@ -374,10 +479,35 @@
 				CC0A5D4797B434E51B834E82 /* UpcomingTicketsView.swift in Sources */,
 				783812A42579A7CF0093EC69 /* ViewingDate.swift in Sources */,
 				9B411EE57E72A15BCE2EF139 /* ViewingType.swift in Sources */,
+				F9591F8EA45E2D18B53B308E /* WikidataClient.swift in Sources */,
+				39668062FE80224E081D024A /* WikidataModels.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D2D9A4A13DF4F4A905379AA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F9D29BEE3A645289C3430F4 /* MovieLogMigrationSpikeTests.swift in Sources */,
+				E0373E79A1DCE36204638968 /* MovieMetadataMappingTests.swift in Sources */,
+				511A8BBD61EEC18DD0DFDB30 /* Phase2RegionalDataTests.swift in Sources */,
+				92631D91F3FF06B070B7D749 /* Phase4CulturalImpactTests.swift in Sources */,
+				F8D95D32C7331C4CB065EC1A /* RawCollectionEncodingTests.swift in Sources */,
+				3BC5C68B42AE912B9A8B1843 /* SwiftDataStringArraySpikeTests.swift in Sources */,
+				E9E4830C3B30DD8CBA48FAEB /* TMDBDetailDecodingTests.swift in Sources */,
+				7AB790C4F8669E7CD6CE6A1A /* WikidataAwardsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1C9E319A2D280924B8DFC1C4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B51A26A19A887E1B52D6926 /* monory */;
+			targetProxy = 4FC02AA9DC757EBBF591206A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		102F8ED1F1A02137105EA509 /* Release */ = {
@@ -402,6 +532,23 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
+		};
+		68E833540E4DA9ACFC68613B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tsukiusagi.monoryTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/monory.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/monory";
+			};
+			name = Debug;
 		};
 		878667FAAD9BE854F2C82910 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -463,6 +610,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -492,6 +640,23 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
+		};
+		BE14ACA7F27149CD000D5DD2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tsukiusagi.monoryTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/monory.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/monory";
+			};
+			name = Release;
 		};
 		E4F0CFC3A241089AD87329B6 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -546,6 +711,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -561,6 +727,15 @@
 			buildConfigurations = (
 				B1840799A9DE41DA840CB993 /* Debug */,
 				102F8ED1F1A02137105EA509 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6252E6DF97A26ADF2A037F7B /* Build configuration list for PBXNativeTarget "monoryTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				68E833540E4DA9ACFC68613B /* Debug */,
+				BE14ACA7F27149CD000D5DD2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

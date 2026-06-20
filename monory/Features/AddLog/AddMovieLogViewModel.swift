@@ -64,8 +64,10 @@ final class AddMovieLogViewModel {
     var isSearching = false
     var selectedTMDBMovie: TMDBMovie?
     var selectedPosterData: Data?
+    private(set) var draftMetadata: MovieMetadata?
 
     private var searchTask: Task<Void, Never>?
+    private var detailTask: Task<Void, Never>?
 
     init(initialViewingType: ViewingType = .theater) {
         self.viewingType = initialViewingType
@@ -163,11 +165,21 @@ final class AddMovieLogViewModel {
         if let posterPath = movie.posterPath {
             selectedPosterData = try? await TMDBClient.fetchPosterData(path: posterPath)
         }
+        // Silent background detail fetch — failure is non-fatal
+        detailTask?.cancel()
+        detailTask = Task {
+            guard let metadata = try? await TMDBClient.fetchMovieDetails(id: movie.id) else { return }
+            guard !Task.isCancelled else { return }
+            self.draftMetadata = metadata
+        }
     }
 
     func clearSelection() {
         selectedTMDBMovie = nil
         selectedPosterData = nil
+        draftMetadata = nil
+        detailTask?.cancel()
+        detailTask = nil
         searchResults = []
     }
 
@@ -219,6 +231,13 @@ final class AddMovieLogViewModel {
             log.movieReleaseYear = movie.releaseYear
             log.movieSynopsis = movie.overview.isEmpty ? nil : movie.overview
             log.moviePosterData = selectedPosterData
+            if let metadata = draftMetadata {
+                log.movieRuntimeMinutes = metadata.runtimeMinutes
+                log.movieGenresRaw = metadata.genres.isEmpty ? nil : metadata.genres.joined(separator: ",")
+                log.movieDirector = metadata.director
+                log.movieCastRaw = metadata.topCast.isEmpty ? nil : metadata.topCast.joined(separator: ",")
+                log.metadataUpdatedAt = Date()
+            }
         }
 
         context.insert(log)
