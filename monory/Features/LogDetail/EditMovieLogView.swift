@@ -60,7 +60,7 @@ struct EditMovieLogView: View {
         _additionalDates = State(initialValue:
             log.viewingDates
                 .sorted(by: { $0.date < $1.date })
-                .map { IdentifiableDate(date: $0.date) }
+                .map { IdentifiableDate(id: $0.id, date: $0.date) }
         )
         _admissionFeeText = State(initialValue: log.admissionFee.map { String($0) } ?? "")
 
@@ -454,6 +454,7 @@ struct EditMovieLogView: View {
             ticket.ocrRawText = await OCRService.recognizeText(from: data)
             context.insert(ticket)
             log.ticketImages.append(ticket)
+            log.updatedAt = Date()
         }
     }
 
@@ -467,6 +468,7 @@ struct EditMovieLogView: View {
             context.insert(ticket)
             log.ticketImages.append(ticket)
         }
+        log.updatedAt = Date()
         await rescan()
     }
 
@@ -544,14 +546,27 @@ struct EditMovieLogView: View {
             log.screenNumber    = nil
             log.seatNumber      = nil
 
-            // 追加視聴日を書き戻し（既存を全削除→再作成）
-            for vd in log.viewingDates { context.delete(vd) }
+            // 追加視聴日を書き戻し
             if watchedDateMode == .full {
-                for item in additionalDates {
-                    let vd = ViewingDate(date: item.date)
-                    context.insert(vd)
-                    log.viewingDates.append(vd)
+                // UUID を維持した upsert
+                let existingByID = Dictionary(uniqueKeysWithValues: log.viewingDates.map { ($0.id, $0) })
+                let newIDs = Set(additionalDates.map { $0.id })
+                for vd in log.viewingDates where !newIDs.contains(vd.id) {
+                    context.delete(vd)
                 }
+                for item in additionalDates {
+                    if let existing = existingByID[item.id] {
+                        existing.date = item.date
+                    } else {
+                        let vd = ViewingDate(date: item.date)
+                        vd.id = item.id
+                        context.insert(vd)
+                        log.viewingDates.append(vd)
+                    }
+                }
+            } else {
+                // yearOnly / unknown: 視聴日は不要なので全削除
+                for vd in log.viewingDates { context.delete(vd) }
             }
         }
 

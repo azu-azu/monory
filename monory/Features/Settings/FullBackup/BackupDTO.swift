@@ -86,16 +86,14 @@ enum ImportMode: Sendable {
 struct ImportResult: Sendable {
     let restoredCount: Int
     let updatedCount: Int
+    let skippedCount: Int
 
     var summary: String {
-        switch (restoredCount, updatedCount) {
-        case (_, 0):
-            return "\(restoredCount)件を復元しました"
-        case (0, _):
-            return "\(updatedCount)件を更新しました"
-        default:
-            return "\(restoredCount)件を復元、\(updatedCount)件を更新しました"
-        }
+        var parts: [String] = []
+        if restoredCount > 0 { parts.append("\(restoredCount)件を復元") }
+        if updatedCount > 0  { parts.append("\(updatedCount)件を更新") }
+        if skippedCount > 0  { parts.append("\(skippedCount)件をスキップ（ローカルが新しい）") }
+        return parts.isEmpty ? "変更なし" : parts.joined(separator: "、") + "しました"
     }
 }
 
@@ -105,6 +103,7 @@ enum BackupError: LocalizedError, Sendable {
     case unsupportedVersion(Int)
     case missingRequiredFile(String)
     case invalidArchive
+    case resourceLimitExceeded
 
     var errorDescription: String? {
         switch self {
@@ -114,6 +113,8 @@ enum BackupError: LocalizedError, Sendable {
             return "バックアップファイルが壊れています（\(name) が見つかりません）"
         case .invalidArchive:
             return "バックアップファイルを開けませんでした"
+        case .resourceLimitExceeded:
+            return "バックアップファイルが大きすぎます"
         }
     }
 }

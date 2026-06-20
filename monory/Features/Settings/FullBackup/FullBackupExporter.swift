@@ -126,6 +126,10 @@ struct FullBackupExporter {
         }
         try fm.zipItem(at: tmpDir, to: zipURL, shouldKeepParent: false)
         try? fm.removeItem(at: tmpDir)
+        try fm.setAttributes(
+            [.protectionKey: FileProtectionType.complete],
+            ofItemAtPath: zipURL.path
+        )
 
         return zipURL
     }

@@ -98,6 +98,7 @@ struct MovieLogDetailView: View {
                                         }
                                         .contextMenu {
                                             Button(role: .destructive) {
+                                                log.updatedAt = Date()
                                                 context.delete(ticket)
                                             } label: {
                                                 Label("削除", systemImage: "trash")

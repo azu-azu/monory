@@ -35,6 +35,14 @@ struct FullBackupImporter {
         }
     }
 
+    // MARK: - Resource limits
+
+    private static let maxEntryCount = 5_000
+    private static let maxTotalUncompressedSize: UInt64 = 100 * 1024 * 1024  // 100 MB
+    private static let maxImageSize: UInt64 = 10 * 1024 * 1024               // 10 MB
+    private static let maxLogsJSONSize: UInt64 = 5 * 1024 * 1024             // 5 MB
+    private static let maxLogCount = 10_000
+
     // MARK: - Decode + Validate (sync, Sendable を返す)
 
     static func decodePayload(from url: URL) throws -> BackupPayload {
@@ -55,7 +63,10 @@ struct FullBackupImporter {
         let allowedExact = Set(["manifest.json", "logs.json", "settings.json"])
         let allowedDirPrefixes = ["images/posters/", "images/tickets/"]
 
-        // Pass 1: path validation（展開前）
+        // Pass 1: path validation + resource limits（展開前）
+        var entryCount = 0
+        var totalUncompressed: UInt64 = 0
+
         for entry in archive {
             let path = entry.path
             // directory entry はスキップ（"images/" など）
@@ -70,6 +81,32 @@ struct FullBackupImporter {
             let isAllowed = allowedExact.contains(path)
                 || allowedDirPrefixes.contains(where: { path.hasPrefix($0) })
             guard isAllowed else { throw BackupError.invalidArchive }
+
+            // entry 数
+            entryCount += 1
+            guard entryCount <= Self.maxEntryCount else {
+                throw BackupError.resourceLimitExceeded
+            }
+
+            // per-file size（負値はアーカイブ破損として拒否）
+            guard entry.uncompressedSize >= 0 else { throw BackupError.invalidArchive }
+            let entrySize = UInt64(entry.uncompressedSize)
+            if path == "logs.json" {
+                guard entrySize <= Self.maxLogsJSONSize else {
+                    throw BackupError.resourceLimitExceeded
+                }
+            } else if allowedDirPrefixes.contains(where: { path.hasPrefix($0) }) {
+                guard entrySize <= Self.maxImageSize else {
+                    throw BackupError.resourceLimitExceeded
+                }
+            }
+
+            // 全体サイズ（overflow-safe: 加算前に残余を確認）
+            guard entrySize <= Self.maxTotalUncompressedSize,
+                  totalUncompressed <= Self.maxTotalUncompressedSize - entrySize else {
+                throw BackupError.resourceLimitExceeded
+            }
+            totalUncompressed += entrySize
         }
 
         // Pass 2: extract
@@ -105,6 +142,9 @@ struct FullBackupImporter {
             throw BackupError.missingRequiredFile("logs.json")
         }
         let logs = try decoder.decode([MovieLogDTO].self, from: Data(contentsOf: logsURL))
+        guard logs.count <= Self.maxLogCount else {
+            throw BackupError.resourceLimitExceeded
+        }
 
         // settings.json（format v1 では required）
         let settingsURL = tmpDir.appendingPathComponent("settings.json")
@@ -188,12 +228,13 @@ struct FullBackupImporter {
             context.insert(log)
             count += 1
         }
-        return ImportResult(restoredCount: count, updatedCount: 0)
+        return ImportResult(restoredCount: count, updatedCount: 0, skippedCount: 0)
     }
 
     private static func applyMerge(_ payload: BackupPayload, into context: ModelContext) throws -> ImportResult {
         var restored = 0
         var updated = 0
+        var skipped = 0
 
         for dto in payload.logs {
             guard let logId = UUID(uuidString: dto.id) else { continue }
@@ -201,6 +242,11 @@ struct FullBackupImporter {
             let existing = try context.fetch(FetchDescriptor<MovieLog>(predicate: predicate))
 
             if let log = existing.first {
+                // newer wins: backup が古ければスキップ、同一 timestamp はローカル優先
+                guard dto.updatedAt > log.updatedAt else {
+                    skipped += 1
+                    continue
+                }
                 updateLog(log, from: dto, imageData: payload.imageData, context: context)
                 updated += 1
             } else {
@@ -209,7 +255,7 @@ struct FullBackupImporter {
                 restored += 1
             }
         }
-        return ImportResult(restoredCount: restored, updatedCount: updated)
+        return ImportResult(restoredCount: restored, updatedCount: updated, skippedCount: skipped)
     }
 
     // MARK: - Build / Update Helpers

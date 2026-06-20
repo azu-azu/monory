@@ -9,8 +9,13 @@ struct TicketImageDraft: Identifiable {
 }
 
 struct IdentifiableDate: Identifiable {
-    let id: UUID = UUID()
+    let id: UUID
     var date: Date
+
+    init(id: UUID = UUID(), date: Date) {
+        self.id = id
+        self.date = date
+    }
 }
 
 enum WatchedDateMode: String, CaseIterable {
