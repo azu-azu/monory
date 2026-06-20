@@ -7,6 +7,7 @@ struct CinemaTicketResult {
     var seatNumber: String?
     var watchedAt: Date?
     var screeningFormat: String?
+    var admissionFee: Int?
 }
 
 enum CinemaTicketParser {
@@ -22,6 +23,7 @@ enum CinemaTicketParser {
     ]
     private static let screenKeywords = ["スクリーン", "Screen", "ホール"]
     private static let seatKeywords = ["座席", "席番号", "Seat"]
+    private static let feeKeywords = ["料金", "金額", "入場料", "チケット代", "代金", "販売価格"]
 
     // MARK: - Regex (static to avoid re-construction)
 
@@ -37,6 +39,10 @@ enum CinemaTicketParser {
     ].compactMap { try? NSRegularExpression(pattern: $0) }
 
     private static let timeRegex = try? NSRegularExpression(pattern: #"(\d{1,2}):(\d{2})"#)
+    // ¥1,800 / ￥1800 / 1,800円 など
+    private static let feeRegex = try? NSRegularExpression(
+        pattern: #"[¥￥]\s*([0-9０-９][0-9０-９,，]*)|([0-9０-９][0-9０-９,，]*)\s*円"#
+    )
 
     private static let formatMap: [(keyword: String, format: String)] = [
         ("IMAX", "IMAX"),
@@ -91,6 +97,7 @@ enum CinemaTicketParser {
         result.seatNumber = extractSeatNumber(from: lines, text: text)
         result.watchedAt = extractDate(from: text)
         result.screeningFormat = extractScreeningFormat(from: text)
+        result.admissionFee = extractAdmissionFee(from: lines, text: text)
         return result
     }
 
@@ -228,5 +235,49 @@ enum CinemaTicketParser {
             return entry.format
         }
         return nil
+    }
+
+    /// チケットから料金（円）を抽出する。合理的な映画料金範囲（300〜9999円）に絞る
+    private static func extractAdmissionFee(from lines: [String], text: String) -> Int? {
+        // 1. キーワードベース: 「料金：1,800円」「金額 ¥1800」など
+        if let raw = extractValue(from: lines, keywords: feeKeywords) {
+            if let fee = parseYen(from: raw), isReasonableFee(fee) { return fee }
+        }
+        // 2. regex fallback: テキスト全体から ¥/円 を含む数字を全候補取得し、最初の合理的値を採用
+        guard let regex = feeRegex else { return nil }
+        let ns = text as NSString
+        let range = NSRange(text.startIndex..., in: text)
+        var matches = [Int]()
+        regex.enumerateMatches(in: text, range: range) { match, _, _ in
+            guard let match else { return }
+            for i in 1..<match.numberOfRanges {
+                let r = match.range(at: i)
+                if r.location != NSNotFound {
+                    let s = ns.substring(with: r)
+                    if let fee = parseYen(from: s) { matches.append(fee) }
+                }
+            }
+        }
+        return matches.first(where: isReasonableFee)
+    }
+
+    /// 数字文字列（カンマ・全角混じり可）を Int に変換する
+    private static func parseYen(from raw: String) -> Int? {
+        let digits = raw
+            .unicodeScalars
+            .compactMap { s -> Character? in
+                if s.value >= 0xFF10 && s.value <= 0xFF19 {
+                    // 全角数字 → 半角
+                    return Character(UnicodeScalar(s.value - 0xFF10 + 0x30)!)
+                }
+                let c = Character(s)
+                return (c.isNumber || c == ",") ? c : nil
+            }
+            .filter { $0 != "," }
+        return Int(String(digits))
+    }
+
+    private static func isReasonableFee(_ fee: Int) -> Bool {
+        fee >= 300 && fee <= 9999
     }
 }

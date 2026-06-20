@@ -13,6 +13,7 @@ final class MovieLog {
     var screenNumber: String?
     var seatNumber: String?
     var screeningFormat: String = ScreeningFormat.standard.rawValue
+    var admissionFee: Int?
 
     // Viewing type
     var viewingType: String = ViewingType.theater.rawValue

@@ -40,6 +40,7 @@ final class AddMovieLogViewModel {
     var screenNumber: String = ""
     var seatNumber: String = ""
     var screeningFormat: ScreeningFormat = .standard
+    var admissionFeeText: String = ""
     var rating: Int? = nil
     var review: String = ""
     var ticketDrafts: [TicketImageDraft] = []
@@ -54,6 +55,11 @@ final class AddMovieLogViewModel {
 
     var canSave: Bool {
         !movieTitle.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    var hasTheaterInfo: Bool {
+        !theaterName.isEmpty || !screenNumber.isEmpty
+            || !seatNumber.isEmpty || !admissionFeeText.isEmpty
     }
 
     // MARK: - Ticket image + OCR
@@ -100,6 +106,7 @@ final class AddMovieLogViewModel {
         if theaterName.isEmpty, let v = result.theaterName { theaterName = v }
         if screenNumber.isEmpty, let v = result.screenNumber { screenNumber = v }
         if seatNumber.isEmpty, let v = result.seatNumber { seatNumber = v }
+        if admissionFeeText.isEmpty, let fee = result.admissionFee { admissionFeeText = String(fee) }
         if let date = result.watchedAt { watchedAt = date }
         if let format = result.screeningFormat,
            let sf = ScreeningFormat.allCases.first(where: { $0.rawValue == format }) {
@@ -144,21 +151,21 @@ final class AddMovieLogViewModel {
         searchResults = []
     }
 
-    /// タイトル × ボタン用: OCR で auto-populate された全フィールドを初期値に戻す
-    func clearAll() {
+    /// タイトル × ボタン用: 作品名と TMDB 選択のみリセット
+    func clearTitle() {
         clearSelection()
-        movieTitle             = ""
-        watchedAt              = Date()
-        watchedAtUnknown       = false
-        scannedFromTicket      = false
-        theaterName            = ""
-        screenNumber           = ""
-        seatNumber             = ""
-        screeningFormat        = .standard
-        customStreamingService = ""
-        rating                 = nil
-        additionalDates        = []
+        movieTitle = ""
+        scannedFromTicket = false
         searchTask?.cancel()
+    }
+
+    /// 映画館 × ボタン用: 映画館情報のみリセット
+    func clearTheater() {
+        theaterName      = ""
+        screenNumber     = ""
+        seatNumber       = ""
+        screeningFormat  = .standard
+        admissionFeeText = ""
     }
 
     // MARK: - Save
@@ -177,6 +184,7 @@ final class AddMovieLogViewModel {
             log.screenNumber = screenNumber.isEmpty ? nil : screenNumber
             log.seatNumber = seatNumber.isEmpty ? nil : seatNumber
             log.screeningFormat = screeningFormat.rawValue
+            log.admissionFee = admissionFeeText.isEmpty ? nil : Int(admissionFeeText.filter { $0.isNumber })
         } else {
             let service = effectiveStreamingService
             log.streamingService = service.isEmpty ? nil : service

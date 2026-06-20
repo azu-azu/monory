@@ -42,7 +42,7 @@ struct AddMovieLogView: View {
                             }
                         if !viewModel.movieTitle.isEmpty {
                             Button {
-                                viewModel.clearAll()
+                                viewModel.clearTitle()
                             } label: {
                                 Image(systemName: "xmark.circle.fill")
                                     .foregroundStyle(.secondary)
@@ -92,9 +92,22 @@ struct AddMovieLogView: View {
 
                 if viewModel.viewingType == .theater {
                     Section("映画館") {
-                        TextField("映画館名", text: $viewModel.theaterName)
+                        HStack {
+                            TextField("映画館名", text: $viewModel.theaterName)
+                            if viewModel.hasTheaterInfo {
+                                Button {
+                                    viewModel.clearTheater()
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundStyle(.secondary)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
                         TextField("スクリーン番号", text: $viewModel.screenNumber)
                         TextField("座席番号", text: $viewModel.seatNumber)
+                        TextField("料金（円）", text: $viewModel.admissionFeeText)
+                            .keyboardType(.numberPad)
                         Picker("上映形式", selection: $viewModel.screeningFormat) {
                             ForEach(ScreeningFormat.allCases, id: \.self) { format in
                                 Text(format.rawValue).tag(format)
