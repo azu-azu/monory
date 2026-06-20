@@ -21,6 +21,12 @@ struct EditMovieLogView: View {
     @State private var review: String
     @State private var watchedAtUnknown: Bool
     @State private var additionalDates: [IdentifiableDate]
+    @State private var admissionFeeText: String
+
+    @State private var ocrResult: CinemaTicketResult?
+    @State private var showOCRSheet = false
+    @State private var showRescanEmptyAlert = false
+    @State private var isScanning = false
 
     init(log: MovieLog) {
         self.log = log
@@ -39,6 +45,7 @@ struct EditMovieLogView: View {
                 .sorted(by: { $0.date < $1.date })
                 .map { IdentifiableDate(date: $0.date) }
         )
+        _admissionFeeText = State(initialValue: log.admissionFee.map { String($0) } ?? "")
 
         // streaming service: preset か custom かを判定
         let knownServices = StreamingServiceStore.loadServices()
@@ -77,6 +84,8 @@ struct EditMovieLogView: View {
                         TextField("映画館名", text: $theaterName)
                         TextField("スクリーン番号", text: $screenNumber)
                         TextField("座席番号", text: $seatNumber)
+                        TextField("料金（円）", text: $admissionFeeText)
+                            .keyboardType(.numberPad)
                         Picker("上映形式", selection: $screeningFormat) {
                             ForEach(ScreeningFormat.allCases, id: \.self) { format in
                                 Text(format.rawValue).tag(format)
@@ -158,11 +167,83 @@ struct EditMovieLogView: View {
                     .fontWeight(.semibold)
                     .disabled(movieTitle.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
+                if !log.ticketImages.isEmpty {
+                    ToolbarItem(placement: .bottomBar) {
+                        Button {
+                            Task { await rescan() }
+                        } label: {
+                            if isScanning {
+                                ProgressView()
+                            } else {
+                                Label("チケットを再スキャン", systemImage: "doc.viewfinder")
+                            }
+                        }
+                        .disabled(isScanning)
+                    }
+                }
+            }
+            .sheet(isPresented: $showOCRSheet) {
+                if let result = ocrResult {
+                    OCRResultSheet(result: result) { field in
+                        applyOCRField(field)
+                    }
+                }
+            }
+            .alert("読み取れませんでした", isPresented: $showRescanEmptyAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("チケット画像から情報を読み取れませんでした。")
             }
         }
     }
 
     // MARK: - Private
+
+    private func rescan() async {
+        isScanning = true
+        defer { isScanning = false }
+
+        var merged = CinemaTicketResult()
+        for ticket in log.ticketImages {
+            let text: String?
+            if let stored = ticket.ocrRawText {
+                text = stored
+            } else {
+                text = await OCRService.recognizeText(from: ticket.imageData)
+            }
+            guard let t = text else { continue }
+            let parsed = CinemaTicketParser.parse(t)
+            if merged.movieTitle == nil     { merged.movieTitle = parsed.movieTitle }
+            if merged.theaterName == nil    { merged.theaterName = parsed.theaterName }
+            if merged.screenNumber == nil   { merged.screenNumber = parsed.screenNumber }
+            if merged.seatNumber == nil     { merged.seatNumber = parsed.seatNumber }
+            if merged.watchedAt == nil      { merged.watchedAt = parsed.watchedAt }
+            if merged.screeningFormat == nil { merged.screeningFormat = parsed.screeningFormat }
+            if merged.admissionFee == nil   { merged.admissionFee = parsed.admissionFee }
+        }
+        ocrResult = merged
+        let hasAnyResult = merged.movieTitle != nil || merged.theaterName != nil
+            || merged.screenNumber != nil || merged.seatNumber != nil
+            || merged.watchedAt != nil || merged.screeningFormat != nil
+            || merged.admissionFee != nil
+        if hasAnyResult {
+            showOCRSheet = true
+        } else {
+            showRescanEmptyAlert = true
+        }
+    }
+
+    private func applyOCRField(_ field: OCRResultSheet.OCRField) {
+        switch field {
+        case .movieTitle(let v):      movieTitle = v
+        case .theaterName(let v):     theaterName = v
+        case .screenNumber(let v):    screenNumber = v
+        case .seatNumber(let v):      seatNumber = v
+        case .watchedAt(let v):       watchedAt = v; watchedAtUnknown = false
+        case .screeningFormat(let v): screeningFormat = v
+        case .admissionFee(let v):    admissionFeeText = String(v)
+        }
+    }
 
     private func saveChanges() {
         log.movieTitle        = movieTitle.trimmingCharacters(in: .whitespaces)
@@ -178,6 +259,7 @@ struct EditMovieLogView: View {
             log.screenNumber    = screenNumber.isEmpty ? nil : screenNumber
             log.seatNumber      = seatNumber.isEmpty ? nil : seatNumber
             log.screeningFormat = screeningFormat.rawValue
+            log.admissionFee = admissionFeeText.isEmpty ? nil : Int(admissionFeeText.filter { $0.isNumber })
             log.streamingService = nil
             // 映画館に切り替えた場合、配信日付を削除
             for vd in log.viewingDates { context.delete(vd) }
