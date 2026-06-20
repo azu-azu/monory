@@ -32,6 +32,7 @@ struct EditMovieLogView: View {
     @State private var selectedTMDBMovie: TMDBMovie?
     @State private var selectedPosterData: Data?
     @State private var searchTask: Task<Void, Never>?
+    @State private var tmdbYearApplied: Bool
 
     @State private var selectedTicketItems: [PhotosPickerItem] = []
     @State private var showNoPasteImageAlert = false
@@ -98,9 +99,11 @@ struct EditMovieLogView: View {
             )
             _selectedTMDBMovie  = State(initialValue: movie)
             _selectedPosterData = State(initialValue: log.moviePosterData)
+            _tmdbYearApplied    = State(initialValue: true)  // 既存レコードは上書きしない
         } else {
             _selectedTMDBMovie  = State(initialValue: nil)
             _selectedPosterData = State(initialValue: nil)
+            _tmdbYearApplied    = State(initialValue: false)
         }
     }
 
@@ -150,6 +153,7 @@ struct EditMovieLogView: View {
                                 selectedTMDBMovie = nil
                                 selectedPosterData = nil
                                 searchResults = []
+                                tmdbYearApplied = false
                             }
                         )
                     }
@@ -165,7 +169,18 @@ struct EditMovieLogView: View {
 
                 if viewingType == .theater {
                     Section("映画館") {
-                        TextField("映画館名", text: $theaterName)
+                        HStack {
+                            TextField("映画館名", text: $theaterName)
+                            if hasTheaterInfo {
+                                Button {
+                                    clearTheater()
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundStyle(.secondary)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
                         TextField("スクリーン番号", text: $screenNumber)
                         TextField("座席番号", text: $seatNumber)
                         LabeledContent("料金") {
@@ -327,6 +342,14 @@ struct EditMovieLogView: View {
             .alert("クリップボードに画像がありません", isPresented: $showNoPasteImageAlert) {
                 Button("OK", role: .cancel) {}
             }
+            .onChange(of: watchedDateMode) { _, newMode in
+                guard newMode == .yearOnly,
+                      !tmdbYearApplied,
+                      let releaseYear = selectedTMDBMovie?.releaseYear
+                else { return }
+                watchedYear = releaseYear
+                tmdbYearApplied = true
+            }
         }
     }
 
@@ -382,6 +405,11 @@ struct EditMovieLogView: View {
         selectedTMDBMovie = movie
         movieTitle = movie.title
         searchResults = []
+        tmdbYearApplied = false
+        if watchedDateMode == .yearOnly, let releaseYear = movie.releaseYear {
+            watchedYear = releaseYear
+            tmdbYearApplied = true
+        }
         Task {
             if let posterPath = movie.posterPath {
                 selectedPosterData = try? await TMDBClient.fetchPosterData(path: posterPath)
@@ -395,6 +423,22 @@ struct EditMovieLogView: View {
         selectedPosterData = nil
         searchResults = []
         movieTitle = ""
+        tmdbYearApplied = false
+    }
+
+    private var hasTheaterInfo: Bool {
+        !theaterName.isEmpty || !screenNumber.isEmpty
+            || !seatNumber.isEmpty || !admissionFeeText.isEmpty
+            || screeningFormat != .standard || !theaterMemo.isEmpty
+    }
+
+    private func clearTheater() {
+        theaterName      = ""
+        screenNumber     = ""
+        seatNumber       = ""
+        admissionFeeText = ""
+        screeningFormat  = .standard
+        theaterMemo      = ""
     }
 
     // MARK: - Clipboard

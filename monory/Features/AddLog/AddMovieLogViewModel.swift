@@ -73,6 +73,7 @@ final class AddMovieLogViewModel {
     var hasTheaterInfo: Bool {
         !theaterName.isEmpty || !screenNumber.isEmpty
             || !seatNumber.isEmpty || !admissionFeeText.isEmpty
+            || screeningFormat != .standard || !theaterMemo.isEmpty
     }
 
     // MARK: - Ticket image + OCR
@@ -179,6 +180,7 @@ final class AddMovieLogViewModel {
         seatNumber       = ""
         screeningFormat  = .standard
         admissionFeeText = ""
+        theaterMemo      = ""
     }
 
     // MARK: - Save
