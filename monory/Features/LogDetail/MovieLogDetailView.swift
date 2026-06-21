@@ -13,10 +13,12 @@ struct MovieLogDetailView: View {
     @State private var showSynopsisSheet = false
 
     var body: some View {
+        let hasSynopsis = log.movieSynopsis?.isEmpty == false
+
         List {
             Section {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(log.movieTitle.isEmpty ? "無題" : log.movieTitle)
+                    Text(log.displayTitle)
                         .font(.headline)
 
                     if let originalTitle = log.movieOriginalTitle {
@@ -34,7 +36,7 @@ struct MovieLogDetailView: View {
                 .padding(.vertical, 4)
             }
 
-            if log.tmdbId != nil || log.movieSynopsis?.isEmpty == false {
+            if log.tmdbId != nil || hasSynopsis {
                 Section {
                     if log.tmdbId != nil {
                         Button {
@@ -45,7 +47,7 @@ struct MovieLogDetailView: View {
                         .buttonStyle(.plain)
                     }
 
-                    if log.movieSynopsis?.isEmpty == false {
+                    if hasSynopsis {
                         Button {
                             showSynopsisSheet = true
                         } label: {
@@ -128,7 +130,7 @@ struct MovieLogDetailView: View {
                 }
             }
         }
-        .navigationTitle(log.movieTitle.isEmpty ? "無題" : log.movieTitle)
+        .navigationTitle(log.displayTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

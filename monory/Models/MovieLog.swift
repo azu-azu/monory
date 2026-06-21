@@ -71,6 +71,10 @@ final class MovieLog {
         return Calendar.current.startOfDay(for: watchedAt) > Calendar.current.startOfDay(for: Date())
     }
 
+    var displayTitle: String {
+        movieTitle.isEmpty ? "無題" : movieTitle
+    }
+
     var watchedAtDisplay: String {
         if watchedAtUnknown { return "不明" }
         if watchedYearOnly {
