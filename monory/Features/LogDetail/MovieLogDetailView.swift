@@ -10,24 +10,53 @@ struct MovieLogDetailView: View {
     @State private var showDeleteConfirmation = false
     @State private var showEdit = false
     @State private var showMetadataSheet = false
+    @State private var showSynopsisSheet = false
 
     var body: some View {
         List {
             Section {
-                LabeledContent("映画タイトル", value: log.movieTitle.isEmpty ? "—" : log.movieTitle)
-                if let originalTitle = log.movieOriginalTitle {
-                    LabeledContent("原題", value: originalTitle)
-                }
-                if let year = log.movieReleaseYear {
-                    LabeledContent("公開年", value: String(year))
-                }
-                if log.tmdbId != nil {
-                    Button {
-                        showMetadataSheet = true
-                    } label: {
-                        Label("作品詳細", systemImage: "film")
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(log.movieTitle.isEmpty ? "無題" : log.movieTitle)
+                        .font(.headline)
+
+                    if let originalTitle = log.movieOriginalTitle {
+                        Text(originalTitle)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    if let year = log.movieReleaseYear {
+                        Text(String(year))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
                     }
                 }
+                .padding(.vertical, 4)
+            }
+
+            if log.tmdbId != nil || log.movieSynopsis?.isEmpty == false {
+                Section {
+                    if log.tmdbId != nil {
+                        Button {
+                            showMetadataSheet = true
+                        } label: {
+                            detailLinkLabel("作品詳細", systemImage: "film")
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+                    if log.movieSynopsis?.isEmpty == false {
+                        Button {
+                            showSynopsisSheet = true
+                        } label: {
+                            detailLinkLabel("あらすじ", systemImage: "text.alignleft")
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+
+            Section("視聴記録") {
                 if log.isMedia && !log.viewingDates.isEmpty {
                     LabeledContent("初回視聴", value: log.watchedAtDisplay)
                     ForEach(log.viewingDates.sorted(by: { $0.date < $1.date })) { vd in
@@ -38,14 +67,6 @@ struct MovieLogDetailView: View {
                 }
                 if log.isMedia {
                     LabeledContent("メディア", value: log.streamingService ?? "—")
-                }
-            }
-
-            if let synopsis = log.movieSynopsis, !synopsis.isEmpty {
-                Section("あらすじ") {
-                    Text(synopsis)
-                        .font(.body)
-                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -87,7 +108,7 @@ struct MovieLogDetailView: View {
                                         .scaledToFill()
                                         .frame(width: 100, height: 100)
                                         .clipped()
-                                        .cornerRadius(8)
+                                        .cornerRadius(CornerRadius.standard)
                                         .onTapGesture {
                                             selectedTicket = ticket
                                         }
@@ -132,6 +153,9 @@ struct MovieLogDetailView: View {
         .sheet(isPresented: $showMetadataSheet) {
             MovieMetadataSheet(log: log)
         }
+        .sheet(isPresented: $showSynopsisSheet) {
+            MovieSynopsisSheet(synopsis: log.movieSynopsis ?? "")
+        }
         .confirmationDialog("このログを削除しますか？", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button("削除", role: .destructive) {
                 context.delete(log)
@@ -141,6 +165,40 @@ struct MovieLogDetailView: View {
         .fullScreenCover(item: $selectedTicket) { ticket in
             if let uiImage = UIImage(data: ticket.imageData) {
                 PhotoViewerSheet(image: uiImage)
+            }
+        }
+    }
+
+    private func detailLinkLabel(_ title: String, systemImage: String) -> some View {
+        HStack {
+            Label(title, systemImage: systemImage)
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.tertiary)
+        }
+        .foregroundStyle(.primary)
+    }
+}
+
+private struct MovieSynopsisSheet: View {
+    let synopsis: String
+
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                Text(synopsis)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+            }
+            .navigationTitle("あらすじ")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("閉じる") { dismiss() }
+                }
             }
         }
     }

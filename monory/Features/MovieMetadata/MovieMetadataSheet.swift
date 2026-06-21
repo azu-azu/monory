@@ -84,7 +84,7 @@ struct MovieMetadataSheet: View {
                         .scaledToFill()
                         .frame(width: 60, height: 90)
                         .clipped()
-                        .cornerRadius(6)
+                        .cornerRadius(CornerRadius.posterMedium)
                 }
                 VStack(alignment: .leading, spacing: 4) {
                     Text(log.movieTitle.isEmpty ? "—" : log.movieTitle)
