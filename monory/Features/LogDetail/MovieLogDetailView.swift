@@ -69,11 +69,7 @@ struct MovieLogDetailView: View {
                 }
                 if log.isMedia {
                     LabeledContent("メディア", value: log.streamingService ?? "—")
-                }
-            }
-
-            if !log.isMedia {
-                Section("映画館") {
+                } else {
                     LabeledContent("映画館", value: log.theaterName.isEmpty ? "—" : log.theaterName)
                     LabeledContent("スクリーン", value: log.screenNumber ?? "—")
                     LabeledContent("座席", value: log.seatNumber ?? "—")
@@ -174,12 +170,12 @@ struct MovieLogDetailView: View {
     private func detailLinkLabel(_ title: String, systemImage: String) -> some View {
         HStack {
             Label(title, systemImage: systemImage)
+                .foregroundStyle(AppTheme.accent)
             Spacer()
             Image(systemName: "chevron.right")
                 .font(.footnote.weight(.semibold))
                 .foregroundStyle(.tertiary)
         }
-        .foregroundStyle(.primary)
     }
 }
 

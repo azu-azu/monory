@@ -32,9 +32,9 @@ enum StatusColors {
 }
 
 enum CornerRadius {
-    static let posterThumb: CGFloat = 4    // TMDB ポスターサムネイル (40×56)
-    static let posterMedium: CGFloat = 4   // 中サイズポスター (56×80)
-    static let standard: CGFloat = 6       // 画像・ボタン
-    static let card: CGFloat = 8           // カード背景
-    static let cardLarge: CGFloat = 10     // 大型カードコンテナ
+    static let posterThumb: CGFloat = 3    // TMDB ポスターサムネイル (40×56)
+    static let posterMedium: CGFloat = 3   // 中サイズポスター (56×80)
+    static let standard: CGFloat = 5       // 画像・ボタン
+    static let card: CGFloat = 6           // カード背景
+    static let cardLarge: CGFloat = 8      // 大型カードコンテナ
 }
