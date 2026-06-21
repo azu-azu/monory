@@ -7,7 +7,6 @@ struct MovieMetadataSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @State private var vm: MovieMetadataViewModel?
-    @State private var showCulturalImpactEdit = false
 
     var body: some View {
         NavigationStack {
@@ -70,8 +69,6 @@ struct MovieMetadataSheet: View {
             watchProvidersSection(vm: vm)
 
             awardsSection(vm: vm)
-
-            culturalImpactSection(vm: vm)
 
             attributionSection
         }
@@ -248,39 +245,6 @@ struct MovieMetadataSheet: View {
                 }
             }
             .padding(.vertical, 2)
-        }
-    }
-
-    @ViewBuilder
-    private func culturalImpactSection(vm: MovieMetadataViewModel) -> some View {
-        Section {
-            let hasNote = !vm.culturalImpactNote.isEmpty
-            let hasSources = !vm.culturalImpactSources.isEmpty
-            if hasNote {
-                Text(vm.culturalImpactNote)
-                    .font(.body)
-            }
-            if hasSources {
-                ForEach(vm.culturalImpactSources, id: \.absoluteString) { url in
-                    Link(url.absoluteString, destination: url)
-                        .font(.caption)
-                        .lineLimit(2)
-                }
-            }
-            if !hasNote && !hasSources {
-                Text("未記録")
-                    .foregroundStyle(.secondary)
-            }
-        } header: {
-            HStack {
-                Text("文化的インパクト")
-                Spacer()
-                Button("編集") { showCulturalImpactEdit = true }
-                    .font(.caption)
-            }
-        }
-        .sheet(isPresented: $showCulturalImpactEdit) {
-            CulturalImpactEditView(vm: vm)
         }
     }
 

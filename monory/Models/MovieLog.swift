@@ -36,10 +36,6 @@ final class MovieLog {
     var movieCastRaw: String?
     var metadataUpdatedAt: Date?
 
-    // Phase 4 — User-authored cultural impact
-    var culturalImpactNote: String = ""
-    var culturalImpactSourcesData: Data?
-
     var watchedAtUnknown: Bool = false
     var watchedYearOnly: Bool = false
     var theaterMemo: String = ""
@@ -64,16 +60,6 @@ final class MovieLog {
     var movieCast: [String] {
         guard let raw = movieCastRaw, !raw.isEmpty else { return [] }
         return raw.split(separator: ",").map(String.init)
-    }
-
-    var culturalImpactSources: [URL] {
-        guard let data = culturalImpactSourcesData,
-              let strings = try? JSONDecoder().decode([String].self, from: data)
-        else { return [] }
-        return strings
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-            .compactMap { URL(string: $0) }
-            .filter { $0.scheme != nil }
     }
 
     var isMedia: Bool {

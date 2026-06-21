@@ -34,13 +34,6 @@ struct FullBackupExporter {
                 ViewingDateDTO(id: vd.id.uuidString, date: vd.date)
             }
 
-            let culturalSources: [String]? = {
-                guard let data = log.culturalImpactSourcesData,
-                      let strings = try? JSONDecoder().decode([String].self, from: data),
-                      !strings.isEmpty else { return nil }
-                return strings
-            }()
-
             let dto = MovieLogDTO(
                 id: log.id.uuidString,
                 watchedAt: log.watchedAt,
@@ -70,9 +63,7 @@ struct FullBackupExporter {
                 movieGenresRaw: log.movieGenresRaw,
                 movieDirector: log.movieDirector,
                 movieCastRaw: log.movieCastRaw,
-                metadataUpdatedAt: log.metadataUpdatedAt,
-                culturalImpactNote: log.culturalImpactNote.isEmpty ? nil : log.culturalImpactNote,
-                culturalImpactSources: culturalSources
+                metadataUpdatedAt: log.metadataUpdatedAt
             )
 
             return BackupSnapshot.LogEntry(

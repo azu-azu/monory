@@ -366,11 +366,5 @@ struct FullBackupImporter {
         log.movieDirector = dto.movieDirector
         log.movieCastRaw = dto.movieCastRaw
         log.metadataUpdatedAt = dto.metadataUpdatedAt
-        log.culturalImpactNote = dto.culturalImpactNote ?? ""
-        if let sources = dto.culturalImpactSources, !sources.isEmpty {
-            log.culturalImpactSourcesData = try? JSONEncoder().encode(sources)
-        } else {
-            log.culturalImpactSourcesData = nil
-        }
     }
 }

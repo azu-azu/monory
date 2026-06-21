@@ -87,19 +87,5 @@ final class MovieMetadataViewModel {
     var watchProviders: [WatchProvider] { metadata?.watchProviders ?? [] }
     var revenue: Int?              { metadata?.revenue }
 
-    // Phase 4: user-authored cultural impact（persist する）
-    var culturalImpactNote: String { log.culturalImpactNote }
-    var culturalImpactSources: [URL] { log.culturalImpactSources }
 
-    func saveCulturalImpact(note: String, sources: [URL]) {
-        log.culturalImpactNote = note
-        let strings = sources.map(\.absoluteString)
-        log.culturalImpactSourcesData = strings.isEmpty
-            ? nil
-            : try? JSONEncoder().encode(strings)
-        let now = Date()
-        log.metadataUpdatedAt = now
-        log.updatedAt = now   // merge backup の新旧判定に使われる
-        try? context.save()
-    }
 }

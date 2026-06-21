@@ -13,7 +13,7 @@ struct MovieLogExporter {
             "タイトル", "原題", "公開年", "観た日", "評価",
             "種別", "映画館名", "配信サービス", "上映形式",
             "スクリーン", "座席", "追加視聴日", "感想", "TMDB ID",
-            "映画館メモ", "文化的インパクト", "参考URL",
+            "映画館メモ",
         ]
 
         var rows: [[String]] = [header]
@@ -33,10 +33,6 @@ struct MovieLogExporter {
                 .map { dateFormatter.string(from: $0.date) }
                 .joined(separator: "/")
 
-            let sourceURLs = log.culturalImpactSources
-                .map(\.absoluteString)
-                .joined(separator: "|")
-
             let row: [String] = [
                 log.movieTitle,
                 log.movieOriginalTitle ?? "",
@@ -53,8 +49,6 @@ struct MovieLogExporter {
                 log.review,
                 log.tmdbId.map { String($0) } ?? "",
                 log.theaterMemo,
-                log.culturalImpactNote,
-                sourceURLs,
             ]
             rows.append(row)
         }

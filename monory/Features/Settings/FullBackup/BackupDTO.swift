@@ -41,9 +41,6 @@ struct MovieLogDTO: Codable, Sendable {
     let movieDirector: String?
     let movieCastRaw: String?
     let metadataUpdatedAt: Date?
-    // Phase 4 — optional for backward compatibility with old backups
-    let culturalImpactNote: String?
-    let culturalImpactSources: [String]?
 }
 
 struct TicketImageDTO: Codable, Sendable {
