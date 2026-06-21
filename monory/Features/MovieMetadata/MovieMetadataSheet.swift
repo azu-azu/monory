@@ -66,8 +66,6 @@ struct MovieMetadataSheet: View {
 
             crewSection(vm: vm)
 
-            watchProvidersSection(vm: vm)
-
             awardsSection(vm: vm)
 
             attributionSection
@@ -154,33 +152,6 @@ struct MovieMetadataSheet: View {
                     LabeledContent("興行収入", value: rev.formatted(.currency(code: "USD").presentation(.narrow)))
                 }
             }
-        }
-    }
-
-    @ViewBuilder
-    private func watchProvidersSection(vm: MovieMetadataViewModel) -> some View {
-        let providers = vm.watchProviders
-        if !providers.isEmpty {
-            Section {
-                providerRows(providers, type: .subscription, label: "サブスクリプション")
-                providerRows(providers, type: .free,         label: "無料")
-                providerRows(providers, type: .ads,          label: "広告付き無料")
-                providerRows(providers, type: .rent,         label: "レンタル")
-                providerRows(providers, type: .buy,          label: "購入")
-            } header: {
-                Text("現在の配信情報（JP）")
-            } footer: {
-                Text("配信状況は変わる場合があります。鑑賞時のサービスはメディア欄に記録してください。")
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func providerRows(_ all: [WatchProvider], type: WatchProviderType, label: String) -> some View {
-        let filtered = all.filter { $0.type == type }
-            .sorted(by: { $0.displayPriority < $1.displayPriority })
-        if !filtered.isEmpty {
-            LabeledContent(label, value: filtered.map(\.providerName).joined(separator: "、"))
         }
     }
 

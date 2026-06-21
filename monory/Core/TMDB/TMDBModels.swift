@@ -37,7 +37,6 @@ struct TMDBDetailResponse: Decodable {
     let credits: TMDBCreditsDTO
     let externalIDs: TMDBExternalIDsDTO
     let releaseDates: TMDBReleaseDatesDTO?
-    let watchProviders: TMDBWatchProvidersDTO?
 
     enum CodingKeys: String, CodingKey {
         case id, runtime, revenue, genres, credits
@@ -45,7 +44,6 @@ struct TMDBDetailResponse: Decodable {
         case voteCount = "vote_count"
         case externalIDs = "external_ids"
         case releaseDates = "release_dates"
-        case watchProviders = "watch/providers"
     }
 }
 
@@ -99,30 +97,3 @@ struct TMDBReleaseDate: Decodable {
     let type: Int
 }
 
-// MARK: - Watch providers DTO
-
-struct TMDBWatchProvidersDTO: Decodable {
-    let results: [String: TMDBCountryProviders]
-}
-
-struct TMDBCountryProviders: Decodable {
-    let flatrate: [TMDBProviderDTO]?
-    let free: [TMDBProviderDTO]?
-    let ads: [TMDBProviderDTO]?
-    let rent: [TMDBProviderDTO]?
-    let buy: [TMDBProviderDTO]?
-}
-
-struct TMDBProviderDTO: Decodable {
-    let providerID: Int
-    let providerName: String
-    let logoPath: String?
-    let displayPriority: Int
-
-    enum CodingKeys: String, CodingKey {
-        case providerID = "provider_id"
-        case providerName = "provider_name"
-        case logoPath = "logo_path"
-        case displayPriority = "display_priority"
-    }
-}

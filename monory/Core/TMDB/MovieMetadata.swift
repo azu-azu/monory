@@ -1,25 +1,5 @@
 import Foundation
 
-// MARK: - Watch providers (Phase 2)
-
-struct WatchProvider: Hashable, Identifiable {
-    let providerID: Int
-    let providerName: String
-    let logoPath: String?
-    let displayPriority: Int
-    let type: WatchProviderType
-
-    var id: String { "\(type.rawValue):\(providerID)" }
-}
-
-enum WatchProviderType: String, CaseIterable {
-    case subscription  // TMDB: flatrate
-    case free
-    case ads
-    case rent
-    case buy
-}
-
 // MARK: - Domain model
 
 struct MovieMetadata {
@@ -36,7 +16,6 @@ struct MovieMetadata {
 
     // Phase 2: live regional data
     let jpCertification: String?
-    let watchProviders: [WatchProvider]
 
     // Phase 3: optional enrichment
     let wikidataID: String?
@@ -61,7 +40,6 @@ extension MovieMetadata {
         let revenue: Int? = (dto.revenue ?? 0) == 0 ? nil : dto.revenue
 
         let jpCertification = extractJPCertification(from: dto.releaseDates)
-        let watchProviders = extractJPWatchProviders(from: dto.watchProviders)
 
         return MovieMetadata(
             voteAverage: dto.voteAverage,
@@ -72,7 +50,6 @@ extension MovieMetadata {
             director: director,
             topCast: topCast,
             jpCertification: jpCertification,
-            watchProviders: watchProviders,
             wikidataID: dto.externalIDs.wikidataID
         )
     }
@@ -85,27 +62,5 @@ extension MovieMetadata {
         let theatrical = jp.releaseDates.first(where: { $0.type == 3 && !$0.certification.isEmpty })
         let any = jp.releaseDates.first(where: { !$0.certification.isEmpty })
         return theatrical?.certification ?? any?.certification
-    }
-
-    private static func extractJPWatchProviders(from dto: TMDBWatchProvidersDTO?) -> [WatchProvider] {
-        guard let jp = dto?.results["JP"] else { return [] }
-
-        func map(_ providers: [TMDBProviderDTO]?, type: WatchProviderType) -> [WatchProvider] {
-            (providers ?? []).map {
-                WatchProvider(
-                    providerID: $0.providerID,
-                    providerName: $0.providerName,
-                    logoPath: $0.logoPath,
-                    displayPriority: $0.displayPriority,
-                    type: type
-                )
-            }
-        }
-
-        return map(jp.flatrate, type: .subscription)
-            + map(jp.free, type: .free)
-            + map(jp.ads, type: .ads)
-            + map(jp.rent, type: .rent)
-            + map(jp.buy, type: .buy)
     }
 }

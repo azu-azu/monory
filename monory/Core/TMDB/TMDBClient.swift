@@ -56,7 +56,7 @@ enum TMDBClient {
         components.queryItems = [
             URLQueryItem(name: "api_key", value: key),
             URLQueryItem(name: "language", value: "ja-JP"),
-            URLQueryItem(name: "append_to_response", value: "credits,release_dates,watch/providers,external_ids"),
+            URLQueryItem(name: "append_to_response", value: "credits,release_dates,external_ids"),
         ]
         logger.debug("fetchMovieDetails id=\(id)")
         do {

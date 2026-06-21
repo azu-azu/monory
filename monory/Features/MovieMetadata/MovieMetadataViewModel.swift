@@ -84,7 +84,6 @@ final class MovieMetadataViewModel {
 
     // Phase 2: live regional data（persist しない）
     var jpCertification: String?   { metadata?.jpCertification }
-    var watchProviders: [WatchProvider] { metadata?.watchProviders ?? [] }
     var revenue: Int?              { metadata?.revenue }
 
 

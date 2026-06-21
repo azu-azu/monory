@@ -27,8 +27,7 @@ final class MovieMetadataMappingTests: XCTestCase {
             genres: genres,
             credits: TMDBCreditsDTO(cast: cast, crew: crew),
             externalIDs: TMDBExternalIDsDTO(wikidataID: wikidataID),
-            releaseDates: nil,
-            watchProviders: nil
+            releaseDates: nil
         )
     }
 
@@ -165,10 +164,6 @@ final class MovieMetadataMappingTests: XCTestCase {
     }
 
     // MARK: - Phase 2 fields are empty stubs in Phase 1
-
-    func testWatchProvidersEmptyInPhase1() {
-        XCTAssertTrue(MovieMetadata.from(makeDTO()).watchProviders.isEmpty)
-    }
 
     func testJPCertificationNilInPhase1() {
         XCTAssertNil(MovieMetadata.from(makeDTO()).jpCertification)
