@@ -1,4 +1,6 @@
 import SwiftUI
+import ImageIO
+import UIKit
 
 // MARK: - dynamicFont
 
@@ -156,6 +158,53 @@ struct TMDBMovieRow: View {
 // MARK: - TMDBSelectedMovieCard
 // TMDB で選択済み映画カード（ポスター＋タイトル＋×ボタン）。Add/Edit 共用。
 
+struct ThumbnailImageView: View {
+    let imageData: Data
+    let width: CGFloat
+    let height: CGFloat
+    let cornerRadius: CGFloat
+
+    @State private var thumbnail: UIImage?
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .fill(Color.secondary.opacity(0.2))
+
+            if let thumbnail {
+                Image(uiImage: thumbnail)
+                    .resizable()
+                    .scaledToFill()
+            }
+        }
+        .frame(width: width, height: height)
+        .clipped()
+        .cornerRadius(cornerRadius)
+        .task(id: imageData) {
+            guard thumbnail == nil else { return }
+            await Task.yield()
+            thumbnail = Self.makeThumbnail(
+                from: imageData,
+                maxPixelSize: max(width, height) * UIScreen.main.scale
+            )
+        }
+    }
+
+    private static func makeThumbnail(from data: Data, maxPixelSize: CGFloat) -> UIImage? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
+            kCGImageSourceShouldCacheImmediately: true,
+        ]
+        guard let image = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) else {
+            return nil
+        }
+        return UIImage(cgImage: image)
+    }
+}
+
 struct TMDBSelectedMovieCard: View {
     let movie: TMDBMovie
     let posterData: Data?
@@ -163,13 +212,13 @@ struct TMDBSelectedMovieCard: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            if let data = posterData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 40, height: 56)
-                    .clipped()
-                    .cornerRadius(CornerRadius.posterThumb)
+            if let data = posterData {
+                ThumbnailImageView(
+                    imageData: data,
+                    width: 40,
+                    height: 56,
+                    cornerRadius: CornerRadius.posterThumb
+                )
             } else {
                 RoundedRectangle(cornerRadius: CornerRadius.posterThumb)
                     .fill(Color.secondary.opacity(0.2))

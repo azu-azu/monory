@@ -275,14 +275,12 @@ struct EditMovieLogView: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 8) {
                                     ForEach(log.ticketImages) { ticket in
-                                        if let uiImage = UIImage(data: ticket.imageData) {
-                                            Image(uiImage: uiImage)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 80, height: 80)
-                                                .clipped()
-                                                .cornerRadius(CornerRadius.standard)
-                                        }
+                                        ThumbnailImageView(
+                                            imageData: ticket.imageData,
+                                            width: 80,
+                                            height: 80,
+                                            cornerRadius: CornerRadius.standard
+                                        )
                                     }
                                 }
                                 .padding(.vertical, 4)
