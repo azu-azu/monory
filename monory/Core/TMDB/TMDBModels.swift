@@ -25,6 +25,10 @@ struct TMDBMovie: Decodable, Identifiable {
     }
 }
 
+struct TMDBOverviewResponse: Decodable {
+    let overview: String
+}
+
 // MARK: - Detail response DTOs
 
 struct TMDBDetailResponse: Decodable {
@@ -96,4 +100,3 @@ struct TMDBReleaseDate: Decodable {
     /// 1=Premiere 2=Limited 3=Theatrical 4=Digital 5=Physical 6=TV
     let type: Int
 }
-

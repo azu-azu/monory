@@ -355,6 +355,7 @@ struct FullBackupImporter {
         log.movieOriginalTitle = dto.movieOriginalTitle
         log.movieReleaseYear = dto.movieReleaseYear
         log.movieSynopsis = dto.movieSynopsis
+        log.movieSynopsisEn = dto.movieSynopsisEn
         log.watchedAtUnknown = dto.watchedAtUnknown
         log.watchedYearOnly = dto.watchedYearOnly
         log.theaterMemo = dto.theaterMemo

@@ -50,6 +50,7 @@ struct FullBackupExporter {
                 movieOriginalTitle: log.movieOriginalTitle,
                 movieReleaseYear: log.movieReleaseYear,
                 movieSynopsis: log.movieSynopsis,
+                movieSynopsisEn: log.movieSynopsisEn,
                 posterImageExt: posterExt,
                 watchedAtUnknown: log.watchedAtUnknown,
                 watchedYearOnly: log.watchedYearOnly,

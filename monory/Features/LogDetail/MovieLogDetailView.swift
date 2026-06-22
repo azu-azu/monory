@@ -13,7 +13,7 @@ struct MovieLogDetailView: View {
     @State private var showSynopsisSheet = false
 
     var body: some View {
-        let hasSynopsis = log.movieSynopsis?.isEmpty == false
+        let hasSynopsis = log.movieSynopsis?.isEmpty == false || log.movieSynopsisEn?.isEmpty == false
 
         List {
             Section {
@@ -152,7 +152,7 @@ struct MovieLogDetailView: View {
             MovieMetadataSheet(log: log)
         }
         .sheet(isPresented: $showSynopsisSheet) {
-            MovieSynopsisSheet(synopsis: log.movieSynopsis ?? "")
+            MovieSynopsisSheet(synopsisJa: log.movieSynopsis, synopsisEn: log.movieSynopsisEn)
         }
         .confirmationDialog("このログを削除しますか？", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button("削除", role: .destructive) {
@@ -180,16 +180,57 @@ struct MovieLogDetailView: View {
 }
 
 private struct MovieSynopsisSheet: View {
-    let synopsis: String
+    private enum Language: String, CaseIterable, Identifiable {
+        case japanese = "日本語"
+        case english = "English"
+
+        var id: Self { self }
+    }
+
+    let synopsisJa: String?
+    let synopsisEn: String?
 
     @Environment(\.dismiss) private var dismiss
+    @State private var selectedLanguage: Language = .japanese
+
+    private var japaneseSynopsis: String? {
+        synopsisJa?.isEmpty == false ? synopsisJa : nil
+    }
+
+    private var englishSynopsis: String? {
+        synopsisEn?.isEmpty == false ? synopsisEn : nil
+    }
+
+    private var currentSynopsis: String {
+        switch selectedLanguage {
+        case .japanese:
+            return japaneseSynopsis ?? englishSynopsis ?? ""
+        case .english:
+            return englishSynopsis ?? japaneseSynopsis ?? ""
+        }
+    }
+
+    private var hasBothLanguages: Bool {
+        japaneseSynopsis != nil && englishSynopsis != nil
+    }
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                Text(synopsis)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+                VStack(alignment: .leading, spacing: 16) {
+                    if hasBothLanguages {
+                        Picker("言語", selection: $selectedLanguage) {
+                            ForEach(Language.allCases) { language in
+                                Text(language.rawValue).tag(language)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                    }
+
+                    Text(currentSynopsis)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding()
             }
             .navigationTitle("あらすじ")
             .navigationBarTitleDisplayMode(.inline)

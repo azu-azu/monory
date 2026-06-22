@@ -26,6 +26,7 @@ struct MovieLogDTO: Codable, Sendable {
     let movieOriginalTitle: String?
     let movieReleaseYear: Int?
     let movieSynopsis: String?
+    let movieSynopsisEn: String?
     let posterImageExt: String?
     let watchedAtUnknown: Bool
     let watchedYearOnly: Bool

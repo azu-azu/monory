@@ -24,6 +24,7 @@ final class MovieLog {
     var movieOriginalTitle: String?
     var movieReleaseYear: Int?
     var movieSynopsis: String?
+    var movieSynopsisEn: String?
 
     @Attribute(.externalStorage)
     var moviePosterData: Data?

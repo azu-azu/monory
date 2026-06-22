@@ -59,6 +59,7 @@ final class MovieLogMigrationSpikeTests: XCTestCase {
         XCTAssertNil(record.movieDirector, "未取得の record は nil")
         XCTAssertNil(record.movieCastRaw, "未取得の record は nil")
         XCTAssertNil(record.metadataUpdatedAt, "未取得の record は nil")
+        XCTAssertNil(record.movieSynopsisEn, "英語あらすじ未取得の record は nil")
     }
 
     // MARK: - computed property: nil / "" はどちらも []
@@ -102,6 +103,7 @@ final class MovieLogMigrationSpikeTests: XCTestCase {
         log.movieGenresRaw = "Action,Science Fiction,Adventure"
         log.movieDirector = "Christopher Nolan"
         log.movieCastRaw = "Leonardo DiCaprio,Joseph Gordon-Levitt,Elliot Page,Tom Hardy,Ken Watanabe"
+        log.movieSynopsisEn = "A skilled extractor is offered a chance to regain his old life."
         log.metadataUpdatedAt = Date()
         context.insert(log)
         try context.save()
@@ -112,6 +114,7 @@ final class MovieLogMigrationSpikeTests: XCTestCase {
         XCTAssertEqual(record.movieDirector, "Christopher Nolan")
         XCTAssertEqual(record.movieCast.count, 5)
         XCTAssertEqual(record.movieCast.first, "Leonardo DiCaprio")
+        XCTAssertEqual(record.movieSynopsisEn, "A skilled extractor is offered a chance to regain his old life.")
         XCTAssertNotNil(record.metadataUpdatedAt)
     }
 

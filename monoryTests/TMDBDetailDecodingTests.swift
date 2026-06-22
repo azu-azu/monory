@@ -93,6 +93,22 @@ final class TMDBDetailDecodingTests: XCTestCase {
 
     // MARK: - TMDBDetailResponse decoding
 
+    func testEnglishOverviewDecoding() throws {
+        let json = """
+        { "overview": "A skilled extractor is offered a chance to regain his old life." }
+        """.data(using: .utf8)!
+
+        let response = try decoder.decode(TMDBOverviewResponse.self, from: json)
+        XCTAssertEqual(response.overview, "A skilled extractor is offered a chance to regain his old life.")
+    }
+
+    func testEmptyEnglishOverviewDecoding() throws {
+        let json = #"{ "overview": "" }"#.data(using: .utf8)!
+
+        let response = try decoder.decode(TMDBOverviewResponse.self, from: json)
+        XCTAssertTrue(response.overview.isEmpty)
+    }
+
     func testFullResponseDecoding() throws {
         let dto = try decoder.decode(TMDBDetailResponse.self, from: fullResponseJSON)
         XCTAssertEqual(dto.id, 27205)

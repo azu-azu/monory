@@ -35,6 +35,7 @@ struct EditMovieLogView: View {
     @State private var posterTask: Task<Void, Never>?
     @State private var detailTask: Task<Void, Never>?
     @State private var draftMetadata: MovieMetadata?
+    @State private var draftEnglishOverview: String?
     @State private var tmdbYearApplied: Bool
 
     @State private var selectedTicketItems: [PhotosPickerItem] = []
@@ -102,10 +103,12 @@ struct EditMovieLogView: View {
             )
             _selectedTMDBMovie  = State(initialValue: movie)
             _selectedPosterData = State(initialValue: log.moviePosterData)
+            _draftEnglishOverview = State(initialValue: log.movieSynopsisEn)
             _tmdbYearApplied    = State(initialValue: true)  // 既存レコードは上書きしない
         } else {
             _selectedTMDBMovie  = State(initialValue: nil)
             _selectedPosterData = State(initialValue: nil)
+            _draftEnglishOverview = State(initialValue: nil)
             _tmdbYearApplied    = State(initialValue: false)
         }
     }
@@ -161,6 +164,7 @@ struct EditMovieLogView: View {
                                 selectedTMDBMovie = nil
                                 selectedPosterData = nil
                                 draftMetadata = nil
+                                draftEnglishOverview = nil
                                 searchResults = []
                                 tmdbYearApplied = false
                             }
@@ -383,8 +387,12 @@ struct EditMovieLogView: View {
 
     private func onTitleChanged(_ newValue: String) {
         if let selected = selectedTMDBMovie, newValue != selected.title {
+            posterTask?.cancel()
+            detailTask?.cancel()
             selectedTMDBMovie = nil
             selectedPosterData = nil
+            draftMetadata = nil
+            draftEnglishOverview = nil
             searchResults = []
         }
         guard selectedTMDBMovie == nil else { return }
@@ -413,6 +421,8 @@ struct EditMovieLogView: View {
             tmdbYearApplied = true
         }
         let capturedID = movie.id
+        draftMetadata = nil
+        draftEnglishOverview = nil
         posterTask?.cancel()
         posterTask = Task {
             guard let posterPath = movie.posterPath else { return }
@@ -420,12 +430,15 @@ struct EditMovieLogView: View {
             guard !Task.isCancelled, selectedTMDBMovie?.id == capturedID else { return }
             selectedPosterData = data
         }
-        // Silent background detail fetch — failure is non-fatal
+        // Silent background detail fetch — failures are independent and non-fatal
         detailTask?.cancel()
         detailTask = Task {
-            guard let metadata = try? await TMDBClient.fetchMovieDetails(id: capturedID) else { return }
+            async let metadata = try? TMDBClient.fetchMovieDetails(id: capturedID)
+            async let englishOverview = try? TMDBClient.fetchEnglishOverview(id: capturedID)
+            let (metadataResult, overviewResult) = await (metadata, englishOverview)
             guard !Task.isCancelled, selectedTMDBMovie?.id == capturedID else { return }
-            draftMetadata = metadata
+            draftMetadata = metadataResult
+            draftEnglishOverview = overviewResult?.isEmpty == false ? overviewResult : nil
         }
     }
 
@@ -436,6 +449,7 @@ struct EditMovieLogView: View {
         selectedTMDBMovie = nil
         selectedPosterData = nil
         draftMetadata = nil
+        draftEnglishOverview = nil
         searchResults = []
         movieTitle = ""
         tmdbYearApplied = false
@@ -591,6 +605,7 @@ struct EditMovieLogView: View {
             log.movieOriginalTitle = movie.originalTitle != movie.title ? movie.originalTitle : nil
             log.movieReleaseYear = movie.releaseYear
             log.movieSynopsis = movie.overview.isEmpty ? nil : movie.overview
+            log.movieSynopsisEn = draftEnglishOverview
             log.moviePosterData = selectedPosterData ?? log.moviePosterData
             // Phase 1: re-select 時のみ extended metadata を更新する
             if let metadata = draftMetadata {
@@ -605,6 +620,7 @@ struct EditMovieLogView: View {
             log.movieOriginalTitle = nil
             log.movieReleaseYear = nil
             log.movieSynopsis = nil
+            log.movieSynopsisEn = nil
             log.moviePosterData = nil
             // TMDB リンクを削除したら extended metadata も合わせてクリア
             log.movieRuntimeMinutes = nil
@@ -628,4 +644,3 @@ struct EditMovieLogView: View {
 }
 
 // MARK: - Private subviews
-

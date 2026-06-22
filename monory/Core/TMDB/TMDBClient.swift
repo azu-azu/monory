@@ -70,4 +70,28 @@ enum TMDBClient {
             throw error
         }
     }
+
+    static func fetchEnglishOverview(id: Int) async throws -> String {
+        let key = Secrets.tmdbAPIKey
+        guard !key.isEmpty, key != "YOUR_TMDB_API_KEY" else {
+            logger.warning("API key not set")
+            throw TMDBError.missingAPIKey
+        }
+
+        var components = URLComponents(string: "\(baseURL)/movie/\(id)")!
+        components.queryItems = [
+            URLQueryItem(name: "api_key", value: key),
+            URLQueryItem(name: "language", value: "en-US"),
+        ]
+        logger.debug("fetchEnglishOverview id=\(id)")
+        do {
+            let (data, response) = try await URLSession.shared.data(from: components.url!)
+            let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+            logger.debug("fetchEnglishOverview status=\(status)")
+            return try decoder.decode(TMDBOverviewResponse.self, from: data).overview
+        } catch {
+            logger.error("fetchEnglishOverview failed: \(error)")
+            throw error
+        }
+    }
 }

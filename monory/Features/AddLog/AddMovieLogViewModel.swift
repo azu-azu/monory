@@ -65,6 +65,7 @@ final class AddMovieLogViewModel {
     var selectedTMDBMovie: TMDBMovie?
     var selectedPosterData: Data?
     private(set) var draftMetadata: MovieMetadata?
+    private(set) var draftEnglishOverview: String?
 
     private var searchTask: Task<Void, Never>?
     private var detailTask: Task<Void, Never>?
@@ -163,17 +164,22 @@ final class AddMovieLogViewModel {
         movieTitle = movie.title
         searchResults = []
         let capturedID = movie.id
+        draftMetadata = nil
+        draftEnglishOverview = nil
         if let posterPath = movie.posterPath {
             let data = try? await TMDBClient.fetchPosterData(path: posterPath)
             guard selectedTMDBMovie?.id == capturedID else { return }
             selectedPosterData = data
         }
-        // Silent background detail fetch — failure is non-fatal
+        // Silent background detail fetch — failures are independent and non-fatal
         detailTask?.cancel()
         detailTask = Task {
-            guard let metadata = try? await TMDBClient.fetchMovieDetails(id: capturedID) else { return }
+            async let metadata = try? TMDBClient.fetchMovieDetails(id: capturedID)
+            async let englishOverview = try? TMDBClient.fetchEnglishOverview(id: capturedID)
+            let (metadataResult, overviewResult) = await (metadata, englishOverview)
             guard !Task.isCancelled, self.selectedTMDBMovie?.id == capturedID else { return }
-            self.draftMetadata = metadata
+            self.draftMetadata = metadataResult
+            self.draftEnglishOverview = overviewResult?.isEmpty == false ? overviewResult : nil
         }
     }
 
@@ -181,6 +187,7 @@ final class AddMovieLogViewModel {
         selectedTMDBMovie = nil
         selectedPosterData = nil
         draftMetadata = nil
+        draftEnglishOverview = nil
         detailTask?.cancel()
         detailTask = nil
         searchResults = []
@@ -233,6 +240,7 @@ final class AddMovieLogViewModel {
             log.movieOriginalTitle = movie.originalTitle != movie.title ? movie.originalTitle : nil
             log.movieReleaseYear = movie.releaseYear
             log.movieSynopsis = movie.overview.isEmpty ? nil : movie.overview
+            log.movieSynopsisEn = draftEnglishOverview
             log.moviePosterData = selectedPosterData
             if let metadata = draftMetadata {
                 log.movieRuntimeMinutes = metadata.runtimeMinutes
